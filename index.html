@@ -3,468 +3,368 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Emoji Factory Tycoon PRO</title>
+    <title>Emoji Tycoon ULTIMATE</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔥</text></svg>">
+    
     <style>
-        /* --- CSS PROFESIONAL "GLASSMORPHISM" --- */
-        :root {
-            --bg: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            --glass: rgba(255, 255, 255, 0.1);
-            --border: rgba(255, 255, 255, 0.2);
-            --accent: #ffd700;
-            --text: #fff;
-            --danger: #ff4757;
-            --success: #2ed573;
-        }
-
-        body {
-            background: var(--bg);
-            color: var(--text);
-            font-family: 'Segoe UI', system-ui, sans-serif;
-            margin: 0;
-            height: 100vh;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-        }
-
-        /* HEADER & STATS */
-        header {
-            background: rgba(0,0,0,0.3);
-            padding: 10px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid var(--border);
-            z-index: 100;
-        }
-
-        .currency-box {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-end;
-        }
-
-        #money-display { font-size: 1.4rem; font-weight: bold; color: var(--success); text-shadow: 0 1px 2px black;}
-        #gems-display { font-size: 0.9rem; color: var(--accent); font-weight: bold;}
-
-        /* ÁREA PRINCIPAL */
-        #main-game {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-        }
-
-        #factory-target {
-            font-size: 6rem;
-            cursor: pointer;
-            user-select: none;
-            transition: transform 0.05s;
-            filter: drop-shadow(0 0 20px rgba(255,255,255,0.4));
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        #factory-target:active { transform: scale(0.9); }
-
-        /* PARTICULAS (Efecto visual al clicar) */
-        .particle {
-            position: absolute;
-            font-weight: bold;
-            pointer-events: none;
-            animation: floatUp 1s ease-out forwards;
-            color: #fff;
-            text-shadow: 0 1px 2px #000;
-        }
-
-        @keyframes floatUp {
-            0% { transform: translateY(0) scale(1); opacity: 1; }
-            100% { transform: translateY(-100px) scale(1.5); opacity: 0; }
-        }
-
-        /* PESTAÑAS DE MENÚ */
-        .tabs {
-            display: flex;
-            background: rgba(0,0,0,0.5);
-        }
-        .tab-btn {
-            flex: 1;
-            padding: 15px;
-            background: none;
-            border: none;
-            color: #aaa;
-            font-weight: bold;
-            font-size: 1rem;
-            border-top: 2px solid transparent;
-        }
-        .tab-btn.active { color: white; background: rgba(255,255,255,0.1); border-top-color: var(--accent); }
-
-        /* PANELES DE CONTENIDO */
-        #panels-container {
-            height: 50%;
-            background: var(--glass);
-            backdrop-filter: blur(10px);
-            overflow-y: auto;
-            border-top: 1px solid var(--border);
-        }
-
-        .panel { display: none; padding: 15px; padding-bottom: 50px;}
-        .panel.active { display: block; }
-
-        /* ESTILO DE ITEMS DE TIENDA */
-        .shop-item {
-            background: rgba(0,0,0,0.3);
-            margin-bottom: 10px;
-            padding: 10px;
-            border-radius: 10px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border: 1px solid transparent;
-        }
+        /* ESTÉTICA FUTURISTA */
+        :root { --bg: #1a1a2e; --panel: #16213e; --accent: #e94560; --gold: #ffd700; --text: #fff; }
+        body { background-color: var(--bg); color: var(--text); font-family: 'Segoe UI', sans-serif; margin: 0; height: 100vh; overflow: hidden; display: flex; flex-direction: column; user-select: none; }
         
-        .shop-item.can-buy { border-color: var(--success); background: rgba(46, 213, 115, 0.1); }
+        /* UI SUPERIOR */
+        .header { background: rgba(0,0,0,0.6); padding: 15px; display: flex; justify-content: space-between; border-bottom: 2px solid var(--accent); z-index: 10; backdrop-filter: blur(5px); }
+        .currency { text-align: right; }
+        .money { color: #2ecc71; font-weight: 800; font-size: 1.2rem; text-shadow: 0 0 5px #2ecc71; }
+        .gems { color: var(--gold); font-weight: bold; font-size: 1rem; }
+        .lvl-bar { width: 100%; height: 5px; background: #333; position: absolute; bottom: 0; left: 0; }
+        .lvl-fill { height: 100%; background: var(--accent); width: 0%; transition: width 0.5s; }
 
-        .item-info h4 { margin: 0; font-size: 1rem; }
-        .item-info p { margin: 2px 0; font-size: 0.8rem; color: #ddd; }
+        /* JUEGO CENTRAL */
+        .game-zone { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; background: radial-gradient(circle, #1f4068 0%, #1a1a2e 70%); }
         
-        .buy-btn {
-            background: var(--success);
-            border: none;
-            padding: 8px 15px;
-            border-radius: 5px;
-            color: white;
-            font-weight: bold;
-            cursor: pointer;
-        }
-        .buy-btn:disabled { background: #555; opacity: 0.5; }
+        #main-emoji { font-size: 6rem; cursor: pointer; transition: transform 0.05s; filter: drop-shadow(0 0 15px rgba(233, 69, 96, 0.5)); -webkit-tap-highlight-color: transparent; }
+        #main-emoji:active { transform: scale(0.9) rotate(5deg); }
 
-        /* PREMIUM & ADS SECTION (Monetización) */
-        .ad-btn {
-            width: 100%;
-            padding: 15px;
-            margin-bottom: 10px;
-            background: linear-gradient(45deg, #ff9f43, #ff6b6b);
-            border: none;
-            border-radius: 10px;
-            color: white;
-            font-weight: bold;
-            font-size: 1rem;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 10px;
-            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
-            animation: pulse 2s infinite;
-        }
+        /* POPUP OFFLINE (EL GANCHO) */
+        #offline-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 999; display: none; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
+        .modal-content { background: var(--panel); padding: 30px; border-radius: 20px; border: 2px solid var(--gold); max-width: 80%; box-shadow: 0 0 50px rgba(255, 215, 0, 0.3); }
+        .modal-btn { padding: 15px 30px; margin: 10px; border: none; border-radius: 50px; font-weight: bold; font-size: 1rem; cursor: pointer; width: 100%; }
+        .btn-claim { background: #555; color: white; }
+        .btn-double { background: linear-gradient(45deg, #f1c40f, #e67e22); color: black; animation: pulse 1.5s infinite; }
+
+        /* PESTAÑAS Y PANELES */
+        .tabs { display: flex; background: #0f3460; }
+        .tab { flex: 1; padding: 15px; background: none; border: none; color: #aaa; font-weight: bold; }
+        .tab.active { color: white; background: var(--panel); border-top: 3px solid var(--accent); }
         
-        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.02); } 100% { transform: scale(1); } }
+        .panel-container { height: 50%; background: var(--panel); overflow-y: auto; padding-bottom: 50px; }
+        .panel { display: none; padding: 15px; }
+        .panel.active { display: block; animation: fadeIn 0.3s; }
 
-        .prestige-btn {
-            width: 100%;
-            padding: 15px;
-            background: linear-gradient(45deg, #a55eea, #4b7bec);
-            border: none;
-            border-radius: 10px;
-            color: white;
-            margin-top: 20px;
-        }
+        /* TIENDA ITEMS */
+        .item { background: rgba(255,255,255,0.05); padding: 12px; margin-bottom: 8px; border-radius: 10px; display: flex; justify-content: space-between; align-items: center; border-left: 4px solid var(--accent); }
+        .buy-btn { background: #2ecc71; color: #000; padding: 8px 15px; border-radius: 5px; border: none; font-weight: bold; }
+        .buy-btn:disabled { background: #555; color: #888; }
 
+        /* CAJA MISTERIOSA */
+        .mystery-box { background: linear-gradient(135deg, #6c5ce7, #a29bfe); padding: 20px; border-radius: 15px; text-align: center; margin-bottom: 20px; border: 2px dashed white; cursor: pointer; }
+        .mystery-box:active { transform: scale(0.98); }
+
+        /* ANIMACIONES */
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .particle { position: absolute; color: #2ecc71; font-weight: bold; pointer-events: none; animation: floatUp 0.8s forwards; }
+        @keyframes floatUp { to { transform: translateY(-100px); opacity: 0; } }
     </style>
 </head>
 <body>
 
-    <header>
-        <div>
-            <div style="font-size:0.8rem; opacity:0.7;">FÁBRICA NIVEL <span id="level-display">1</span></div>
-            <strong>EMOJI TYCOON</strong>
+    <div id="offline-modal">
+        <div class="modal-content">
+            <h2 style="color:var(--gold)">¡BIENVENIDO JEFE!</h2>
+            <p>Tus empleados trabajaron mientras no estabas.</p>
+            <h1 id="offline-amount" style="color:#2ecc71">$0</h1>
+            
+            <button class="modal-btn btn-double" onclick="claimOffline(true)">
+                📺 DOBLE ($ x2)
+            </button>
+            <button class="modal-btn btn-claim" onclick="claimOffline(false)">
+                Reclamar Normal
+            </button>
         </div>
-        <div class="currency-box">
-            <div id="money-display">$0</div>
-            <div id="gems-display">💎 0</div>
-        </div>
-    </header>
+    </div>
 
-    <div id="main-game">
-        <div id="factory-target" onclick="clickFactory(event)">😀</div>
+    <div class="header">
+        <div>
+            <div style="font-size:0.8rem; color:#aaa;">NIVEL <span id="lvl-num">1</span></div>
+            <strong>EMOJI CORP</strong>
+            <div class="lvl-bar"><div class="lvl-fill" id="lvl-fill"></div></div>
+        </div>
+        <div class="currency">
+            <div class="money" id="money-ui">$0</div>
+            <div class="gems" id="gems-ui">💎 0</div>
+        </div>
+    </div>
+
+    <div class="game-zone">
+        <div id="main-emoji" onclick="doClick(event)">🚀</div>
         
-        <div style="position: absolute; bottom: 10px; font-size: 0.7rem; opacity: 0.5;">
-            [Espacio AdSense 320x50]
+        <div style="position: absolute; bottom: 5px; color: #555; font-size: 0.7rem;">
+            [Publicidad]
         </div>
     </div>
 
     <div class="tabs">
-        <button class="tab-btn active" onclick="switchTab('production')">🏭 Máquinas</button>
-        <button class="tab-btn" onclick="switchTab('upgrades')">⚡ Mejoras</button>
-        <button class="tab-btn" onclick="switchTab('store')">💎 Tienda</button>
+        <button class="tab active" onclick="tab('prod')">🏭 Máquinas</button>
+        <button class="tab" onclick="tab('upgrades')">⚡ Mejoras</button>
+        <button class="tab" onclick="tab('shop')">💎 Tienda</button>
     </div>
 
-    <div id="panels-container">
-        <div id="production" class="panel active">
-            <div id="machines-list"></div>
-        </div>
+    <div class="panel-container">
+        <div id="prod" class="panel active"></div>
+        
+        <div id="upgrades" class="panel"></div>
 
-        <div id="upgrades" class="panel">
-            <div id="upgrades-list"></div>
-        </div>
-
-        <div id="store" class="panel">
-            <div style="text-align: center; padding: 10px; background: rgba(0,0,0,0.2); border-radius: 10px; margin-bottom: 20px;">
-                <h3>MONETIZACIÓN</h3>
-                <p style="font-size: 0.8rem;">Estas opciones simulan cómo ganarías dinero real.</p>
+        <div id="shop" class="panel">
+            
+            <div class="mystery-box" onclick="openMysteryBox()">
+                <div style="font-size: 2rem;">🎁</div>
+                <h3>CAJA MISTERIOSA</h3>
+                <p>Cuesta: <strong>15 💎</strong></p>
+                <small>¡Puede contener dinero o el Multiplicador x5!</small>
             </div>
 
-            <button class="ad-btn" onclick="watchAd()">
-                <span>📺</span> VER ANUNCIO (+5 💎)
+            <button class="modal-btn btn-double" onclick="watchAdForGems()">
+                🎬 VER ANUNCIO (+10 💎)
             </button>
-            
-            <hr style="border-color: rgba(255,255,255,0.1); margin: 20px 0;">
 
-            <h3>VENDER EMPRESA (Prestigio)</h3>
-            <p>Reinicia tu dinero y máquinas, pero obtén un multiplicador permanente x2.</p>
-            <p>Requisito: $1,000,000</p>
-            <button class="prestige-btn" id="prestige-btn" disabled onclick="doPrestige()">
-                ASCENDER AHORA
-            </button>
+            <div class="item" style="border-color: gold; margin-top:20px;">
+                <div>
+                    <h4>⏳ Viaje al Futuro</h4>
+                    <small>Adelanta 1 hora de ganancias</small>
+                </div>
+                <button class="buy-btn" onclick="buyTimeWarp()" style="background:gold;">30 💎</button>
+            </div>
         </div>
     </div>
 
 <script>
-    // --- CONFIGURACIÓN DEL JUEGO (AQUÍ ES DONDE EDITAS) ---
-    
-    // 1. LISTA DE MÁQUINAS
+    // --- DATOS DEL JUEGO ---
     const machinesDB = [
-        { id: 'm1', name: "Becario", icon: "🤓", baseCost: 15, production: 0.5 },
-        { id: 'm2', name: "Impresora 3D", icon: "🖨️", baseCost: 100, production: 4 },
-        { id: 'm3', name: "Línea de Montaje", icon: "⚙️", baseCost: 1100, production: 32 },
-        { id: 'm4', name: "Fábrica Nuclear", icon: "🏭", baseCost: 12000, production: 260 },
-        { id: 'm5', name: "Clonador Alien", icon: "👽", baseCost: 130000, production: 1400 }
+        {name: "Becario", cost: 15, prod: 1, icon: "🤓"},
+        {name: "Servidor", cost: 100, prod: 5, icon: "🖥️"},
+        {name: "Hacker", cost: 1100, prod: 40, icon: "👨‍💻"},
+        {name: "Botnet", cost: 12000, prod: 300, icon: "🤖"},
+        {name: "IA Maestra", cost: 150000, prod: 2000, icon: "🧠"}
     ];
-
-    // 2. LISTA DE MEJORAS
-    const upgradesDB = [
-        { id: 'u1', name: "Ratón Gamer", icon: "🖱️", cost: 50, clickMult: 2, desc: "Doble poder de clic" },
-        { id: 'u2', name: "Bebida Energética", icon: "🥤", cost: 500, clickMult: 2, desc: "Doble poder de clic" },
-        { id: 'u3', name: "Teclado Mecánico", icon: "⌨️", cost: 2500, clickMult: 2, desc: "Doble poder de clic" },
-        { id: 'u4', name: "Dedo Biónico", icon: "🦾", cost: 10000, clickMult: 5, desc: "Clic x5 brutal" }
-    ];
-
-    // --- ESTADO DEL JUEGO ---
+    
+    // Estado inicial
     let game = {
         money: 0,
-        gems: 0,
-        clickPower: 1,
-        prestigeMult: 1,
-        machines: {}, 
-        upgrades: [], 
-        startTime: Date.now()
+        gems: 5, // Regalamos 5 al empezar para enganchar
+        qtys: [0,0,0,0,0],
+        upgrades: [],
+        lastSave: Date.now(),
+        prestige: 1,
+        totalEarnings: 0 // Para calcular nivel
     };
 
-    machinesDB.forEach(m => {
-        if(!game.machines[m.id]) game.machines[m.id] = 0;
-    });
-
-    // --- SISTEMA DE GUARDADO ---
-    function loadGame() {
-        const saved = localStorage.getItem('emojiTycoonSave');
-        if (saved) {
-            const parsed = JSON.parse(saved);
-            game = { ...game, ...parsed }; 
-        }
-    }
-    loadGame();
-
-    // --- LÓGICA PRINCIPAL ---
-    function saveGame() {
-        localStorage.setItem('emojiTycoonSave', JSON.stringify(game));
+    // --- CARGAR / GUARDAR ---
+    if(localStorage.getItem('emojiUltimate')) {
+        game = JSON.parse(localStorage.getItem('emojiUltimate'));
+        checkOfflineEarnings();
+    } else {
+        // Usuario nuevo
+        setTimeout(() => alert("¡Bienvenido CEO! Haz clic en el cohete para empezar."), 500);
     }
 
-    function getAutoProduction() {
-        let total = 0;
-        machinesDB.forEach(m => {
-            total += (game.machines[m.id] || 0) * m.production;
-        });
-        return total * game.prestigeMult;
+    function save() {
+        game.lastSave = Date.now();
+        localStorage.setItem('emojiUltimate', JSON.stringify(game));
     }
 
-    function getClickPower() {
-        let power = 1;
-        upgradesDB.forEach(u => {
-            if (game.upgrades.includes(u.id)) power *= u.clickMult;
-        });
-        return power * game.prestigeMult;
-    }
+    // --- SISTEMA OFFLINE (RETENCIÓN) ---
+    let pendingOfflineCash = 0;
 
-    setInterval(() => {
-        const prod = getAutoProduction();
-        if(prod > 0) {
-            addMoney(prod / 10);
-        }
-        updateUI();
-        saveGame();
-    }, 100);
-
-    function addMoney(amount) {
-        game.money += amount;
-    }
-
-    // --- INTERACCIÓN ---
-    function clickFactory(e) {
-        const amount = getClickPower();
-        addMoney(amount);
-        const particle = document.createElement('div');
-        particle.className = 'particle';
-        particle.innerText = `+$${amount.toFixed(1)}`;
-        const x = e.clientX + (Math.random() * 40 - 20); 
-        const y = e.clientY - 20;
-        particle.style.left = `${x}px`;
-        particle.style.top = `${y}px`;
-        document.body.appendChild(particle);
-        setTimeout(() => particle.remove(), 1000);
-    }
-
-    function buyMachine(id) {
-        const machine = machinesDB.find(m => m.id === id);
-        const count = game.machines[id];
-        const cost = Math.floor(machine.baseCost * Math.pow(1.15, count));
-        
-        if (game.money >= cost) {
-            game.money -= cost;
-            game.machines[id]++;
-            renderMachines(); 
-        }
-    }
-
-    function buyUpgrade(id) {
-        const upgrade = upgradesDB.find(u => u.id === id);
-        if (!game.upgrades.includes(id) && game.money >= upgrade.cost) {
-            game.money -= upgrade.cost;
-            game.upgrades.push(id);
-            renderUpgrades();
-        }
-    }
-
-    // --- RENDERIZADO UI ---
-    const moneyEl = document.getElementById('money-display');
-    const gemsEl = document.getElementById('gems-display');
-    const prestigeBtn = document.getElementById('prestige-btn');
-
-    function updateUI() {
-        moneyEl.innerText = '$' + Math.floor(game.money).toLocaleString();
-        gemsEl.innerText = '💎 ' + game.gems;
-        document.querySelectorAll('.buy-btn').forEach(btn => {
-            const cost = parseInt(btn.getAttribute('data-cost'));
-            btn.disabled = game.money < cost;
-            if(game.money >= cost) btn.parentElement.classList.add('can-buy');
-            else btn.parentElement.classList.remove('can-buy');
-        });
-        prestigeBtn.disabled = game.money < 1000000;
-        if(game.money >= 1000000) prestigeBtn.innerText = "ASCENDER (Disponible)";
-        else prestigeBtn.innerText = "Necesitas $1M para Ascender";
-    }
-
-    function renderMachines() {
-        const list = document.getElementById('machines-list');
-        list.innerHTML = '';
-        machinesDB.forEach(m => {
-            const count = game.machines[m.id];
-            const cost = Math.floor(m.baseCost * Math.pow(1.15, count));
-            list.innerHTML += `
-                <div class="shop-item">
-                    <div class="item-info">
-                        <div style="font-size:1.5rem; float:left; margin-right:10px;">${m.icon}</div>
-                        <h4>${m.name} <span style="color:var(--accent)">x${count}</span></h4>
-                        <p>+${m.production} $/s</p>
-                    </div>
-                    <button class="buy-btn" data-cost="${cost}" onclick="buyMachine('${m.id}')">
-                        $${cost.toLocaleString()}
-                    </button>
-                </div>
-            `;
-        });
-    }
-
-    function renderUpgrades() {
-        const list = document.getElementById('upgrades-list');
-        list.innerHTML = '';
-        upgradesDB.forEach(u => {
-            if(game.upgrades.includes(u.id)) return;
-            list.innerHTML += `
-                <div class="shop-item">
-                    <div class="item-info">
-                        <h4>${u.icon} ${u.name}</h4>
-                        <p>${u.desc}</p>
-                    </div>
-                    <button class="buy-btn" data-cost="${u.cost}" onclick="buyUpgrade('${u.id}')">
-                        $${u.cost.toLocaleString()}
-                    </button>
-                </div>
-            `;
-        });
-    }
-
-    function switchTab(tabId) {
-        document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-        document.getElementById(tabId).classList.add('active');
-        const buttons = document.querySelectorAll('.tab-btn');
-        if(tabId === 'production') buttons[0].classList.add('active');
-        if(tabId === 'upgrades') buttons[1].classList.add('active');
-        if(tabId === 'store') buttons[2].classList.add('active');
-    }
-
-    // --- AQUÍ ESTÁ LA MAGIA DE LA MONETIZACIÓN ---
-    
-    let lastAdTime = 0;
-
-    function watchAd() {
+    function checkOfflineEarnings() {
         const now = Date.now();
-        // Evitar clics masivos (seguridad anti-ban)
-        if (now - lastAdTime < 30000) {
-            alert("¡Espera unos segundos para ver otro anuncio!");
-            return;
-        }
-
-        // ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼
-        // PEGA AQUÍ TU ENLACE DE ADSTERRA DENTRO DE LAS COMILLAS
-        const adLink = "https://www.effectivegatecpm.com/ttwcdab5?key=8d51779f7c6cbf2f752d275eb491f8dc"; 
-        // ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
-
-        // Abrir anuncio
-        window.open(adLink, '_blank');
+        const secondsGone = (now - game.lastSave) / 1000;
         
-        // Dar recompensa (Simulado)
-        setTimeout(() => {
-            game.gems += 5;
-            lastAdTime = Date.now();
-            saveGame();
-            updateUI();
-            alert("¡+5 Gemas recibidas! 💎");
-        }, 1500); 
-    }
-
-    function doPrestige() {
-        if(game.money >= 1000000) {
-            if(confirm("¿Seguro? Perderás todo el dinero y máquinas, pero ganarás el doble de velocidad para siempre.")) {
-                game.money = 0;
-                game.machines = {};
-                machinesDB.forEach(m => game.machines[m.id] = 0);
-                game.upgrades = [];
-                game.prestigeMult *= 2; 
-                game.gems += 100; 
-                saveGame();
-                renderMachines();
-                renderUpgrades();
-                switchTab('production');
+        if(secondsGone > 60) { // Si se fue más de 1 minuto
+            const pps = getPPS();
+            if(pps > 0) {
+                pendingOfflineCash = pps * secondsGone;
+                document.getElementById('offline-amount').innerText = `$${Math.floor(pendingOfflineCash).toLocaleString()}`;
+                document.getElementById('offline-modal').style.display = 'flex';
             }
         }
     }
 
+    function claimOffline(isDouble) {
+        if(isDouble) {
+            // TRUCO: Abrimos publi y damos el doble
+            showAd(() => {
+                game.money += pendingOfflineCash * 2;
+                game.totalEarnings += pendingOfflineCash * 2;
+                closeModal();
+                alert("¡Doble ganancia recibida!");
+            });
+        } else {
+            game.money += pendingOfflineCash;
+            game.totalEarnings += pendingOfflineCash;
+            closeModal();
+        }
+    }
+    
+    function closeModal() {
+        document.getElementById('offline-modal').style.display = 'none';
+        save(); render();
+    }
+
+    // --- LÓGICA DE DINERO ---
+    function getPPS() { // Producción por segundo
+        let p = 0;
+        machinesDB.forEach((m, i) => p += (m.prod * game.qtys[i]));
+        return p * game.prestige;
+    }
+
+    setInterval(() => {
+        const inc = getPPS() / 10;
+        if(inc > 0) {
+            game.money += inc;
+            game.totalEarnings += inc;
+            updateLevel();
+        }
+        document.getElementById('money-ui').innerText = `$${Math.floor(game.money).toLocaleString()}`;
+        save();
+    }, 100);
+
+    // --- ACCIONES ---
+    function doClick(e) {
+        const clickVal = (1 + (getPPS() * 0.05)) * game.prestige; // El click escala con tu producción
+        game.money += clickVal;
+        game.totalEarnings += clickVal;
+        
+        // Efecto Partícula
+        const p = document.createElement('div');
+        p.innerText = `+$${Math.floor(clickVal)}`;
+        p.className = 'particle';
+        p.style.left = e.clientX + 'px';
+        p.style.top = (e.clientY - 40) + 'px';
+        document.body.appendChild(p);
+        setTimeout(()=>p.remove(), 800);
+        
+        updateLevel();
+        save();
+        document.getElementById('money-ui').innerText = `$${Math.floor(game.money).toLocaleString()}`;
+    }
+
+    function buyItem(i) {
+        const m = machinesDB[i];
+        const cost = Math.floor(m.cost * Math.pow(1.15, game.qtys[i]));
+        if(game.money >= cost) {
+            game.money -= cost;
+            game.qtys[i]++;
+            save(); render();
+        }
+    }
+
+    // --- TIENDA DE GEMAS & CAJA MISTERIOSA ---
+    
+    function openMysteryBox() {
+        if(game.gems >= 15) {
+            game.gems -= 15;
+            save(); render();
+            
+            // RULETA DE PROBABILIDAD
+            const rand = Math.random();
+            if(rand < 0.5) { // 50% Dinero pequeño
+                const premio = getPPS() * 100 + 500;
+                game.money += premio;
+                alert(`📦 CAJA COMÚN: Ganaste $${Math.floor(premio)}`);
+            } else if(rand < 0.8) { // 30% Dinero grande
+                const premio = getPPS() * 600 + 2000;
+                game.money += premio;
+                alert(`📦📦 CAJA RARA: ¡Ganaste $${Math.floor(premio)}!`);
+            } else if(rand < 0.95) { // 15% Gemas devuelta
+                game.gems += 20;
+                alert(`💎 CAJA DE GEMAS: ¡20 Gemas!`);
+            } else { // 5% PREMIO GORDO
+                game.prestige += 0.5;
+                alert(`👑 CAJA LEGENDARIA: ¡Tu multiplicador de beneficios ha subido +0.5x!`);
+            }
+        } else {
+            alert("No tienes suficientes gemas (15) 💎");
+        }
+    }
+
+    function buyTimeWarp() {
+        if(game.gems >= 30) {
+            game.gems -= 30;
+            game.money += getPPS() * 3600; // 1 hora
+            alert("¡VIAJE EN EL TIEMPO! Ganancia de 1 hora recibida.");
+            save(); render();
+        }
+    }
+
+    function watchAdForGems() {
+        showAd(() => {
+            game.gems += 10;
+            save(); render();
+            alert("¡+10 Gemas Recibidas!");
+        });
+    }
+
+    // --- INTEGRACIÓN PUBLICIDAD (AQUÍ ESTÁ TU DINERO) ---
+    
+    let lastAdTime = 0;
+    
+    function showAd(callback) {
+        const now = Date.now();
+        if(now - lastAdTime < 15000) { // 15 segundos entre anuncios
+            alert("El satélite de anuncios se está recargando...");
+            return;
+        }
+
+        // ▼▼▼▼ PEGA TU LINK DIRECTO DE ADSTERRA AQUÍ ABAJO ▼▼▼▼
+        const adLink = "https://www.effectivegatecpm.com/ttwcdab5?key=8d51779f7c6cbf2f752d275eb491f8dc";
+        // ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
+
+        window.open(adLink, '_blank');
+        lastAdTime = now;
+        
+        // Retraso para simular que vio el anuncio
+        setTimeout(() => {
+            if(callback) callback();
+        }, 1000);
+    }
+
+    // --- UI HELPERS ---
+    function updateLevel() {
+        // Nivel basado en dinero total ganado (logarítmico)
+        const lvl = Math.floor(Math.log10(game.totalEarnings + 1)) + 1;
+        document.getElementById('lvl-num').innerText = lvl;
+        
+        // Barra de progreso (visual)
+        const nextLvlReq = Math.pow(10, lvl);
+        const prevLvlReq = Math.pow(10, lvl-1);
+        const progress = (game.totalEarnings - prevLvlReq) / (nextLvlReq - prevLvlReq) * 100;
+        document.getElementById('lvl-fill').style.width = Math.min(progress, 100) + '%';
+    }
+
+    function tab(id) {
+        document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        event.target.classList.add('active');
+    }
+
+    function render() {
+        document.getElementById('gems-ui').innerText = `💎 ${game.gems}`;
+        
+        const div = document.getElementById('prod');
+        div.innerHTML = "";
+        machinesDB.forEach((m, i) => {
+            const cost = Math.floor(m.cost * Math.pow(1.15, game.qtys[i]));
+            div.innerHTML += `
+            <div class="item">
+                <div style="display:flex; align-items:center;">
+                    <div style="font-size:1.8rem; margin-right:10px;">${m.icon}</div>
+                    <div>
+                        <div style="font-weight:bold;">${m.name}</div>
+                        <div style="font-size:0.8rem; color:#aaa;">Tienes: ${game.qtys[i]} | +$${m.prod}/s</div>
+                    </div>
+                </div>
+                <button class="buy-btn" onclick="buyItem(${i})" ${game.money < cost ? 'disabled' : ''}>
+                    $${cost.toLocaleString()}
+                </button>
+            </div>`;
+        });
+    }
+
     // Inicio
-    renderMachines();
-    renderUpgrades();
+    render();
+    updateLevel();
 
 </script>
 </body>
