@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Emoji Factory Tycoon</title>
+    <title>Emoji Factory Tycoon PRO</title>
     <style>
         /* --- CSS PROFESIONAL "GLASSMORPHISM" --- */
         :root {
@@ -234,7 +234,7 @@
 <script>
     // --- CONFIGURACIÓN DEL JUEGO (AQUÍ ES DONDE EDITAS) ---
     
-    // 1. LISTA DE MÁQUINAS (Ingresos pasivos)
+    // 1. LISTA DE MÁQUINAS
     const machinesDB = [
         { id: 'm1', name: "Becario", icon: "🤓", baseCost: 15, production: 0.5 },
         { id: 'm2', name: "Impresora 3D", icon: "🖨️", baseCost: 100, production: 4 },
@@ -243,7 +243,7 @@
         { id: 'm5', name: "Clonador Alien", icon: "👽", baseCost: 130000, production: 1400 }
     ];
 
-    // 2. LISTA DE MEJORAS (Click power y visuales)
+    // 2. LISTA DE MEJORAS
     const upgradesDB = [
         { id: 'u1', name: "Ratón Gamer", icon: "🖱️", cost: 50, clickMult: 2, desc: "Doble poder de clic" },
         { id: 'u2', name: "Bebida Energética", icon: "🥤", cost: 500, clickMult: 2, desc: "Doble poder de clic" },
@@ -257,12 +257,11 @@
         gems: 0,
         clickPower: 1,
         prestigeMult: 1,
-        machines: {}, // Cantidad comprada de cada máquina
-        upgrades: [], // IDs de mejoras compradas
+        machines: {}, 
+        upgrades: [], 
         startTime: Date.now()
     };
 
-    // Inicializar cantidades a 0
     machinesDB.forEach(m => {
         if(!game.machines[m.id]) game.machines[m.id] = 0;
     });
@@ -272,18 +271,16 @@
         const saved = localStorage.getItem('emojiTycoonSave');
         if (saved) {
             const parsed = JSON.parse(saved);
-            game = { ...game, ...parsed }; // Fusionar
+            game = { ...game, ...parsed }; 
         }
     }
     loadGame();
 
     // --- LÓGICA PRINCIPAL ---
-    
     function saveGame() {
         localStorage.setItem('emojiTycoonSave', JSON.stringify(game));
     }
 
-    // Calcular producción automática por segundo
     function getAutoProduction() {
         let total = 0;
         machinesDB.forEach(m => {
@@ -292,7 +289,6 @@
         return total * game.prestigeMult;
     }
 
-    // Calcular poder de clic
     function getClickPower() {
         let power = 1;
         upgradesDB.forEach(u => {
@@ -301,11 +297,10 @@
         return power * game.prestigeMult;
     }
 
-    // Bucle del juego (cada 1s para dinero automático, cada 0.1s para UI)
     setInterval(() => {
         const prod = getAutoProduction();
         if(prod > 0) {
-            addMoney(prod / 10); // Dividido entre 10 porque corre cada 100ms visualmente
+            addMoney(prod / 10);
         }
         updateUI();
         saveGame();
@@ -316,23 +311,17 @@
     }
 
     // --- INTERACCIÓN ---
-
     function clickFactory(e) {
         const amount = getClickPower();
         addMoney(amount);
-        
-        // Efecto visual (Partícula de dinero)
         const particle = document.createElement('div');
         particle.className = 'particle';
         particle.innerText = `+$${amount.toFixed(1)}`;
-        // Posición random cerca del clic
         const x = e.clientX + (Math.random() * 40 - 20); 
         const y = e.clientY - 20;
         particle.style.left = `${x}px`;
         particle.style.top = `${y}px`;
         document.body.appendChild(particle);
-        
-        // Limpiar partícula
         setTimeout(() => particle.remove(), 1000);
     }
 
@@ -344,7 +333,7 @@
         if (game.money >= cost) {
             game.money -= cost;
             game.machines[id]++;
-            renderMachines(); // Refrescar precios
+            renderMachines(); 
         }
     }
 
@@ -358,7 +347,6 @@
     }
 
     // --- RENDERIZADO UI ---
-
     const moneyEl = document.getElementById('money-display');
     const gemsEl = document.getElementById('gems-display');
     const prestigeBtn = document.getElementById('prestige-btn');
@@ -366,16 +354,12 @@
     function updateUI() {
         moneyEl.innerText = '$' + Math.floor(game.money).toLocaleString();
         gemsEl.innerText = '💎 ' + game.gems;
-        
-        // Comprobar botones de compra (activar/desactivar visualmente)
         document.querySelectorAll('.buy-btn').forEach(btn => {
             const cost = parseInt(btn.getAttribute('data-cost'));
             btn.disabled = game.money < cost;
             if(game.money >= cost) btn.parentElement.classList.add('can-buy');
             else btn.parentElement.classList.remove('can-buy');
         });
-
-        // Activar botón de prestigio
         prestigeBtn.disabled = game.money < 1000000;
         if(game.money >= 1000000) prestigeBtn.innerText = "ASCENDER (Disponible)";
         else prestigeBtn.innerText = "Necesitas $1M para Ascender";
@@ -387,7 +371,6 @@
         machinesDB.forEach(m => {
             const count = game.machines[m.id];
             const cost = Math.floor(m.baseCost * Math.pow(1.15, count));
-            
             list.innerHTML += `
                 <div class="shop-item">
                     <div class="item-info">
@@ -407,8 +390,7 @@
         const list = document.getElementById('upgrades-list');
         list.innerHTML = '';
         upgradesDB.forEach(u => {
-            if(game.upgrades.includes(u.id)) return; // Ya comprada
-
+            if(game.upgrades.includes(u.id)) return;
             list.innerHTML += `
                 <div class="shop-item">
                     <div class="item-info">
@@ -423,30 +405,44 @@
         });
     }
 
-    // Funciones de Pestañas
     function switchTab(tabId) {
         document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
         document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
         document.getElementById(tabId).classList.add('active');
-        
-        // Encontrar el botón correcto para ponerle active (truco rápido)
         const buttons = document.querySelectorAll('.tab-btn');
         if(tabId === 'production') buttons[0].classList.add('active');
         if(tabId === 'upgrades') buttons[1].classList.add('active');
         if(tabId === 'store') buttons[2].classList.add('active');
     }
 
-    // --- MONETIZACIÓN Y EXTRAS ---
+    // --- AQUÍ ESTÁ LA MAGIA DE LA MONETIZACIÓN ---
+    
+    let lastAdTime = 0;
 
     function watchAd() {
-        // AQUÍ IRÍA EL CÓDIGO REAL DE ADMOB / ADSENSE REWARDED VIDEO
-        alert("Simulación: Viendo anuncio... ¡Gracias!");
+        const now = Date.now();
+        // Evitar clics masivos (seguridad anti-ban)
+        if (now - lastAdTime < 30000) {
+            alert("¡Espera unos segundos para ver otro anuncio!");
+            return;
+        }
+
+        // ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼
+        // PEGA AQUÍ TU ENLACE DE ADSTERRA DENTRO DE LAS COMILLAS
+        const adLink = "https://www.effectivegatecpm.com/ttwcdab5?key=8d51779f7c6cbf2f752d275eb491f8dc"; 
+        // ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
+
+        // Abrir anuncio
+        window.open(adLink, '_blank');
+        
+        // Dar recompensa (Simulado)
         setTimeout(() => {
             game.gems += 5;
-            alert("¡Has recibido 5 Gemas!");
+            lastAdTime = Date.now();
             saveGame();
             updateUI();
-        }, 1000);
+            alert("¡+5 Gemas recibidas! 💎");
+        }, 1500); 
     }
 
     function doPrestige() {
@@ -456,8 +452,8 @@
                 game.machines = {};
                 machinesDB.forEach(m => game.machines[m.id] = 0);
                 game.upgrades = [];
-                game.prestigeMult *= 2; // Multiplicador permanente
-                game.gems += 100; // Bonus de gemas
+                game.prestigeMult *= 2; 
+                game.gems += 100; 
                 saveGame();
                 renderMachines();
                 renderUpgrades();
