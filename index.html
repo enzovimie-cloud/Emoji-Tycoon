@@ -3,95 +3,96 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Emoji Tycoon ULTIMATE</title>
+    <title>Emoji Tycoon HACKER ED.</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔥</text></svg>">
     
     <style>
-        /* ESTÉTICA FUTURISTA */
+        /* ESTILO GENERAL */
         :root { --bg: #1a1a2e; --panel: #16213e; --accent: #e94560; --gold: #ffd700; --text: #fff; }
         body { background-color: var(--bg); color: var(--text); font-family: 'Segoe UI', sans-serif; margin: 0; height: 100vh; overflow: hidden; display: flex; flex-direction: column; user-select: none; }
         
-        /* UI SUPERIOR */
-        .header { background: rgba(0,0,0,0.6); padding: 15px; display: flex; justify-content: space-between; border-bottom: 2px solid var(--accent); z-index: 10; backdrop-filter: blur(5px); }
-        .currency { text-align: right; }
+        /* HEADER */
+        .header { background: rgba(0,0,0,0.8); padding: 15px; display: flex; justify-content: space-between; border-bottom: 2px solid var(--accent); z-index: 10; backdrop-filter: blur(5px); }
         .money { color: #2ecc71; font-weight: 800; font-size: 1.2rem; text-shadow: 0 0 5px #2ecc71; }
-        .gems { color: var(--gold); font-weight: bold; font-size: 1rem; }
-        .lvl-bar { width: 100%; height: 5px; background: #333; position: absolute; bottom: 0; left: 0; }
-        .lvl-fill { height: 100%; background: var(--accent); width: 0%; transition: width 0.5s; }
-
-        /* JUEGO CENTRAL */
-        .game-zone { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; background: radial-gradient(circle, #1f4068 0%, #1a1a2e 70%); }
+        .gems { color: var(--gold); font-weight: bold; }
         
-        #main-emoji { font-size: 6rem; cursor: pointer; transition: transform 0.05s; filter: drop-shadow(0 0 15px rgba(233, 69, 96, 0.5)); -webkit-tap-highlight-color: transparent; }
-        #main-emoji:active { transform: scale(0.9) rotate(5deg); }
+        /* ZONA DE JUEGO */
+        .game-zone { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; background: radial-gradient(circle, #1f4068 0%, #1a1a2e 80%); }
+        #main-emoji { font-size: 6rem; cursor: pointer; transition: transform 0.05s; filter: drop-shadow(0 0 20px var(--accent)); -webkit-tap-highlight-color: transparent; }
+        #main-emoji:active { transform: scale(0.9); }
 
-        /* POPUP OFFLINE (EL GANCHO) */
-        #offline-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 999; display: none; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
-        .modal-content { background: var(--panel); padding: 30px; border-radius: 20px; border: 2px solid var(--gold); max-width: 80%; box-shadow: 0 0 50px rgba(255, 215, 0, 0.3); }
-        .modal-btn { padding: 15px 30px; margin: 10px; border: none; border-radius: 50px; font-weight: bold; font-size: 1rem; cursor: pointer; width: 100%; }
-        .btn-claim { background: #555; color: white; }
-        .btn-double { background: linear-gradient(45deg, #f1c40f, #e67e22); color: black; animation: pulse 1.5s infinite; }
+        /* MODALES (Ventanas emergentes) */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 999; display: none; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
+        .modal-content { background: var(--panel); padding: 25px; border-radius: 20px; border: 2px solid var(--gold); max-width: 85%; width: 300px; box-shadow: 0 0 50px rgba(0,0,0,0.8); }
+        
+        /* ESTILO HACKER (ROJO) */
+        .hacker-mode { border-color: #ff0000; box-shadow: 0 0 50px #ff0000; animation: shake 0.5s infinite; }
+        @keyframes shake { 0% { transform: translate(1px, 1px) rotate(0deg); } 10% { transform: translate(-1px, -2px) rotate(-1deg); } 20% { transform: translate(-3px, 0px) rotate(1deg); } 30% { transform: translate(3px, 2px) rotate(0deg); } 40% { transform: translate(1px, -1px) rotate(1deg); } 50% { transform: translate(-1px, 2px) rotate(-1deg); } 60% { transform: translate(-3px, 1px) rotate(0deg); } 70% { transform: translate(3px, 1px) rotate(-1deg); } 80% { transform: translate(-1px, -1px) rotate(1deg); } 90% { transform: translate(1px, 2px) rotate(0deg); } 100% { transform: translate(1px, -2px) rotate(-1deg); } }
+
+        /* BOTONES */
+        .btn { padding: 12px; margin: 8px 0; border: none; border-radius: 8px; font-weight: bold; width: 100%; cursor: pointer; font-size: 1rem; }
+        .btn-green { background: #2ecc71; color: #000; }
+        .btn-gold { background: linear-gradient(45deg, #f1c40f, #e67e22); color: #000; animation: pulse 1.5s infinite; }
+        .btn-red { background: #e74c3c; color: white; }
+        .btn:disabled { background: #555; color: #888; animation: none; }
 
         /* PESTAÑAS Y PANELES */
         .tabs { display: flex; background: #0f3460; }
-        .tab { flex: 1; padding: 15px; background: none; border: none; color: #aaa; font-weight: bold; }
-        .tab.active { color: white; background: var(--panel); border-top: 3px solid var(--accent); }
-        
-        .panel-container { height: 50%; background: var(--panel); overflow-y: auto; padding-bottom: 50px; }
+        .tab { flex: 1; padding: 15px; background: none; border: none; color: #aaa; font-weight: bold; border-top: 3px solid transparent; }
+        .tab.active { color: white; background: var(--panel); border-top-color: var(--accent); }
+        .panel-container { height: 45%; background: var(--panel); overflow-y: auto; padding-bottom: 20px; }
         .panel { display: none; padding: 15px; }
-        .panel.active { display: block; animation: fadeIn 0.3s; }
+        .panel.active { display: block; }
 
-        /* TIENDA ITEMS */
-        .item { background: rgba(255,255,255,0.05); padding: 12px; margin-bottom: 8px; border-radius: 10px; display: flex; justify-content: space-between; align-items: center; border-left: 4px solid var(--accent); }
-        .buy-btn { background: #2ecc71; color: #000; padding: 8px 15px; border-radius: 5px; border: none; font-weight: bold; }
-        .buy-btn:disabled { background: #555; color: #888; }
-
-        /* CAJA MISTERIOSA */
-        .mystery-box { background: linear-gradient(135deg, #6c5ce7, #a29bfe); padding: 20px; border-radius: 15px; text-align: center; margin-bottom: 20px; border: 2px dashed white; cursor: pointer; }
-        .mystery-box:active { transform: scale(0.98); }
-
-        /* ANIMACIONES */
+        /* ITEMS DE TIENDA */
+        .item { background: rgba(255,255,255,0.05); padding: 10px; margin-bottom: 8px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; }
+        
         @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         .particle { position: absolute; color: #2ecc71; font-weight: bold; pointer-events: none; animation: floatUp 0.8s forwards; }
         @keyframes floatUp { to { transform: translateY(-100px); opacity: 0; } }
     </style>
 </head>
 <body>
 
-    <div id="offline-modal">
-        <div class="modal-content">
-            <h2 style="color:var(--gold)">¡BIENVENIDO JEFE!</h2>
-            <p>Tus empleados trabajaron mientras no estabas.</p>
-            <h1 id="offline-amount" style="color:#2ecc71">$0</h1>
+    <div id="hacker-modal" class="modal-overlay">
+        <div class="modal-content hacker-mode">
+            <h1 style="color:red; margin:0;">⚠️ ALERTA ⚠️</h1>
+            <p>¡UN HACKER INTENTA ROBAR TUS FONDOS!</p>
+            <p style="font-size:0.8rem;">Elige rápido:</p>
             
-            <button class="modal-btn btn-double" onclick="claimOffline(true)">
-                📺 DOBLE ($ x2)
+            <button class="btn btn-green" onclick="resolveHacker(true)">
+                🛡️ BLOQUEAR (Ver Anuncio)
+                <br><small>¡Salvas tu dinero y ganas Bonus!</small>
             </button>
-            <button class="modal-btn btn-claim" onclick="claimOffline(false)">
-                Reclamar Normal
+            
+            <button class="btn btn-red" onclick="resolveHacker(false)">
+                ❌ NO HACER NADA
+                <br><small>Pierdes 20% de dinero</small>
             </button>
         </div>
     </div>
 
-    <div class="header">
-        <div>
-            <div style="font-size:0.8rem; color:#aaa;">NIVEL <span id="lvl-num">1</span></div>
-            <strong>EMOJI CORP</strong>
-            <div class="lvl-bar"><div class="lvl-fill" id="lvl-fill"></div></div>
+    <div id="offline-modal" class="modal-overlay">
+        <div class="modal-content">
+            <h2 style="color:var(--gold)">¡BIENVENIDO!</h2>
+            <p>Ganaste esto mientras dormías:</p>
+            <h1 id="offline-amount" style="color:#2ecc71">$0</h1>
+            <button class="btn btn-gold" onclick="claimOffline(true)">📺 RECLAMAR DOBLE</button>
+            <button class="btn btn-green" onclick="claimOffline(false)">Reclamar Normal</button>
         </div>
-        <div class="currency">
+    </div>
+
+    <div class="header">
+        <div><strong>EMOJI CORP</strong> <small>Nvl <span id="lvl-num">1</span></small></div>
+        <div style="text-align:right;">
             <div class="money" id="money-ui">$0</div>
             <div class="gems" id="gems-ui">💎 0</div>
         </div>
     </div>
 
     <div class="game-zone">
-        <div id="main-emoji" onclick="doClick(event)">🚀</div>
-        
-        <div style="position: absolute; bottom: 5px; color: #555; font-size: 0.7rem;">
-            [Publicidad]
-        </div>
+        <div id="main-emoji" onclick="doClick(event)">💸</div>
+        <div style="position: absolute; bottom: 5px; font-size: 0.7rem; color: #555;">[Publicidad]</div>
     </div>
 
     <div class="tabs">
@@ -102,269 +103,180 @@
 
     <div class="panel-container">
         <div id="prod" class="panel active"></div>
-        
         <div id="upgrades" class="panel"></div>
-
         <div id="shop" class="panel">
-            
-            <div class="mystery-box" onclick="openMysteryBox()">
-                <div style="font-size: 2rem;">🎁</div>
+            <div style="text-align:center; padding:10px; border:1px dashed white; margin-bottom:15px; border-radius:10px;">
+                <div style="font-size:2rem;">🎁</div>
                 <h3>CAJA MISTERIOSA</h3>
-                <p>Cuesta: <strong>15 💎</strong></p>
-                <small>¡Puede contener dinero o el Multiplicador x5!</small>
+                <button class="btn btn-gold" onclick="openMysteryBox()">ABRIR (15 💎)</button>
             </div>
-
-            <button class="modal-btn btn-double" onclick="watchAdForGems()">
-                🎬 VER ANUNCIO (+10 💎)
-            </button>
-
-            <div class="item" style="border-color: gold; margin-top:20px;">
-                <div>
-                    <h4>⏳ Viaje al Futuro</h4>
-                    <small>Adelanta 1 hora de ganancias</small>
-                </div>
-                <button class="buy-btn" onclick="buyTimeWarp()" style="background:gold;">30 💎</button>
-            </div>
+            <button class="btn btn-green" onclick="watchAdForGems()">🎬 CONSEGUIR 10 💎 GRATIS</button>
+            <button class="btn btn-green" style="background:#3498db; color:white; margin-top:20px;" onclick="buyTimeWarp()">⏳ SALTO TEMPORAL (30 💎)</button>
         </div>
     </div>
 
 <script>
-    // --- DATOS DEL JUEGO ---
+    // --- DATOS ---
     const machinesDB = [
         {name: "Becario", cost: 15, prod: 1, icon: "🤓"},
         {name: "Servidor", cost: 100, prod: 5, icon: "🖥️"},
-        {name: "Hacker", cost: 1100, prod: 40, icon: "👨‍💻"},
-        {name: "Botnet", cost: 12000, prod: 300, icon: "🤖"},
-        {name: "IA Maestra", cost: 150000, prod: 2000, icon: "🧠"}
+        {name: "Crypto Miner", cost: 1100, prod: 45, icon: "⛏️"},
+        {name: "Botnet", cost: 12000, prod: 350, icon: "🤖"},
+        {name: "IA Cuántica", cost: 150000, prod: 2500, icon: "🧠"}
     ];
+    const upgradesDB = [
+        {name: "Ratón Gamer", cost: 500, mult: 2, icon: "🖱️", desc: "Clic x2"},
+        {name: "Bebida Energética", cost: 2500, mult: 2, icon: "🥤", desc: "Máquinas x2"},
+        {name: "Overclocking", cost: 10000, mult: 5, icon: "⚡", desc: "Clic x5"},
+        {name: "Refrigeración Líquida", cost: 500000, mult: 5, icon: "❄️", desc: "Máquinas x5"}
+    ];
+
+    // --- ESTADO ---
+    let game = { money: 0, gems: 5, qtys: [0,0,0,0,0], upgrades: [], lastSave: Date.now(), prestige: 1, total: 0 };
+    if(localStorage.getItem('hackerTycoon')) {
+        game = JSON.parse(localStorage.getItem('hackerTycoon'));
+        setTimeout(checkOffline, 1000);
+    }
+
+    // --- LÓGICA ---
+    function save() { game.lastSave = Date.now(); localStorage.setItem('hackerTycoon', JSON.stringify(game)); }
     
-    // Estado inicial
-    let game = {
-        money: 0,
-        gems: 5, // Regalamos 5 al empezar para enganchar
-        qtys: [0,0,0,0,0],
-        upgrades: [],
-        lastSave: Date.now(),
-        prestige: 1,
-        totalEarnings: 0 // Para calcular nivel
-    };
-
-    // --- CARGAR / GUARDAR ---
-    if(localStorage.getItem('emojiUltimate')) {
-        game = JSON.parse(localStorage.getItem('emojiUltimate'));
-        checkOfflineEarnings();
-    } else {
-        // Usuario nuevo
-        setTimeout(() => alert("¡Bienvenido CEO! Haz clic en el cohete para empezar."), 500);
-    }
-
-    function save() {
-        game.lastSave = Date.now();
-        localStorage.setItem('emojiUltimate', JSON.stringify(game));
-    }
-
-    // --- SISTEMA OFFLINE (RETENCIÓN) ---
-    let pendingOfflineCash = 0;
-
-    function checkOfflineEarnings() {
-        const now = Date.now();
-        const secondsGone = (now - game.lastSave) / 1000;
-        
-        if(secondsGone > 60) { // Si se fue más de 1 minuto
-            const pps = getPPS();
-            if(pps > 0) {
-                pendingOfflineCash = pps * secondsGone;
-                document.getElementById('offline-amount').innerText = `$${Math.floor(pendingOfflineCash).toLocaleString()}`;
-                document.getElementById('offline-modal').style.display = 'flex';
-            }
-        }
-    }
-
-    function claimOffline(isDouble) {
-        if(isDouble) {
-            // TRUCO: Abrimos publi y damos el doble
-            showAd(() => {
-                game.money += pendingOfflineCash * 2;
-                game.totalEarnings += pendingOfflineCash * 2;
-                closeModal();
-                alert("¡Doble ganancia recibida!");
-            });
-        } else {
-            game.money += pendingOfflineCash;
-            game.totalEarnings += pendingOfflineCash;
-            closeModal();
-        }
-    }
-    
-    function closeModal() {
-        document.getElementById('offline-modal').style.display = 'none';
-        save(); render();
-    }
-
-    // --- LÓGICA DE DINERO ---
-    function getPPS() { // Producción por segundo
+    function getPPS() {
         let p = 0;
         machinesDB.forEach((m, i) => p += (m.prod * game.qtys[i]));
+        if(game.upgrades.includes(1)) p *= 2;
+        if(game.upgrades.includes(3)) p *= 5;
         return p * game.prestige;
     }
 
     setInterval(() => {
         const inc = getPPS() / 10;
-        if(inc > 0) {
-            game.money += inc;
-            game.totalEarnings += inc;
-            updateLevel();
-        }
+        if(inc > 0) { game.money += inc; game.total += inc; }
         document.getElementById('money-ui').innerText = `$${Math.floor(game.money).toLocaleString()}`;
+        document.getElementById('lvl-num').innerText = Math.floor(Math.log10(game.total + 1)) + 1;
         save();
+        
+        // POSIBILIDAD DE HACKER (1% cada segundo si tienes dinero)
+        if(Math.random() < 0.01 && game.money > 1000 && document.getElementById('hacker-modal').style.display !== 'flex') {
+            triggerHacker();
+        }
     }, 100);
 
-    // --- ACCIONES ---
-    function doClick(e) {
-        const clickVal = (1 + (getPPS() * 0.05)) * game.prestige; // El click escala con tu producción
-        game.money += clickVal;
-        game.totalEarnings += clickVal;
-        
-        // Efecto Partícula
-        const p = document.createElement('div');
-        p.innerText = `+$${Math.floor(clickVal)}`;
-        p.className = 'particle';
-        p.style.left = e.clientX + 'px';
-        p.style.top = (e.clientY - 40) + 'px';
-        document.body.appendChild(p);
-        setTimeout(()=>p.remove(), 800);
-        
-        updateLevel();
-        save();
-        document.getElementById('money-ui').innerText = `$${Math.floor(game.money).toLocaleString()}`;
+    // --- EVENTO HACKER ---
+    function triggerHacker() {
+        document.getElementById('hacker-modal').style.display = 'flex';
+        // Vibrar móvil si es posible
+        if(navigator.vibrate) navigator.vibrate([200, 100, 200]);
     }
 
-    function buyItem(i) {
-        const m = machinesDB[i];
-        const cost = Math.floor(m.cost * Math.pow(1.15, game.qtys[i]));
-        if(game.money >= cost) {
-            game.money -= cost;
-            game.qtys[i]++;
-            save(); render();
+    function resolveHacker(watchedAd) {
+        if(watchedAd) {
+            showAd(() => {
+                const bonus = game.money * 0.25; // Ganas un 25% extra
+                game.money += bonus;
+                alert(`¡HACKER BLOQUEADO! Has robado sus datos y ganaste $${Math.floor(bonus)}`);
+                document.getElementById('hacker-modal').style.display = 'none';
+            });
+        } else {
+            const loss = game.money * 0.20; // Pierdes 20%
+            game.money -= loss;
+            alert(`¡TE HAN HACKEADO! Perdiste $${Math.floor(loss)}`);
+            document.getElementById('hacker-modal').style.display = 'none';
         }
     }
 
-    // --- TIENDA DE GEMAS & CAJA MISTERIOSA ---
-    
+    // --- OFFLINE ---
+    let offlineCash = 0;
+    function checkOffline() {
+        const sec = (Date.now() - game.lastSave) / 1000;
+        if(sec > 60 && getPPS() > 0) {
+            offlineCash = getPPS() * sec;
+            document.getElementById('offline-amount').innerText = `$${Math.floor(offlineCash).toLocaleString()}`;
+            document.getElementById('offline-modal').style.display = 'flex';
+        }
+    }
+    function claimOffline(double) {
+        if(double) showAd(() => { game.money += offlineCash * 2; document.getElementById('offline-modal').style.display = 'none'; });
+        else { game.money += offlineCash; document.getElementById('offline-modal').style.display = 'none'; }
+    }
+
+    // --- ACCIONES DE COMPRA ---
+    function buyItem(i) {
+        const cost = Math.floor(machinesDB[i].cost * Math.pow(1.15, game.qtys[i]));
+        if(game.money >= cost) { game.money -= cost; game.qtys[i]++; render(); }
+    }
+    function buyUpgrade(i) {
+        if(game.money >= upgradesDB[i].cost && !game.upgrades.includes(i)) {
+            game.money -= upgradesDB[i].cost; game.upgrades.push(i); render();
+        }
+    }
     function openMysteryBox() {
         if(game.gems >= 15) {
             game.gems -= 15;
-            save(); render();
-            
-            // RULETA DE PROBABILIDAD
-            const rand = Math.random();
-            if(rand < 0.5) { // 50% Dinero pequeño
-                const premio = getPPS() * 100 + 500;
-                game.money += premio;
-                alert(`📦 CAJA COMÚN: Ganaste $${Math.floor(premio)}`);
-            } else if(rand < 0.8) { // 30% Dinero grande
-                const premio = getPPS() * 600 + 2000;
-                game.money += premio;
-                alert(`📦📦 CAJA RARA: ¡Ganaste $${Math.floor(premio)}!`);
-            } else if(rand < 0.95) { // 15% Gemas devuelta
-                game.gems += 20;
-                alert(`💎 CAJA DE GEMAS: ¡20 Gemas!`);
-            } else { // 5% PREMIO GORDO
-                game.prestige += 0.5;
-                alert(`👑 CAJA LEGENDARIA: ¡Tu multiplicador de beneficios ha subido +0.5x!`);
-            }
-        } else {
-            alert("No tienes suficientes gemas (15) 💎");
-        }
+            const r = Math.random();
+            if(r < 0.5) { const p = getPPS()*300; game.money+=p; alert(` Ganaste $${Math.floor(p)}`); }
+            else if(r < 0.9) { game.gems+=20; alert(`¡20 Gemas!`); }
+            else { game.prestige+=0.5; alert(`¡PREMIO GORDO! Multiplicador +0.5x`); }
+            render();
+        } else alert("Faltan gemas");
     }
-
-    function buyTimeWarp() {
-        if(game.gems >= 30) {
-            game.gems -= 30;
-            game.money += getPPS() * 3600; // 1 hora
-            alert("¡VIAJE EN EL TIEMPO! Ganancia de 1 hora recibida.");
-            save(); render();
-        }
-    }
-
-    function watchAdForGems() {
-        showAd(() => {
-            game.gems += 10;
-            save(); render();
-            alert("¡+10 Gemas Recibidas!");
-        });
-    }
-
-    // --- INTEGRACIÓN PUBLICIDAD (AQUÍ ESTÁ TU DINERO) ---
+    function watchAdForGems() { showAd(() => { game.gems += 10; render(); alert("+10 Gemas"); }); }
+    function buyTimeWarp() { if(game.gems >= 30) { game.gems-=30; game.money+=getPPS()*3600; render(); } }
     
-    let lastAdTime = 0;
-    
-    function showAd(callback) {
-        const now = Date.now();
-        if(now - lastAdTime < 15000) { // 15 segundos entre anuncios
-            alert("El satélite de anuncios se está recargando...");
-            return;
-        }
-
-        // ▼▼▼▼ PEGA TU LINK DIRECTO DE ADSTERRA AQUÍ ABAJO ▼▼▼▼
-        const adLink = "https://www.effectivegatecpm.com/ttwcdab5?key=8d51779f7c6cbf2f752d275eb491f8dc";
-        // ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
-
-        window.open(adLink, '_blank');
-        lastAdTime = now;
+    function doClick(e) {
+        let clickVal = (1 + (getPPS() * 0.05)) * game.prestige;
+        if(game.upgrades.includes(0)) clickVal *= 2;
+        if(game.upgrades.includes(2)) clickVal *= 5;
         
-        // Retraso para simular que vio el anuncio
-        setTimeout(() => {
-            if(callback) callback();
-        }, 1000);
+        game.money += clickVal; game.total += clickVal;
+        
+        const p = document.createElement('div'); p.innerText=`+$${Math.floor(clickVal)}`; p.className='particle';
+        p.style.left=e.clientX+'px'; p.style.top=(e.clientY-40)+'px'; document.body.appendChild(p); setTimeout(()=>p.remove(),800);
+        document.getElementById('money-ui').innerText = `$${Math.floor(game.money).toLocaleString()}`;
     }
 
-    // --- UI HELPERS ---
-    function updateLevel() {
-        // Nivel basado en dinero total ganado (logarítmico)
-        const lvl = Math.floor(Math.log10(game.totalEarnings + 1)) + 1;
-        document.getElementById('lvl-num').innerText = lvl;
-        
-        // Barra de progreso (visual)
-        const nextLvlReq = Math.pow(10, lvl);
-        const prevLvlReq = Math.pow(10, lvl-1);
-        const progress = (game.totalEarnings - prevLvlReq) / (nextLvlReq - prevLvlReq) * 100;
-        document.getElementById('lvl-fill').style.width = Math.min(progress, 100) + '%';
-    }
-
+    // --- UI ---
     function tab(id) {
-        document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+        document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
         document.getElementById(id).classList.add('active');
-        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
         event.target.classList.add('active');
     }
-
     function render() {
         document.getElementById('gems-ui').innerText = `💎 ${game.gems}`;
-        
-        const div = document.getElementById('prod');
-        div.innerHTML = "";
+        // Máquinas
+        const d1 = document.getElementById('prod'); d1.innerHTML = "";
         machinesDB.forEach((m, i) => {
             const cost = Math.floor(m.cost * Math.pow(1.15, game.qtys[i]));
-            div.innerHTML += `
-            <div class="item">
-                <div style="display:flex; align-items:center;">
-                    <div style="font-size:1.8rem; margin-right:10px;">${m.icon}</div>
-                    <div>
-                        <div style="font-weight:bold;">${m.name}</div>
-                        <div style="font-size:0.8rem; color:#aaa;">Tienes: ${game.qtys[i]} | +$${m.prod}/s</div>
-                    </div>
-                </div>
-                <button class="buy-btn" onclick="buyItem(${i})" ${game.money < cost ? 'disabled' : ''}>
-                    $${cost.toLocaleString()}
-                </button>
-            </div>`;
+            d1.innerHTML += `<div class="item"><div><span style="font-size:1.5rem">${m.icon}</span> <b>${m.name}</b> (${game.qtys[i]})<br><small>+$${m.prod}/s</small></div><button class="btn-green" style="width:auto; padding:5px 15px;" onclick="buyItem(${i})" ${game.money<cost?'disabled':''}>$${cost.toLocaleString()}</button></div>`;
         });
+        // Mejoras
+        const d2 = document.getElementById('upgrades'); d2.innerHTML = "";
+        upgradesDB.forEach((u, i) => {
+            if(!game.upgrades.includes(i)) {
+                d2.innerHTML += `<div class="item"><div><span style="font-size:1.5rem">${u.icon}</span> <b>${u.name}</b><br><small>${u.desc}</small></div><button class="btn-green" style="width:auto; padding:5px 15px;" onclick="buyUpgrade(${i})" ${game.money<u.cost?'disabled':''}>$${u.cost.toLocaleString()}</button></div>`;
+            }
+        });
+        if(d2.innerHTML=="") d2.innerHTML="<center>¡Todo mejorado!</center>";
     }
-
-    // Inicio
     render();
-    updateLevel();
+
+    // ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼
+    // ¡¡¡ AQUI !!!  ¡¡¡ PEGA TU ENLACE DEBAJO !!!
+    // ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼
+    
+    function showAd(callback) {
+        // 1. BORRA EL TEXTO DE ABAJO (ENTRE LAS COMILLAS)
+        // 2. PEGA TU ENLACE LARGO DE ADSTERRA
+        
+        const adLink = "https://www.effectivegatecpm.com/ttwcdab5?key=8d51779f7c6cbf2f752d275eb491f8dc";
+        
+        // NO TOQUES NADA MÁS DEBAJO DE ESTA LÍNEA
+        if(Date.now() - window.lastAdTime < 15000) { alert("Anuncio cargando... espera"); return; }
+        window.open(adLink, '_blank');
+        window.lastAdTime = Date.now();
+        setTimeout(() => { if(callback) callback(); }, 1500);
+    }
 
 </script>
 </body>
