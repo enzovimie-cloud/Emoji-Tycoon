@@ -3,84 +3,126 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Emoji Tycoon: EXPANSION v21.1</title>
+    <title>Emoji Tycoon: HYBRID v21.2</title>
     <style>
-        /* (Mantenemos la base visual profesional anterior pero con toques nuevos) */
+        /* ESTILOS BASE */
         :root { --bg: #0b0b15; --panel: #161625; --accent: #ff4757; --gold: #ffd700; --text: #fff; --green: #2ecc71; --blue: #3498db; --purple: #9b59b6; --neon: #00f3ff; }
-        body { background-color: #050505; margin: 0; height: 100vh; display: flex; justify-content: center; align-items: center; font-family: 'Segoe UI', sans-serif; user-select: none; overflow: hidden; }
-        ::-webkit-scrollbar { width: 5px; }
-        ::-webkit-scrollbar-thumb { background: var(--blue); border-radius: 3px; }
+        body { background-color: #050505; margin: 0; height: 100vh; display: flex; justify-content: center; align-items: center; font-family: 'Segoe UI', sans-serif; user-select: none; overflow: hidden; color: var(--text); }
         
-        #game-app { width: 100%; max-width: 480px; height: 100%; background-color: var(--bg); color: var(--text); position: relative; display: flex; flex-direction: column; box-shadow: 0 0 50px rgba(0,0,0,0.5); overflow: hidden; }
-        .header { background: rgba(15, 15, 25, 0.98); padding: 10px 15px; border-bottom: 1px solid #333; z-index: 20; }
-        .money { color: var(--green); font-weight: 900; font-size: 1.6rem; text-shadow: 0 0 10px rgba(46, 204, 113, 0.3); }
-        .gems { color: var(--gold); font-weight: bold; background: rgba(255, 215, 0, 0.1); padding: 2px 12px; border-radius: 20px; border: 1px solid var(--gold); }
-        
-        .threat-bar-bg { width: 100%; height: 6px; background: #200; border-radius: 5px; margin-top: 8px; overflow: hidden; border: 1px solid #411; }
-        .threat-bar-fill { height: 100%; background: linear-gradient(90deg, #ff9f43, #ff4757); width: 0%; transition: width 0.3s; }
-        
-        .game-zone { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; background: radial-gradient(circle, #1e272e 0%, #0b0b15 100%); }
-        #main-emoji { font-size: 7rem; cursor: pointer; transition: transform 0.1s; z-index: 5; filter: drop-shadow(0 0 20px rgba(255,255,255,0.1)); }
-        #main-emoji:active { transform: scale(0.9); }
+        #game-app { width: 100%; max-width: 480px; height: 100%; background-color: var(--bg); position: relative; display: flex; flex-direction: column; box-shadow: 0 0 50px rgba(0,0,0,0.5); overflow: hidden; }
 
-        .tabs { display: flex; background: #0a0a12; border-top: 1px solid #333; height: 65px; }
-        .tab { flex: 1; border: none; background: none; color: #555; font-size: 0.7rem; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: 0.3s; }
-        .tab span { font-size: 1.5rem; margin-bottom: 2px; }
-        .tab.active { color: #fff; background: #161625; border-top: 2px solid var(--accent); }
+        /* HEADER & AJUSTES */
+        .header { background: rgba(15, 15, 25, 0.98); padding: 10px 15px; border-bottom: 1px solid #333; z-index: 20; flex-shrink: 0; }
+        .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
+        .money { color: var(--green); font-weight: 900; font-size: 1.4rem; text-shadow: 0 0 10px rgba(46, 204, 113, 0.4); }
+        .header-icons { display: flex; gap: 10px; align-items: center; }
+        .gems-display { color: var(--gold); font-weight: bold; font-size: 0.85rem; background: rgba(255, 215, 0, 0.1); padding: 4px 12px; border-radius: 20px; border: 1px solid rgba(255, 215, 0, 0.3); }
+        .settings-btn { font-size: 1.2rem; cursor: pointer; opacity: 0.8; transition: 0.3s; }
+        .settings-btn:hover { transform: rotate(90deg); opacity: 1; }
 
-        .panel-container { height: 45%; background: var(--panel); overflow-y: auto; padding: 12px; padding-bottom: 80px; }
-        .item { background: rgba(255,255,255,0.03); padding: 12px; margin-bottom: 8px; border-radius: 10px; display: flex; justify-content: space-between; align-items: center; border: 1px solid rgba(255,255,255,0.05); }
-        .item-info b { font-size: 0.95rem; color: #eee; }
-        .item-info small { color: #888; display: block; font-size: 0.75rem; }
-        
-        .btn-buy { background: var(--accent); color: #fff; border: none; padding: 8px 12px; border-radius: 6px; font-weight: bold; cursor: pointer; transition: 0.2s; min-width: 85px; }
-        .btn-buy:disabled { background: #333; color: #666; cursor: not-allowed; }
+        /* ZONA JUEGO */
+        .game-zone { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; background: radial-gradient(circle at center, #2c3e50 0%, #0b0b15 100%); overflow: hidden; }
+        #main-emoji { font-size: 6.5rem; cursor: pointer; transition: transform 0.1s; z-index: 5; filter: drop-shadow(0 0 20px rgba(255,255,255,0.1)); }
+        #main-emoji:active { transform: scale(0.95); }
 
-        .crypto-card { background: #000; border: 1px solid #f39c12; border-radius: 15px; padding: 15px; margin-bottom: 15px; text-align: center; }
-        .btc-val { font-size: 2.2rem; color: #f39c12; font-family: monospace; font-weight: bold; }
-        
-        .toast { position: absolute; top: 120px; left: 50%; transform: translateX(-50%); background: #000; color: #fff; padding: 8px 15px; border-radius: 20px; z-index: 1000; animation: up 2s forwards; border: 1px solid #444; }
-        @keyframes up { 0% {opacity:0; transform: translate(-50%, 20px);} 20% {opacity:1;} 80% {opacity:1;} 100% {opacity:0; transform: translate(-50%, -20px);} }
-        
-        .particle { position: absolute; pointer-events: none; animation: pUp 0.7s forwards; font-weight: bold; z-index: 10; }
-        @keyframes pUp { to { transform: translateY(-80px); opacity: 0; } }
+        /* TABS (Menú Abajo) */
+        .tabs { display: flex; background: #10101a; border-top: 1px solid #333; height: 65px; flex-shrink: 0; overflow-x: auto; scrollbar-width: none; }
+        .tabs::-webkit-scrollbar { display: none; }
+        .tab { flex: 1; min-width: 70px; padding: 5px 0; background: none; border: none; color: #555; font-size: 0.65rem; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: 0.2s; }
+        .tab span { font-size: 1.4rem; margin-bottom: 2px; }
+        .tab.active { color: #fff; border-top: 3px solid var(--accent); background: #161625; }
 
-        /* ESTILOS DEL NUEVO MODAL (Adiós alertas feas) */
-        .overlay { position: absolute; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.9); z-index: 2000; display:none; align-items:center; justify-content:center; backdrop-filter: blur(5px); }
-        .popup { background: #1a1a2e; padding: 25px; border-radius: 20px; width: 85%; max-width: 320px; text-align: center; border: 1px solid #444; box-shadow: 0 10px 40px rgba(0,0,0,0.8); animation: popIn 0.2s ease-out; }
-        @keyframes popIn { from {transform: scale(0.8); opacity: 0;} to {transform: scale(1); opacity: 1;} }
+        /* PANELES */
+        .panel-container { height: 45%; background: var(--panel); overflow-y: auto; padding: 10px; padding-bottom: 100px; box-shadow: inset 0 10px 20px rgba(0,0,0,0.2); }
+        .panel { display: none; animation: fadeIn 0.2s; }
+        .panel.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* ITEMS DE COMPRA */
+        .item { background: rgba(255,255,255,0.03); padding: 10px; margin-bottom: 8px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; border: 1px solid rgba(255,255,255,0.05); }
+        .item-info b { display: block; font-size: 0.9rem; color: #eee; }
+        .item-info small { color: #888; font-size: 0.75rem; }
         
+        .btn-buy { background: var(--accent); color: white; border: none; padding: 8px 12px; border-radius: 8px; font-weight: bold; cursor: pointer; min-width: 80px; font-size: 0.8rem; box-shadow: 0 3px 0 #a02e3a; transition: 0.1s; }
+        .btn-buy:active { transform: translateY(2px); box-shadow: none; }
+        .btn-buy:disabled { background: #333 !important; color: #666 !important; box-shadow: none !important; opacity: 0.6; pointer-events: none; }
+
+        /* MUNDO / CYBER CARDS (DISEÑO MODERNO) */
+        .world-lock { text-align: center; padding: 30px; color: #888; border: 1px dashed #444; border-radius: 15px; margin-top: 20px; }
+        .cyber-card { background: #0f0f1a; border: 1px solid #333; border-left: 4px solid var(--blue); border-radius: 8px; padding: 12px; margin-bottom: 10px; position: relative; overflow: hidden; }
+        .cyber-card.completed { border-left-color: var(--gold); opacity: 0.7; }
+        .cyber-title { font-weight: bold; font-size: 0.9rem; display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
+        .cyber-desc { font-size: 0.7rem; color: #aaa; margin-bottom: 8px; }
+        .cyber-reward { font-size: 0.7rem; color: var(--neon); background: rgba(0, 243, 255, 0.1); padding: 2px 6px; border-radius: 4px; display: inline-block; }
+        .cyber-btn { width: 100%; padding: 8px; background: var(--blue); color: white; border: none; font-weight: bold; margin-top: 8px; border-radius: 6px; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; font-size: 0.75rem; }
+        .cyber-btn.done { background: var(--gold); color: black; cursor: default; }
+
+        /* TIENDA (SUB-TABS) */
+        .sub-tabs { display: flex; gap: 10px; margin-bottom: 15px; justify-content: center; }
+        .sub-tab { background: #222; border: 1px solid #444; color: #888; padding: 6px 15px; border-radius: 15px; font-size: 0.7rem; font-weight: bold; cursor: pointer; transition: 0.2s; }
+        .sub-tab.active { background: var(--purple); color: #fff; border-color: var(--neon); box-shadow: 0 0 10px rgba(155, 89, 182, 0.3); }
+        
+        .skins-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+        .skin-item { background: #111; padding: 10px; border-radius: 12px; border: 2px solid #333; text-align: center; cursor: pointer; transition: 0.2s; }
+        .skin-item.active { border-color: var(--green); background: rgba(46, 204, 113, 0.05); }
+        .skin-icon { font-size: 2rem; display: block; margin-bottom: 5px; }
+
+        /* MODALES ELEGANTES */
+        .overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 3000; display: none; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
+        .popup { background: var(--panel); width: 85%; padding: 20px; border-radius: 20px; border: 1px solid #555; text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,0.8); }
         .popup h2 { margin-top: 0; color: var(--gold); }
-        .popup p { color: #ccc; font-size: 0.9rem; margin-bottom: 20px; line-height: 1.4; }
-        .popup-btns { display: flex; gap: 10px; justify-content: center; }
-        .btn-modal { padding: 10px 20px; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; flex: 1; }
-        .btn-cancel { background: #333; color: #fff; }
-        .btn-confirm { background: var(--green); color: #000; }
+        .popup p { color: #ccc; font-size: 0.9rem; line-height: 1.4; margin-bottom: 20px; }
+        .popup-btns { display: flex; gap: 10px; }
+        .modal-btn { flex: 1; padding: 12px; border-radius: 10px; border: none; font-weight: bold; cursor: pointer; font-size: 0.9rem; }
+        
+        /* NOTIFICACIONES */
+        #toast-area { position: absolute; top: 90px; width: 100%; display: flex; flex-direction: column; align-items: center; pointer-events: none; z-index: 4000; }
+        .toast { background: rgba(255,255,255,0.95); color: #000; padding: 8px 20px; border-radius: 30px; font-weight: bold; font-size: 0.8rem; margin-bottom: 8px; animation: slideDown 2s forwards; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+        @keyframes slideDown { 0% { opacity:0; transform:translateY(-20px); } 10% { opacity:1; transform:translateY(0); } 90% { opacity:1; transform:translateY(0); } 100% { opacity:0; transform:translateY(-20px); } }
+
+        /* OTROS */
+        .progress-track { width: 100%; height: 6px; background: #220000; border-radius: 3px; overflow: hidden; margin-top: 8px; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, #ff9f43, #ff4757); width: 0%; transition: width 0.3s; }
+        .particle { position: absolute; pointer-events: none; animation: floatUp 0.8s forwards; font-weight: bold; font-size: 1.2rem; z-index: 10; }
+        @keyframes floatUp { to { transform: translateY(-80px); opacity: 0; } }
     </style>
 </head>
 <body>
 
 <div id="game-app">
-    <div id="toast-area"></div>
-
+    
     <div id="custom-modal" class="overlay">
         <div class="popup">
             <h2 id="modal-title">AVISO</h2>
-            <p id="modal-msg">Mensaje aquí</p>
-            <div id="modal-actions" class="popup-btns">
-                </div>
+            <p id="modal-msg">Mensaje</p>
+            <div id="modal-actions" class="popup-btns"></div>
         </div>
     </div>
 
+    <div id="settings-modal" class="overlay">
+        <div class="popup">
+            <h2>⚙️ AJUSTES</h2>
+            <button class="modal-btn" style="background:var(--blue); color:white; width:100%; margin-bottom:10px;" onclick="toggleAudio()" id="btn-audio">SONIDO: ON</button>
+            <button class="modal-btn" style="background:#330000; color:#ff4757; border:1px solid #ff4757; width:100%;" onclick="hardReset()">⚠️ BORRAR PARTIDA</button>
+            <button class="modal-btn" style="background:transparent; color:#888; margin-top:15px; width:100%;" onclick="document.getElementById('settings-modal').style.display='none'">CERRAR</button>
+        </div>
+    </div>
+
+    <div id="toast-area"></div>
+
     <div class="header">
-        <div style="display:flex; justify-content:space-between; align-items:center;">
+        <div class="top-bar">
+            <div style="font-weight:900; font-size:0.9rem;">EMOJI TYCOON</div>
+            <div class="header-icons">
+                <div class="gems-display" id="gems-ui">💎 0</div>
+                <div class="settings-btn" onclick="document.getElementById('settings-modal').style.display='flex'">⚙️</div>
+            </div>
+        </div>
+        <div style="display:flex; justify-content:space-between; align-items:flex-end;">
             <div class="money" id="money-ui">$0</div>
-            <div class="gems">💎 <span id="gems-ui">0</span></div>
+            <div style="font-size:0.7rem; color:#888;">Prod: <span id="pps-ui">0</span>/s</div>
         </div>
-        <div style="font-size:0.8rem; color:#888; margin-top:4px;">
-            Producción: <span id="pps-ui">0</span>/s | <span id="mult-ui">x1.0</span>
-        </div>
-        <div class="threat-bar-bg"><div class="threat-bar-fill" id="threat-bar"></div></div>
+        <div class="progress-track"><div class="progress-fill" id="threat-bar"></div></div>
     </div>
 
     <div class="game-zone">
@@ -89,314 +131,311 @@
 
     <div class="tabs">
         <button class="tab active" onclick="tab('prod', event)"><span>🏭</span>Máquinas</button>
-        <button class="tab" onclick="tab('btc-tab', event)"><span>₿</span>Bitcoin</button>
+        <button class="tab" onclick="tab('def', event)"><span>🛡️</span>Seguridad</button>
+        <button class="tab" onclick="tab('btc', event)"><span>₿</span>Mercado</button>
         <button class="tab" onclick="tab('shop', event)"><span>🛒</span>Tienda</button>
-        <button class="tab" onclick="tab('settings', event)"><span>⚙️</span>Ajustes</button>
+        <button class="tab" onclick="tab('world', event)"><span>🌍</span>Mundo</button>
     </div>
 
     <div class="panel-container">
-        <div id="prod" class="panel" style="display:block;"></div>
         
-        <div id="btc-tab" class="panel" style="display:none;">
-            <div class="crypto-card">
-                <div style="color:#888; font-size:0.8rem;">BALANCE CRYPTO</div>
-                <div class="btc-val">₿ <span id="btc-ui">0</span></div>
-                <div style="color:#aaa; margin:10px 0;">Precio actual: <b id="btc-price" style="color:#2ecc71;">$100</b></div>
+        <div id="prod" class="panel active"></div>
+
+        <div id="def" class="panel"></div>
+
+        <div id="btc" class="panel">
+            <div style="background:#000; padding:15px; border-radius:15px; text-align:center; border:1px solid #333;">
+                <div style="color:#888; font-size:0.7rem;">BITCOIN WALLET</div>
+                <div style="font-size:2rem; color:#f39c12; font-weight:bold; margin:5px 0;" id="btc-ui">0</div>
+                <div style="font-size:0.8rem; color:#aaa; margin-bottom:15px;">1 BTC = <span style="color:#fff; font-weight:bold;" id="btc-price-ui">$0</span></div>
                 <div style="display:flex; gap:10px;">
                     <button class="btn-buy" style="flex:1; background:#f39c12;" onclick="mineBTC()">⛏️ MINAR</button>
                     <button class="btn-buy" style="flex:1; background:#27ae60;" onclick="sellBTC()">💰 VENDER</button>
                 </div>
             </div>
-            <div style="color:var(--neon); font-size:0.7rem; font-weight:bold; margin-bottom:10px;">MERCADO NEGRO (MEJORAS BTC)</div>
-            <div id="btc-upgrades"></div>
+            <div style="margin:20px 0 10px 0; font-size:0.8rem; color:var(--accent); font-weight:bold; border-bottom:1px solid #333; padding-bottom:5px;">🕵️ MERCADO NEGRO (PAGO CON BTC)</div>
+            <div id="dark-list"></div>
         </div>
 
-        <div id="shop" class="panel" style="display:none;">
-            <div style="color:var(--gold); font-size:0.7rem; font-weight:bold; margin-bottom:10px;">OBJETOS DE LUJO (GEMAS)</div>
-            <div id="gem-upgrades"></div>
+        <div id="shop" class="panel">
+            <div class="sub-tabs">
+                <div class="sub-tab active" id="sub-obj" onclick="subTab('obj')">📦 MEJORAS</div>
+                <div class="sub-tab" id="sub-skin" onclick="subTab('skin')">🎭 SKINS</div>
+            </div>
+            
+            <div id="view-obj">
+                <div id="gem-list"></div>
+                <div style="text-align:center; margin-top:20px;">
+                    <button class="modal-btn" style="background:var(--blue); color:white; width:auto;" onclick="watchAdForGems()">🎬 Ver Anuncio (+10 Gemas)</button>
+                </div>
+            </div>
+
+            <div id="view-skin" style="display:none;">
+                <div class="skins-grid" id="skins-list"></div>
+            </div>
         </div>
 
-        <div id="settings" class="panel" style="display:none;">
-            <div class="item">
-                <div class="item-info"><b>Sonido</b><small>Efectos de audio</small></div>
-                <button class="btn-buy" onclick="toggleAudio()" id="audio-btn">ON</button>
+        <div id="world" class="panel">
+            <div id="world-lock" class="world-lock" style="display:none;">
+                <div style="font-size:3rem;">🔒</div>
+                <h3>ZONA RESTRINGIDA</h3>
+                <p>Necesitas 100 Gemas y 1 Servidor para acceder a la red global.</p>
             </div>
-            <div class="item">
-                <div class="item-info"><b>Partida</b><small>Borrar todo el progreso</small></div>
-                <button class="btn-buy" style="background:#444;" onclick="hardReset()">RESETEAR</button>
+            <div id="world-content">
+                <div style="text-align:center; font-size:0.8rem; color:var(--blue); margin-bottom:15px; font-weight:bold;">SISTEMA GLOBAL DE MISIONES</div>
+                <div id="mission-list"></div>
             </div>
-            <div style="text-align:center; color:#444; margin-top:20px; font-size:0.8rem;">Emoji Tycoon v21.1 Clean UI</div>
         </div>
+
     </div>
 </div>
 
 <script>
-    // --- BASE DE DATOS AMPLIADA ---
+    /* --- BASES DE DATOS --- */
     const machinesDB = [
-        { name: "Clic Manual", cost: 15, prod: 1, icon: "🖱️" },
-        { name: "Auto-Clicker", cost: 150, prod: 8, icon: "🤖" },
-        { name: "Servidor Casero", cost: 1200, prod: 45, icon: "🖥️" },
-        { name: "Granja de GPU", cost: 15000, prod: 250, icon: "📼" },
-        { name: "Centro de Datos", cost: 180000, prod: 1200, icon: "🏢" },
-        { name: "Supercomputador", cost: 2500000, prod: 8500, icon: "🧠" },
-        { name: "Red Satelital", cost: 50000000, prod: 60000, icon: "🛰️" },
-        { name: "IA de Singularidad", cost: 1000000000, prod: 500000, icon: "🌌" },
-        { name: "Simulador Cuántico", cost: 75000000000, prod: 4000000, icon: "🌀" }
+        {name: "Script Básico", cost: 15, prod: 1, icon: "👶"},
+        {name: "PC Gamer", cost: 150, prod: 10, icon: "💻"},
+        {name: "Servidor Rack", cost: 1400, prod: 80, icon: "🖥️"},
+        {name: "Granja Crypto", cost: 25000, prod: 500, icon: "🏭"},
+        {name: "IA Maestra", cost: 500000, prod: 3500, icon: "🧠"}
+    ];
+    const defDB = [
+        {name: "VPN Básica", cost: 500, red: 0.1, desc: "Amenaza -10%"},
+        {name: "Firewall Pro", cost: 5000, red: 0.25, desc: "Amenaza -25%"},
+        {name: "Señuelo Datos", cost: 50000, red: 0, desc: "Gana 5 BTC al ser hackeado"}
+    ];
+    const gemItemsDB = [
+        {id: "boost", name: "Café Dev", cost: 5, desc: "x2 Producción (30s)", icon: "☕"},
+        {id: "shield", name: "Escudo", cost: 15, desc: "Bloquea 1 Hackeo", icon: "🛡️"},
+        {id: "warp", name: "Salto", cost: 20, desc: "+1 Hora de dinero", icon: "⏩"}
+    ];
+    const darkItemsDB = [
+        {id: "bot", name: "Bot Clicker", cost: 50, desc: "Clics automáticos", icon: "🤖"},
+        {id: "spy", name: "Spyware", cost: 100, desc: "Ver tendencia BTC", icon: "👁️"},
+        {id: "over", name: "Overclock", cost: 500, desc: "+10% Prod (Acumulable)", icon: "⚡"}
+    ];
+    const missionsDB = [
+        {name: "WiFi Vecino", cost: 5000, reward: "+1 Gema/min", icon: "📶"},
+        {name: "Red Cajeros", cost: 50000, reward: "Máquinas -10% coste", icon: "🏧"},
+        {name: "Banco Central", cost: 500000, reward: "Bitcoin vale x2", icon: "🏦"},
+        {name: "Satélite Espía", cost: 5000000, reward: "Amenaza sube 50% lento", icon: "🛰️"},
+        {name: "La Matrix", cost: 5000000000, reward: "MODO INFINITO", icon: "🕶️"}
+    ];
+    const skinsDB = [
+        {id: "baby", icon: "👶", cost: 0},
+        {id: "cool", icon: "😎", cost: 50},
+        {id: "hacker", icon: "😈", cost: 150},
+        {id: "robot", icon: "🤖", cost: 300},
+        {id: "alien", icon: "👽", cost: 500},
+        {id: "king", icon: "👑", cost: 1000}
     ];
 
-    const btcUpgradesDB = [
-        { id: 'spy', name: "Spyware V2", cost: 50, desc: "Predice precios futuros", icon: "👁️" },
-        { id: 'hqc', name: "Hardware Cuántico", cost: 250, desc: "Producción Base x2", icon: "⚛️" },
-        { id: 'algo', name: "Algoritmo Trade", cost: 1000, desc: "Bitcoin vale 50% más", icon: "📉" },
-        { id: 'shld', name: "Proxy Fantasma", cost: 5000, desc: "Roba 0% ante Hackers", icon: "👻" }
-    ];
+    /* --- ESTADO DEL JUEGO --- */
+    let game = { money: 0, gems: 20, btc: 0, machines: [0,0,0,0,0], security: [0,0,0], ownedSkins: ["baby"], currentSkin: "baby", missions: [0,0,0,0,0], hasBot: false, hasSpy: false, hasShield: false, overclock: 0, audio: true, lastLogin: Date.now() };
+    let threat = 0; let btcPrice = 50; let boostMult = 1;
 
-    const gemUpgradesDB = [
-        { id: 'boost', name: "Empuje de Inicio", cost: 10, desc: "Gana $50,000", icon: "💸" },
-        { id: 'mult', name: "Multiplicador x2", cost: 50, desc: "Todo x2 para siempre", icon: "🔥" },
-        { id: 'warp', name: "Salto Temporal", cost: 25, desc: "Gana 2h de producción", icon: "⏩" }
-    ];
+    /* --- CARGA --- */
+    if(localStorage.getItem('EmojiHybrid_v21_2')) {
+        try { game = JSON.parse(localStorage.getItem('EmojiHybrid_v21_2')); } catch(e){}
+    }
+    // Ganancias Offline
+    let now = Date.now();
+    let seconds = (now - game.lastLogin) / 1000;
+    if(seconds > 60) {
+        let earn = getPPS() * seconds;
+        if(earn > 0) {
+            setTimeout(() => showModal("¡HOLA DE NUEVO!", `Has ganado $${fmt(earn)} mientras no estabas.`, null, () => { game.money+=earn; updateUI(); }), 500);
+        }
+    }
+    game.lastLogin = now;
 
-    // --- ESTADO DEL JUEGO ---
-    let game = {
-        money: 0,
-        gems: 10,
-        btc: 0,
-        machines: new Array(machinesDB.length).fill(0),
-        ownedBtcUpgrades: [],
-        permanentMult: 1,
-        audio: true,
-        threat: 0,
-        lastSave: Date.now()
-    };
-
-    let currentBtcPrice = 100;
-    let nextBtcPrice = 110;
-
-    // --- SISTEMA DE MODALES (REEMPLAZO DE ALERT/CONFIRM) ---
-    function showModal(title, msg, onConfirm = null) {
+    /* --- SISTEMA DE MODALES LIMPIOS --- */
+    function showModal(title, msg, onCancel, onConfirm) {
         document.getElementById('modal-title').innerText = title;
         document.getElementById('modal-msg').innerText = msg;
-        const actions = document.getElementById('modal-actions');
-        actions.innerHTML = '';
-
-        if (onConfirm) {
-            // Modo Confirmación (Dos botones)
-            const btnCancel = document.createElement('button');
-            btnCancel.className = 'btn-modal btn-cancel';
-            btnCancel.innerText = 'CANCELAR';
-            btnCancel.onclick = closeModal;
-
-            const btnConfirm = document.createElement('button');
-            btnConfirm.className = 'btn-modal btn-confirm';
-            btnConfirm.innerText = 'CONFIRMAR';
-            btnConfirm.onclick = () => { closeModal(); onConfirm(); };
-
-            actions.appendChild(btnCancel);
-            actions.appendChild(btnConfirm);
+        let area = document.getElementById('modal-actions');
+        area.innerHTML = "";
+        
+        if(onConfirm) {
+            // Dos botones
+            let b1 = document.createElement('button'); b1.className = "modal-btn"; b1.style.background="#333"; b1.style.color="#fff"; b1.innerText="CANCELAR";
+            b1.onclick = () => { document.getElementById('custom-modal').style.display='none'; if(onCancel) onCancel(); };
+            let b2 = document.createElement('button'); b2.className = "modal-btn"; b2.style.background="var(--green)"; b2.style.color="#000"; b2.innerText="CONFIRMAR";
+            b2.onclick = () => { document.getElementById('custom-modal').style.display='none'; onConfirm(); };
+            area.appendChild(b1); area.appendChild(b2);
         } else {
-            // Modo Alerta (Un botón)
-            const btnOk = document.createElement('button');
-            btnOk.className = 'btn-modal';
-            btnOk.style.background = 'var(--blue)';
-            btnOk.style.color = '#fff';
-            btnOk.innerText = 'ENTENDIDO';
-            btnOk.onclick = closeModal;
-            actions.appendChild(btnOk);
+            // Un botón (Alerta)
+            let b = document.createElement('button'); b.className = "modal-btn"; b.style.background="var(--blue)"; b.style.color="#fff"; b.innerText="ENTENDIDO";
+            b.onclick = () => { document.getElementById('custom-modal').style.display='none'; if(onCancel) onCancel(); };
+            area.appendChild(b);
         }
         document.getElementById('custom-modal').style.display = 'flex';
     }
 
-    function closeModal() {
-        document.getElementById('custom-modal').style.display = 'none';
+    function notify(msg) {
+        let t = document.createElement('div'); t.className='toast'; t.innerText=msg;
+        document.getElementById('toast-area').appendChild(t);
+        setTimeout(()=>t.remove(), 2500);
     }
 
-    // --- MOTOR DEL JUEGO ---
-    function fmt(n) {
-        if (n < 1000) return Math.floor(n);
-        const suffixes = ["", "k", "M", "B", "T", "Q"];
-        const i = Math.floor(Math.log10(n) / 3);
-        return (n / Math.pow(1000, i)).toFixed(2) + suffixes[i];
-    }
-
+    /* --- LÓGICA --- */
     function getPPS() {
-        let base = 0;
-        machinesDB.forEach((m, i) => base += m.prod * game.machines[i]);
-        if (game.ownedBtcUpgrades.includes('hqc')) base *= 2;
-        return base * game.permanentMult;
+        let p = 0; machinesDB.forEach((m,i) => p += (m.prod * game.machines[i]));
+        // Bonificaciones
+        if(game.missions[3]) p *= 2; // Satélite da bonus
+        if(game.missions[4]) p *= 100; // Matrix
+        p *= (1 + (game.overclock * 0.1));
+        return p * boostMult;
     }
 
-    function updateUI() {
-        document.getElementById('money-ui').innerText = "$" + fmt(game.money);
-        document.getElementById('pps-ui').innerText = fmt(getPPS());
-        document.getElementById('gems-ui').innerText = game.gems;
-        document.getElementById('btc-ui').innerText = game.btc;
-        document.getElementById('mult-ui').innerText = "x" + game.permanentMult.toFixed(1);
-        document.getElementById('btc-price').innerText = "$" + currentBtcPrice;
-        document.getElementById('threat-bar').style.width = game.threat + "%";
-
-        // Render Máquinas
-        let hProd = "";
-        machinesDB.forEach((m, i) => {
-            let cost = Math.floor(m.cost * Math.pow(1.25, game.machines[i]));
-            let canBuy = game.money >= cost;
-            hProd += `<div class="item">
-                <div class="item-info"><b>${m.icon} ${m.name}</b><small>Posees: ${game.machines[i]} (+$${fmt(m.prod)}/s)</small></div>
-                <button class="btn-buy" ${canBuy ? '' : 'disabled'} onclick="buyMachine(${i})">$${fmt(cost)}</button>
-            </div>`;
-        });
-        document.getElementById('prod').innerHTML = hProd;
-
-        // Render Upgrades BTC
-        let hBtc = "";
-        btcUpgradesDB.forEach(u => {
-            let owned = game.ownedBtcUpgrades.includes(u.id);
-            hBtc += `<div class="item">
-                <div class="item-info"><b>${u.icon} ${u.name}</b><small>${u.desc}</small></div>
-                <button class="btn-buy" style="background:#8e44ad;" ${owned || game.btc < u.cost ? 'disabled' : ''} onclick="buyBtcUpgrade('${u.id}', ${u.cost})">
-                    ${owned ? 'LISTO' : u.cost + ' ₿'}
-                </button>
-            </div>`;
-        });
-        document.getElementById('btc-upgrades').innerHTML = hBtc;
-
-        // Render Shop Gemas
-        let hGem = "";
-        gemUpgradesDB.forEach(u => {
-            hGem += `<div class="item">
-                <div class="item-info"><b>${u.icon} ${u.name}</b><small>${u.desc}</small></div>
-                <button class="btn-buy" style="background:var(--gold); color:#000;" ${game.gems < u.cost ? 'disabled' : ''} onclick="buyGemUpgrade('${u.id}', ${u.cost})">
-                    ${u.cost} 💎
-                </button>
-            </div>`;
-        });
-        document.getElementById('gem-upgrades').innerHTML = hGem;
-    }
-
-    // --- ACCIONES ---
     function doClick(e) {
-        let val = (1 + getPPS() * 0.1) * game.permanentMult;
+        let val = (1 + (getPPS() * 0.05)) * boostMult;
         game.money += val;
         createParticle(e.clientX, e.clientY, `+$${fmt(val)}`, "#2ecc71");
         updateUI();
     }
 
     function buyMachine(i) {
-        let cost = Math.floor(machinesDB[i].cost * Math.pow(1.25, game.machines[i]));
-        if (game.money >= cost) {
-            game.money -= cost;
-            game.machines[i]++;
-            updateUI();
+        let discount = game.missions[1] ? 0.9 : 1;
+        let cost = Math.floor(machinesDB[i].cost * Math.pow(1.2, game.machines[i]) * discount);
+        if(game.money >= cost) { game.money -= cost; game.machines[i]++; notify("Máquina +1"); updateUI(); }
+    }
+
+    function buyDef(i) {
+        if(game.money >= defDB[i].cost && !game.security[i]) {
+            game.money -= defDB[i].cost; game.security[i] = 1; notify("Defensa Activada"); updateUI();
         }
     }
 
-    function mineBTC() {
-        game.btc++;
-        updateUI();
-    }
-
-    function sellBTC() {
-        if (game.btc > 0) {
-            let mult = game.ownedBtcUpgrades.includes('algo') ? 1.5 : 1;
-            game.money += game.btc * currentBtcPrice * mult;
-            game.btc = 0;
-            updateUI();
-        }
-    }
-
-    function buyBtcUpgrade(id, cost) {
-        if (game.btc >= cost && !game.ownedBtcUpgrades.includes(id)) {
-            if(confirm('¿Comprar esta mejora del Mercado Negro?')) { // Usamos nuestro modal si quieres, pero aquí dejo confirm para lógica rápida, mejor usar showModal
-               // En realidad, reemplacemos esto por showModal para consistencia total:
-               // No puedo hacer await en onclick directo facilmente, asi que lo haré directo aquí ya que el botón dice el precio:
-               game.btc -= cost;
-               game.ownedBtcUpgrades.push(id);
-               updateUI();
-            }
-        }
-    }
-    
-    // Sobreescribimos la función anterior para usar el modal en compras importantes si quisieras, 
-    // pero para fluidez dejaremos la compra directa. 
-    // Vamos a arreglar el hardReset y el Hacker que son los molestos.
-
-    function buyGemUpgrade(id, cost) {
-        if (game.gems >= cost) {
+    function buyGemItem(id, cost) {
+        if(game.gems >= cost) {
             game.gems -= cost;
-            if (id === 'boost') game.money += 50000;
-            if (id === 'mult') game.permanentMult += 1;
-            if (id === 'warp') game.money += getPPS() * 7200;
+            if(id=='boost') { boostMult=2; setTimeout(()=>boostMult=1, 30000); notify("x2 Producción (30s)"); }
+            if(id=='shield') { game.hasShield=true; notify("Escudo Equipado"); }
+            if(id=='warp') { game.money += getPPS() * 3600; notify("Salto Temporal!"); }
             updateUI();
+        } else notify("Faltan Gemas");
+    }
+
+    function buyDarkItem(id, cost) {
+        if(game.btc >= cost) {
+            game.btc -= cost;
+            if(id=='bot') game.hasBot=true;
+            if(id=='spy') game.hasSpy=true;
+            if(id=='over') game.overclock++;
+            notify("Item Oscuro Adquirido"); updateUI();
         }
     }
 
-    // --- LOOPS ---
-    setInterval(() => {
-        game.money += getPPS() / 10;
-        game.threat += 0.05;
-        if (game.threat >= 100) {
-            let loss = game.ownedBtcUpgrades.includes('shld') ? 0 : 0.2;
-            game.money -= game.money * loss;
-            game.threat = 0;
-            // AQUI ESTABA EL ALERT FEO
-            if (loss > 0) {
-                showModal("🚨 ALERTA DE SEGURIDAD", "¡Un hacker ha vulnerado tu sistema! Has perdido el 20% de tus fondos.", null);
-            } else {
-                showModal("🛡️ ATAQUE BLOQUEADO", "Tu Proxy Fantasma ha detenido un intento de hackeo.", null);
-            }
+    function buySkin(id, cost) {
+        if(game.ownedSkins.includes(id)) { game.currentSkin = id; notify("Skin Equipada"); updateUI(); }
+        else if(game.gems >= cost) {
+            showModal("TIENDA", `¿Comprar skin por ${cost} gemas?`, null, () => {
+                game.gems -= cost; game.ownedSkins.push(id); game.currentSkin = id; notify("Skin Comprada!"); updateUI();
+            });
         }
+    }
+
+    function doMission(i) {
+        let m = missionsDB[i];
+        if(game.money >= m.cost) {
+            game.money -= m.cost; game.missions[i] = 1; notify("Misión Cumplida!"); updateUI();
+        }
+    }
+
+    function mineBTC() { game.btc++; updateUI(); }
+    function sellBTC() { if(game.btc>0) { let val=game.btc*btcPrice; if(game.missions[2]) val*=2; game.money+=val; game.btc=0; updateUI(); } }
+
+    /* --- UI --- */
+    function updateUI() {
+        document.getElementById('money-ui').innerText = "$" + fmt(game.money);
+        document.getElementById('pps-ui').innerText = fmt(getPPS());
+        document.getElementById('gems-ui').innerText = "💎 " + game.gems;
+        document.getElementById('btc-ui').innerText = game.btc;
+        document.getElementById('btc-price-ui').innerText = "$" + btcPrice;
+        document.getElementById('main-emoji').innerText = skinsDB.find(s=>s.id==game.currentSkin).icon;
+
+        // Máquinas
+        let h=""; machinesDB.forEach((m,i)=>{
+            let disc = game.missions[1]?0.9:1; let cost = Math.floor(m.cost*Math.pow(1.2,game.machines[i])*disc);
+            h+=`<div class="item"><div><b>${m.icon} ${m.name}</b><small>Own: ${game.machines[i]}</small></div><button class="btn-buy" ${game.money<cost?'disabled':''} onclick="buyMachine(${i})">$${fmt(cost)}</button></div>`;
+        }); document.getElementById('prod').innerHTML = h;
+
+        // Seguridad
+        h=""; defDB.forEach((d,i)=>{
+            h+=`<div class="item"><div><b>${d.name}</b><small>${d.desc}</small></div><button class="btn-buy" ${game.security[i]||game.money<d.cost?'disabled':''} onclick="buyDef(${i})">${game.security[i]?'LISTO':'$'+fmt(d.cost)}</button></div>`;
+        }); document.getElementById('def').innerHTML = h;
+
+        // Mercado Negro
+        h=""; darkItemsDB.forEach(d=>{
+            let cost = d.id=='over'?500*(game.overclock+1):d.cost;
+            let owned = (d.id=='bot'&&game.hasBot)||(d.id=='spy'&&game.hasSpy);
+            h+=`<div class="item"><div><b>${d.icon} ${d.name}</b><small>${d.desc}</small></div><button class="btn-buy" style="background:var(--purple);" ${owned||game.btc<cost?'disabled':''} onclick="buyDarkItem('${d.id}',${cost})">${owned?'OK':cost+' ₿'}</button></div>`;
+        }); document.getElementById('dark-list').innerHTML = h;
+
+        // Tienda (Items)
+        h=""; gemItemsDB.forEach(g=>{
+            h+=`<div class="item"><div><b>${g.icon} ${g.name}</b><small>${g.desc}</small></div><button class="btn-buy" style="background:var(--blue);" ${game.gems<g.cost?'disabled':''} onclick="buyGemItem('${g.id}',${g.cost})">${g.cost} 💎</button></div>`;
+        }); document.getElementById('gem-list').innerHTML = h;
+
+        // Skins
+        h=""; skinsDB.forEach(s=>{
+            let owned = game.ownedSkins.includes(s.id); let active = game.currentSkin === s.id;
+            h+=`<div class="skin-item ${active?'active':''}" onclick="buySkin('${s.id}',${s.cost})"><span class="skin-icon">${s.icon}</span><div style="font-size:0.6rem; color:#aaa;">${owned?'PROPIO':s.cost+'💎'}</div></div>`;
+        }); document.getElementById('skins-list').innerHTML = h;
+
+        // Mundo
+        let unlocked = game.gems >= 100 && game.machines[2] > 0;
+        document.getElementById('world-lock').style.display = unlocked ? 'none' : 'block';
+        document.getElementById('world-content').style.display = unlocked ? 'block' : 'none';
+        
+        h=""; missionsDB.forEach((m,i)=>{
+            let done = game.missions[i]; let can = game.money >= m.cost && (i==0 || game.missions[i-1]);
+            h+=`<div class="cyber-card ${done?'completed':''}">
+                <div class="cyber-title"><span>${m.icon} ${m.name}</span><span>$${fmt(m.cost)}</span></div>
+                <div class="cyber-desc">Recompensa: ${m.reward}</div>
+                <button class="cyber-btn ${done?'done':''}" ${!can||done?'disabled':''} onclick="doMission(${i})">${done?'COMPLETADO':'HACKEAR SISTEMA'}</button>
+            </div>`;
+        }); document.getElementById('mission-list').innerHTML = h;
+    }
+
+    /* --- UTILS --- */
+    function tab(id,e) { 
+        document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+        document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+        document.getElementById(id).classList.add('active'); e.currentTarget.classList.add('active');
+    }
+    function subTab(id) {
+        document.getElementById('view-obj').style.display = id=='obj'?'block':'none';
+        document.getElementById('view-skin').style.display = id=='skin'?'block':'none';
+        document.getElementById('sub-obj').classList.toggle('active', id=='obj');
+        document.getElementById('sub-skin').classList.toggle('active', id=='skin');
+    }
+    function fmt(n) { if(n<1000) return Math.floor(n); let s=["","k","M","B","T"]; let e=Math.floor(Math.log10(n)/3); return (n/Math.pow(1000,e)).toFixed(1)+s[e]; }
+    function createParticle(x,y,txt,col) { let p=document.createElement('div'); p.className='particle'; p.innerText=txt; p.style.left=x+'px'; p.style.top=y+'px'; p.style.color=col; document.body.appendChild(p); setTimeout(()=>p.remove(),800); }
+    function watchAdForGems() { window.open("https://www.effectivegatecpm.com/ttwcdab5?key=8d51779f7c6cbf2f752d275eb491f8dc", '_blank'); setTimeout(()=>{ game.gems+=10; notify("+10 Gemas"); updateUI(); },1500); }
+    function toggleAudio() { game.audio=!game.audio; document.getElementById('btn-audio').innerText = game.audio?"SONIDO: ON":"SONIDO: OFF"; }
+    function hardReset() { showModal("RESET", "¿Seguro? Perderás todo.", null, ()=>{ localStorage.clear(); location.reload(); }); }
+
+    /* --- LOOPS --- */
+    setInterval(() => {
+        game.money += getPPS()/10;
+        let red = 1; if(game.security[0]) red-=0.1; if(game.security[1]) red-=0.25; if(game.missions[3]) red-=0.5;
+        threat += 0.08 * red;
+        if(threat>=100) {
+            threat=0;
+            if(game.security[2]) { game.btc+=5; notify("🛡️ Señuelo: +5 BTC"); }
+            else if(game.hasShield) { game.hasShield=false; notify("🛡️ Escudo Usado"); }
+            else { game.money*=0.8; showModal("🚨 HACKEADO", "Has perdido el 20% de tus fondos.", null, ()=>{}); }
+        }
+        document.getElementById('threat-bar').style.width = threat+"%";
+        if(game.hasBot && Math.random()<0.1) doClick({clientX:window.innerWidth/2, clientY:window.innerHeight/3});
         updateUI();
     }, 100);
 
-    setInterval(() => {
-        currentBtcPrice = nextBtcPrice;
-        nextBtcPrice = Math.floor(Math.random() * 500) + 50;
-    }, 5000);
+    setInterval(() => { btcPrice = Math.floor(Math.random()*180)+20; }, 4000);
+    setInterval(() => { game.lastLogin=Date.now(); localStorage.setItem('EmojiHybrid_v21_2', JSON.stringify(game)); }, 5000);
 
-    // --- UI HELPERS ---
-    function tab(id, e) {
-        document.querySelectorAll('.panel').forEach(p => p.style.display = 'none');
-        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-        document.getElementById(id).style.display = 'block';
-        e.currentTarget.classList.add('active');
-    }
-
-    function createParticle(x, y, text, color) {
-        let p = document.createElement('div');
-        p.className = 'particle';
-        p.innerText = text;
-        p.style.left = x + 'px';
-        p.style.top = y + 'px';
-        p.style.color = color;
-        document.body.appendChild(p);
-        setTimeout(() => p.remove(), 700);
-    }
-
-    function toggleAudio() {
-        game.audio = !game.audio;
-        document.getElementById('audio-btn').innerText = game.audio ? "ON" : "OFF";
-    }
-
-    function hardReset() {
-        // AQUI ESTABA EL CONFIRM FEO
-        showModal("⚠️ BORRADO DE DATOS", "¿Estás seguro de que quieres borrar todo tu progreso permanentemente?", () => {
-            localStorage.clear();
-            location.reload();
-        });
-    }
-
-    // Cargar/Guardar
-    function save() { localStorage.setItem('emoji_tycoon_v21', JSON.stringify(game)); }
-    function load() {
-        let data = localStorage.getItem('emoji_tycoon_v21');
-        if (data) {
-            let obj = JSON.parse(data);
-            game = {...game, ...obj};
-        }
-    }
-
-    setInterval(save, 10000);
-    load();
     updateUI();
 </script>
 </body>
