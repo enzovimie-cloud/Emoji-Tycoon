@@ -3,24 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Emoji Tycoon: ULTIMATE v14</title>
+    <title>Emoji Tycoon: FINAL v15.1</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>👑</text></svg>">
     
     <style>
-        /* --- ESTILOS --- */
-        :root { --bg: #0b0b15; --panel: #161625; --accent: #ff4757; --gold: #ffd700; --text: #fff; --green: #2ecc71; --blue: #3498db; }
+        /* --- ESTILOS GENERALES --- */
+        :root { --bg: #0b0b15; --panel: #161625; --accent: #ff4757; --gold: #ffd700; --text: #fff; --green: #2ecc71; --blue: #3498db; --purple: #9b59b6; }
         body { background-color: var(--bg); color: var(--text); font-family: 'Segoe UI', system-ui, sans-serif; margin: 0; height: 100vh; overflow: hidden; display: flex; flex-direction: column; user-select: none; -webkit-tap-highlight-color: transparent; }
         
         /* HEADER */
         .header { background: rgba(15, 15, 25, 0.98); padding: 5px 15px; border-bottom: 1px solid #333; z-index: 20; position: relative; box-shadow: 0 5px 20px rgba(0,0,0,0.8); }
         .top-row { display: flex; justify-content: space-between; align-items: center; }
-        .money { color: var(--green); font-weight: 900; font-size: 1.4rem; text-shadow: 0 0 10px rgba(46, 204, 113, 0.4); transition: transform 0.1s; }
+        .money { color: var(--green); font-weight: 900; font-size: 1.4rem; text-shadow: 0 0 10px rgba(46, 204, 113, 0.4); }
         .gems { color: var(--gold); font-weight: bold; font-size: 0.85rem; background: rgba(255, 215, 0, 0.15); padding: 2px 10px; border-radius: 20px; border: 1px solid rgba(255, 215, 0, 0.3); }
         
         /* BARRA AMENAZA */
         .threat-box { margin-top: 5px; display: flex; align-items: center; gap: 10px; }
         .threat-bar-bg { flex: 1; height: 6px; background: #220000; border-radius: 5px; border: 1px solid #500; overflow: hidden; }
         .threat-bar-fill { height: 100%; background: linear-gradient(90deg, #ff9f43, #ff4757); width: 0%; transition: width 0.3s; }
+        .threat-icon { font-size: 1rem; animation: pulse 2s infinite; }
         
         /* ZONA JUEGO */
         .game-zone { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; background: radial-gradient(circle at center, #2c3e50 0%, #0b0b15 100%); overflow: hidden; padding-bottom: 20px; }
@@ -28,13 +29,14 @@
         #main-emoji:active { transform: scale(0.9); filter: brightness(1.3); }
         .news-ticker { position: absolute; top: 10px; width: 90%; background: rgba(0,0,0,0.5); padding: 4px 15px; border-radius: 20px; font-size: 0.75rem; color: #ccc; text-align: center; pointer-events: none; border: 1px solid #333; }
 
-        /* TABS & PANELS */
+        /* TABS */
         .tabs { display: flex; background: #10101a; border-top: 1px solid #333; padding-bottom: env(safe-area-inset-bottom); height: 55px; }
         .tab { flex: 1; padding: 5px 0; background: none; border: none; color: #666; font-weight: bold; font-size: 0.7rem; border-top: 2px solid transparent; transition: 0.2s; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; }
         .tab span { font-size: 1.2rem; }
         .tab.active { color: #fff; background: var(--panel); border-top-color: var(--accent); }
         
-        .panel-container { height: 38%; background: var(--panel); overflow-y: auto; padding: 10px; padding-bottom: 60px; box-shadow: inset 0 10px 20px rgba(0,0,0,0.2); }
+        /* PANELES (SOLUCIÓN SCROLL: 150px PADDING) */
+        .panel-container { height: 38%; background: var(--panel); overflow-y: auto; padding: 10px; padding-bottom: 150px; box-shadow: inset 0 10px 20px rgba(0,0,0,0.2); }
         .panel { display: none; animation: fadeUp 0.2s ease-out; }
         .panel.active { display: block; }
         @keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
@@ -42,7 +44,6 @@
         /* ITEMS */
         .item { background: linear-gradient(to right, rgba(255,255,255,0.04), rgba(255,255,255,0.01)); padding: 8px 12px; margin-bottom: 6px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; border: 1px solid rgba(255,255,255,0.05); }
         .item-icon { font-size: 1.3rem; margin-right: 10px; }
-        .item-info { flex: 1; }
         .item-info b { display: block; font-size: 0.9rem; }
         .item-info small { color: #888; font-size: 0.7rem; display: block; line-height: 1.2; }
         
@@ -55,14 +56,13 @@
         .btc-count { font-size: 2rem; color: #f39c12; font-weight: 900; margin: 5px 0; font-family: monospace; }
         .price-tag { background: #222; padding: 4px 12px; border-radius: 15px; font-size: 0.75rem; color: #aaa; margin-bottom: 10px; display: flex; align-items: center; gap: 5px; }
         .prediction { font-weight: bold; font-size: 1rem; }
-        
         .btc-actions { display: flex; gap: 8px; width: 100%; justify-content: center; }
         .btn-action { flex: 1; padding: 10px; border-radius: 8px; border: none; font-weight: bold; color: white; cursor: pointer; font-size: 0.9rem; }
 
         .roulette-box { background: linear-gradient(135deg, #2c3e50, #000); padding: 15px; border-radius: 12px; border: 1px solid var(--gold); text-align: center; margin-bottom: 15px; }
         .roulette-display { font-size: 2.5rem; background: #000; width: 60px; height: 60px; display: flex; align-items: center; justify-content: center; border-radius: 10px; margin: 10px auto; border: 2px solid #444; }
 
-        .section-title { font-size: 0.7rem; color: #aaa; text-transform: uppercase; letter-spacing: 1px; margin: 15px 0 5px 0; border-bottom: 1px solid #333; }
+        .section-title { font-size: 0.7rem; color: #aaa; text-transform: uppercase; letter-spacing: 1px; margin: 20px 0 8px 0; border-bottom: 1px solid #333; font-weight: bold; }
 
         /* TOASTS */
         #toast-area { position: fixed; top: 15%; left: 50%; transform: translateX(-50%); z-index: 10000; text-align: center; pointer-events: none; width: 90%; }
@@ -101,7 +101,7 @@
         </div>
         <div class="top-row" style="margin-top:2px;">
             <div class="money" id="money-ui">$0</div>
-            <div style="color:#888; font-size:0.8rem;">+<span id="pps-ui">0</span>/s <span id="boost-indicator" style="color:var(--gold); display:none;">(x2)</span></div>
+            <div style="color:#888; font-size:0.8rem;">+<span id="pps-ui">0</span>/s <span id="shield-icon" style="display:none; color:var(--blue);">🛡️</span> <span id="overclock-icon" style="display:none; color:var(--purple);">⚡</span></div>
         </div>
         <div class="threat-box">
             <div class="threat-icon">⚠️</div>
@@ -110,7 +110,7 @@
     </div>
 
     <div class="game-zone">
-        <div class="news-ticker" id="news-ticker">¡Bienvenido Tycoon!</div>
+        <div class="news-ticker" id="news-ticker">¡Bienvenido al Mercado!</div>
         <div id="main-emoji" onclick="doClick(event)">👶</div>
         <div class="ad-space">
             <script>
@@ -131,7 +131,7 @@
         <div id="prod" class="panel active"></div>
 
         <div id="sec" class="panel">
-            <div style="text-align:center; margin-bottom:10px; color:#888; font-size:0.75rem;">Protección contra la barra roja</div>
+            <div style="text-align:center; margin-bottom:10px; color:#888; font-size:0.75rem;">Reduce la velocidad de la barra roja</div>
             <div id="sec-items"></div>
         </div>
 
@@ -148,16 +148,20 @@
             
             <div class="section-title" style="color:var(--accent); border-color:var(--accent);">🕵️ MERCADO NEGRO (BTC)</div>
             <div class="item" style="border-color: #444;">
-                <div style="display:flex; align-items:center;"><span class="item-icon">👁️</span><div class="item-info"><b>Spyware Mercado</b><small>Predice si el precio sube o baja</small></div></div>
-                <button class="btn-buy" id="btn-spy" style="background:#8e44ad;" onclick="buyItem('spy', 10, 'btc')">10 BTC</button>
+                <div style="display:flex; align-items:center;"><span class="item-icon">👁️</span><div class="item-info"><b>Spyware Mercado</b><small>Predice precio futuro</small></div></div>
+                <button class="btn-buy" id="btn-spy" style="background:#8e44ad;" onclick="buyItem('spy', 50, 'btc')">50 BTC</button>
+            </div>
+            <div class="item" style="border-color: #444;">
+                <div style="display:flex; align-items:center;"><span class="item-icon">🤖</span><div class="item-info"><b>Auto-Clicker</b><small>Clics automáticos</small></div></div>
+                <button class="btn-buy" id="btn-bot" style="background:#8e44ad;" onclick="buyItem('bot', 200, 'btc')">200 BTC</button>
             </div>
             <div class="item" style="border-color: #444;">
                 <div style="display:flex; align-items:center;"><span class="item-icon">🆔</span><div class="item-info"><b>Identidad Falsa</b><small>Hacker roba solo 5%</small></div></div>
-                <button class="btn-buy" id="btn-fake" style="background:#8e44ad;" onclick="buyItem('fake', 100, 'btc')">100 BTC</button>
+                <button class="btn-buy" id="btn-fake" style="background:#8e44ad;" onclick="buyItem('fake', 500, 'btc')">500 BTC</button>
             </div>
             <div class="item" style="border-color: #444;">
-                <div style="display:flex; align-items:center;"><span class="item-icon">🤖</span><div class="item-info"><b>Auto-Clicker</b><small>El bot trabaja por ti</small></div></div>
-                <button class="btn-buy" id="btn-bot" style="background:#8e44ad;" onclick="buyItem('bot', 50, 'btc')">50 BTC</button>
+                <div style="display:flex; align-items:center;"><span class="item-icon">⚛️</span><div class="item-info"><b>Overclocking</b><small>Producción +10% (Perm)</small></div></div>
+                <button class="btn-buy" id="btn-over" style="background:#8e44ad;" onclick="buyItem('overclock', 1000, 'btc')">1k BTC</button>
             </div>
         </div>
 
@@ -168,14 +172,18 @@
                 <button class="btn-buy" id="spin-btn" style="background:var(--gold); color:black; width:100%;" onclick="spinRoulette()">GIRAR (10 💎)</button>
             </div>
 
-            <div class="section-title">MEJORAS</div>
+            <div class="section-title">OBJETOS ÚNICOS (GEMAS)</div>
             <div class="item">
-                <div style="display:flex; align-items:center;"><span class="item-icon">☕</span><div class="item-info"><b>Café de Dev</b><small>Producción x2 (30s)</small></div></div>
-                <button class="btn-buy" style="background:#e67e22;" onclick="buyBoost()">5 💎</button>
+                <div style="display:flex; align-items:center;"><span class="item-icon">📜</span><div class="item-info"><b>Subvención</b><small>Dinero instantáneo</small></div></div>
+                <button class="btn-buy" style="background:#e67e22;" onclick="buyShop('grant', 8)">8 💎</button>
+            </div>
+            <div class="item">
+                <div style="display:flex; align-items:center;"><span class="item-icon">🛡️</span><div class="item-info"><b>Escudo Anti-Hack</b><small>Bloquea 1 ataque</small></div></div>
+                <button class="btn-buy" style="background:#3498db;" onclick="buyShop('shield', 15)">15 💎</button>
             </div>
             <div class="item">
                 <div style="display:flex; align-items:center;"><span class="item-icon">⚡</span><div class="item-info"><b>Salto Temporal</b><small>+1 Hora dinero</small></div></div>
-                <button class="btn-buy" style="background:#3498db;" onclick="buyTimeWarp()">20 💎</button>
+                <button class="btn-buy" style="background:#9b59b6;" onclick="buyTimeWarp()">20 💎</button>
             </div>
             <div class="item">
                 <div style="display:flex; align-items:center;"><span class="item-icon">📺</span><div class="item-info"><b>Gemas Gratis</b><small>Ver video</small></div></div>
@@ -195,6 +203,7 @@
         const t = audioCtx.currentTime;
         if(type=='coin') { osc.frequency.setValueAtTime(1200, t); osc.frequency.exponentialRampToValueAtTime(2000, t+0.1); gain.gain.setValueAtTime(0.1, t); gain.gain.exponentialRampToValueAtTime(0.01, t+0.1); osc.start(t); osc.stop(t+0.1); }
         if(type=='buy') { osc.type='square'; osc.frequency.setValueAtTime(200, t); gain.gain.setValueAtTime(0.1, t); gain.gain.linearRampToValueAtTime(0.01, t+0.1); osc.start(t); osc.stop(t+0.1); }
+        if(type=='shield') { osc.type='sine'; osc.frequency.setValueAtTime(400, t); osc.frequency.linearRampToValueAtTime(800, t+0.3); gain.gain.setValueAtTime(0.2, t); gain.gain.exponentialRampToValueAtTime(0.01, t+0.3); osc.start(t); osc.stop(t+0.3); }
     }
 
     /* --- DATA --- */
@@ -206,23 +215,22 @@
         {name: "IA Maestra", cost: 500000, prod: 3000, icon: "🧠"}
     ];
     const securityDB = [
-        {name: "Contraseña", cost: 500, red: 0.1, icon: "🔑", desc: "Amenaza sube 10% lento"},
-        {name: "Antivirus", cost: 3000, red: 0.2, icon: "🛡️", desc: "Amenaza sube 20% lento"},
-        {name: "Firewall", cost: 25000, red: 0.4, icon: "🔥", desc: "Amenaza sube 40% lento"}
+        {name: "Contraseña", cost: 500, red: 0.1, icon: "🔑", desc: "Amenaza -10%"},
+        {name: "Antivirus", cost: 3000, red: 0.2, icon: "🛡️", desc: "Amenaza -20%"},
+        {name: "Firewall", cost: 25000, red: 0.4, icon: "🔥", desc: "Amenaza -40%"}
     ];
-    const news = ["¡Bienvenido!", "Haz clic para ganar dinero", "Compra máquinas para ganar solo", "Cuidado con el Hacker", "Compra bajo, vende alto", "El Bot Minero es muy útil"];
+    const news = ["¡Precios del Mercado Negro han subido!", "Compra Escudos en la tienda", "Overclocking mejora todo", "Cuidado con el Hacker", "Compra bajo, vende alto"];
 
     /* --- STATE --- */
-    let game = { money: 0, gems: 10, total: 0, machines: [0,0,0,0,0], security: [0,0,0], btc: 0, hasBot: false, hasSpy: false, hasFake: false };
+    let game = { money: 0, gems: 10, total: 0, machines: [0,0,0,0,0], security: [0,0,0], btc: 0, hasBot: false, hasSpy: false, hasFake: false, hasShield: false, overclock: 0 };
     let threat = 0;
     let btcPrice = 50;
-    let nextBtcPrice = 50; // Para el Spyware
-    let boostMult = 1;
+    let nextBtcPrice = 50;
 
     /* --- LOAD --- */
-    if(localStorage.getItem('EmojiUlt_v14')) {
+    if(localStorage.getItem('EmojiUlt_v15_1')) {
         try { 
-            let s = JSON.parse(localStorage.getItem('EmojiUlt_v14')); 
+            let s = JSON.parse(localStorage.getItem('EmojiUlt_v15_1')); 
             if(s.machines && s.machines.length == machinesDB.length) game = s;
         } catch(e) {}
     }
@@ -242,7 +250,7 @@
 
     /* --- LOOPS --- */
     setInterval(() => {
-        let pps = getPPS() * boostMult;
+        let pps = getPPS();
         if(pps > 0) { let inc = pps / 10; game.money += inc; game.total += inc; }
         // BOT LOGIC
         if(game.hasBot && Math.random() < 0.3) { doClick({clientX: window.innerWidth/2, clientY: window.innerHeight/3}, true); }
@@ -250,32 +258,28 @@
         updateThreat();
         updateEmoji();
         updateUI();
-        localStorage.setItem('EmojiUlt_v14', JSON.stringify(game));
+        localStorage.setItem('EmojiUlt_v15_1', JSON.stringify(game));
     }, 100);
 
     // MARKET LOGIC
     setInterval(() => {
         btcPrice = nextBtcPrice;
         nextBtcPrice = Math.floor(Math.random() * 140) + 10;
-        
         document.getElementById('btc-price').innerText = `$${btcPrice}`;
         document.getElementById('btc-price').style.color = btcPrice>80 ? '#2ecc71' : '#ff4757';
         
-        // Spyware Logic
         let arrow = document.getElementById('spy-arrow');
         if(game.hasSpy) {
             arrow.innerText = nextBtcPrice > btcPrice ? "💹(SUBE)" : "🔻(BAJA)";
             arrow.style.color = nextBtcPrice > btcPrice ? "#2ecc71" : "#ff4757";
-        } else {
-            arrow.innerText = "";
-        }
+        } else { arrow.innerText = ""; }
     }, 3000);
 
     setInterval(() => { document.getElementById('news-ticker').innerText = news[Math.floor(Math.random()*news.length)]; }, 5000);
 
     /* --- LOGIC --- */
     function doClick(e, isBot) {
-        let v = (1 + (getPPS() * 0.05)) * boostMult;
+        let v = (1 + (getPPS() * 0.05));
         game.money += v; game.total += v;
         if(!isBot) sfx('coin');
         let p = document.createElement('div'); p.className='particle'; p.innerText=`+$${fmt(v)}`; p.style.color='#2ecc71';
@@ -303,9 +307,16 @@
     }
 
     function triggerHacker() { 
+        if(game.hasShield) {
+            game.hasShield = false;
+            threat = 0;
+            toast("¡Escudo activado! Hacker bloqueado.");
+            sfx('shield');
+            return;
+        }
         document.getElementById('hacker-modal').style.display = 'flex'; 
         let loss = game.hasFake ? "5%" : "25%";
-        document.getElementById('hacker-msg').innerText = game.hasFake ? "ID Falsa activa: Riesgo 5%" : "Riesgo: -25% Dinero";
+        document.getElementById('hacker-msg').innerText = game.hasFake ? "ID Falsa: Riesgo 5%" : "Riesgo: -25% Dinero";
         if(navigator.vibrate) navigator.vibrate(500); 
     }
     
@@ -333,30 +344,28 @@
         } else toast("No tienes Bitcoin");
     }
 
+    /* --- COMPRAS --- */
     function buyItem(type, cost, currency) {
-        if(type == 'bot' && game.hasBot) return;
-        if(type == 'spy' && game.hasSpy) return;
-        if(type == 'fake' && game.hasFake) return;
-
         let afford = currency == 'btc' ? game.btc >= cost : game.gems >= cost;
         if(afford) {
             if(currency == 'btc') game.btc -= cost; else game.gems -= cost;
-            if(type == 'bot') { game.hasBot = true; toast("Bot Activado"); }
-            if(type == 'spy') { game.hasSpy = true; toast("Spyware Instalado"); }
-            if(type == 'fake') { game.hasFake = true; toast("ID Falsa Comprada"); }
+            
+            if(type == 'bot') { if(game.hasBot)return; game.hasBot = true; toast("Bot Activado"); }
+            if(type == 'spy') { if(game.hasSpy)return; game.hasSpy = true; toast("Spyware Instalado"); }
+            if(type == 'fake') { if(game.hasFake)return; game.hasFake = true; toast("ID Falsa Comprada"); }
+            if(type == 'overclock') { game.overclock = (game.overclock || 0) + 0.1; toast("Producción +10%!"); }
+            
             sfx('buy'); updateUI();
         } else toast("Insuficiente " + currency.toUpperCase());
     }
 
-    function buyBoost() {
-        if(game.gems >= 5) {
-            game.gems -= 5;
-            boostMult = 2;
-            document.getElementById('boost-indicator').style.display = "inline";
-            toast("¡Producción x2 por 30s!");
-            setTimeout(() => { boostMult = 1; document.getElementById('boost-indicator').style.display = "none"; }, 30000);
+    function buyShop(type, cost) {
+        if(game.gems >= cost) {
+            game.gems -= cost;
+            if(type == 'grant') { let m = getPPS() * 100 + 500; game.money += m; toast(`Subvención: +$${fmt(m)}`); sfx('coin'); }
+            if(type == 'shield') { game.hasShield = true; toast("Escudo equipado"); sfx('shield'); }
             updateUI();
-        } else toast("Faltan gemas");
+        } else toast("Faltan Gemas");
     }
 
     function spinRoulette() {
@@ -365,15 +374,16 @@
             let btn = document.getElementById('spin-btn');
             let disp = document.getElementById('roulette-icon');
             btn.disabled = true;
-            let symbols = ["💰", "🪙", "💎", "💩"];
+            let symbols = ["💰", "🪙", "🛡️", "💎"];
             let c = 0;
             let interval = setInterval(() => { disp.innerText = symbols[c++ % symbols.length]; }, 100);
 
             setTimeout(() => {
                 clearInterval(interval);
-                let r = Math.random();
-                if(r < 0.5) { let m = getPPS()*60+200; game.money+=m; disp.innerText="💰"; toast(`Ganaste $${fmt(m)}`); }
-                else if(r < 0.8) { game.btc+=5; disp.innerText="🪙"; toast("Ganaste 5 BTC"); }
+                let r = Math.random(); // 0.0 - 1.0
+                if(r < 0.30) { let m = getPPS()*100+500; game.money+=m; disp.innerText="💰"; toast(`Ganaste $${fmt(m)}`); }
+                else if(r < 0.65) { game.btc+=5; disp.innerText="🪙"; toast("Ganaste 5 BTC"); }
+                else if(r < 0.85) { threat=0; disp.innerText="🛡️"; toast("Amenaza reducida"); }
                 else { game.gems+=20; disp.innerText="💎"; toast("¡20 Gemas!"); }
                 sfx('coin'); btn.disabled = false; updateUI();
             }, 1500);
@@ -395,12 +405,21 @@
     }
 
     /* --- UI --- */
-    function getPPS() { let p=0; machinesDB.forEach((m,i)=>p+=(m.prod*game.machines[i])); return p; }
+    function getPPS() { 
+        let p=0; 
+        machinesDB.forEach((m,i)=>p+=(m.prod*game.machines[i])); 
+        // Overclock logic
+        let mult = 1 + (game.overclock || 0);
+        return p * mult;
+    }
+    
     function updateUI() {
         document.getElementById('money-ui').innerText = `$${fmt(game.money)}`;
-        document.getElementById('pps-ui').innerText = fmt(getPPS() * boostMult);
+        document.getElementById('pps-ui').innerText = fmt(getPPS());
         document.getElementById('gems-ui').innerText = game.gems;
         document.getElementById('btc-ui').innerText = game.btc;
+        document.getElementById('shield-icon').style.display = game.hasShield ? "inline" : "none";
+        document.getElementById('overclock-icon').style.display = game.overclock > 0 ? "inline" : "none";
 
         let h="";
         machinesDB.forEach((m,i)=>{
@@ -447,3 +466,4 @@
 </script>
 </body>
 </html>
+
