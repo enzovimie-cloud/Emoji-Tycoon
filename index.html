@@ -3,40 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Emoji Tycoon: CYBER EDITION</title>
+    <title>Emoji Tycoon: DARK WEB</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔥</text></svg>">
     
     <style>
-        /* --- ESTILO BASE --- */
-        :root { --bg: #0f0f1a; --panel: #1b1b2f; --accent: #e94560; --gold: #ffd700; --crypto: #00d2d3; --text: #fff; --red: #ff4757; }
+        /* --- ESTILOS GENERALES --- */
+        :root { --bg: #0f0f1a; --panel: #1b1b2f; --accent: #e94560; --gold: #ffd700; --crypto: #f39c12; --text: #fff; --red: #ff4757; }
         body { background-color: var(--bg); color: var(--text); font-family: 'Segoe UI', sans-serif; margin: 0; height: 100vh; overflow: hidden; display: flex; flex-direction: column; user-select: none; }
         
-        /* HEADER & BARRAS */
-        .header { background: rgba(0,0,0,0.9); padding: 10px 15px; border-bottom: 2px solid var(--panel); z-index: 20; }
+        /* HEADER */
+        .header { background: rgba(0,0,0,0.95); padding: 10px 15px; border-bottom: 2px solid #333; z-index: 20; }
         .top-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
-        .money { color: #2ecc71; font-weight: 800; font-size: 1.3rem; text-shadow: 0 0 10px rgba(46, 204, 113, 0.3); }
-        .gems { color: var(--gold); font-weight: bold; font-size: 0.9rem; }
+        .money { color: #2ecc71; font-weight: 800; font-size: 1.4rem; text-shadow: 0 0 10px rgba(46, 204, 113, 0.2); }
+        .gems { color: var(--gold); font-weight: bold; font-size: 1rem; }
         
-        /* BARRA DE AMENAZA (TENSION) */
-        .threat-container { width: 100%; height: 8px; background: #333; border-radius: 4px; overflow: hidden; position: relative; margin-top: 5px; }
+        /* BARRA AMENAZA */
+        .threat-container { width: 100%; height: 10px; background: #333; border-radius: 5px; overflow: hidden; position: relative; margin-top: 8px; border: 1px solid #555; }
         .threat-bar { height: 100%; background: linear-gradient(90deg, #ff9f43, #ff4757); width: 0%; transition: width 0.5s linear; }
-        .threat-label { position: absolute; top: -15px; right: 0; font-size: 0.7rem; color: var(--red); font-weight: bold; animation: blink 2s infinite; }
+        .threat-label { position: absolute; top: -18px; right: 0; font-size: 0.7rem; color: #aaa; font-weight: bold; }
         
-        /* ZONA DE JUEGO */
+        /* ZONA JUEGO */
         .game-zone { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; background: radial-gradient(circle, #2d3436 0%, #0f0f1a 90%); overflow: hidden; }
+        #main-emoji { font-size: 7rem; cursor: pointer; transition: transform 0.05s; filter: drop-shadow(0 0 30px rgba(233, 69, 96, 0.3)); z-index: 5; -webkit-tap-highlight-color: transparent; }
+        #main-emoji:active { transform: scale(0.90); }
         
-        #main-emoji { font-size: 6.5rem; cursor: pointer; transition: transform 0.08s; filter: drop-shadow(0 0 25px rgba(233, 69, 96, 0.4)); z-index: 5; position: relative; }
-        #main-emoji:active { transform: scale(0.92); }
-        
-        /* COMBOS & EFECTOS */
-        #combo-display { position: absolute; top: 10%; font-size: 2.5rem; font-weight: 900; color: var(--crypto); text-shadow: 0 0 20px var(--crypto); opacity: 0; pointer-events: none; z-index: 4; transition: opacity 0.2s; }
-        .particle { position: absolute; color: #2ecc71; font-weight: bold; pointer-events: none; animation: floatUp 0.8s forwards; font-size: 1.2rem; z-index: 6; }
-        @keyframes floatUp { to { transform: translateY(-100px) scale(1.2); opacity: 0; } }
-        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+        /* PARTÍCULAS (Dinero y BTC) */
+        .particle { position: absolute; font-weight: bold; pointer-events: none; animation: floatUp 0.6s forwards; font-size: 1.2rem; z-index: 4; text-shadow: 1px 1px 2px black; }
+        @keyframes floatUp { to { transform: translateY(-80px); opacity: 0; } }
 
-        /* TABS DE NAVEGACIÓN */
+        /* TABS */
         .tabs { display: flex; background: #161626; border-top: 1px solid #333; }
-        .tab { flex: 1; padding: 12px; background: none; border: none; color: #777; font-weight: bold; border-top: 3px solid transparent; transition: 0.3s; font-size: 0.9rem; }
+        .tab { flex: 1; padding: 15px; background: none; border: none; color: #777; font-weight: bold; font-size: 0.9rem; border-top: 3px solid transparent; transition: 0.2s; }
         .tab.active { color: white; background: var(--panel); border-top-color: var(--accent); }
         
         /* PANELES */
@@ -44,74 +41,73 @@
         .panel { display: none; padding: 15px; }
         .panel.active { display: block; }
 
-        /* ITEMS DE TIENDA */
-        .item { background: rgba(255,255,255,0.03); padding: 12px; margin-bottom: 8px; border-radius: 10px; display: flex; justify-content: space-between; align-items: center; border: 1px solid rgba(255,255,255,0.05); }
-        .item-info b { font-size: 1rem; color: #fff; }
-        .item-info small { color: #aaa; }
-        
-        /* BOTONES */
-        .btn-buy { background: var(--accent); color: white; border: none; padding: 8px 16px; border-radius: 6px; font-weight: bold; cursor: pointer; min-width: 80px; }
-        .btn-buy:disabled { background: #333 !important; color: #666 !important; pointer-events: none; opacity: 0.7; }
-        
-        /* BOLSA / MERCADO (NUEVO) */
-        .market-card { background: #111; padding: 15px; border-radius: 12px; border: 1px solid #333; text-align: center; margin-bottom: 15px; }
-        .graph-box { height: 100px; display: flex; align-items: flex-end; justify-content: space-around; margin: 15px 0; border-bottom: 1px dashed #444; }
-        .graph-bar { width: 8%; background: var(--crypto); opacity: 0.6; border-radius: 2px 2px 0 0; transition: height 0.5s; }
-        .price-tag { font-size: 2rem; font-weight: bold; color: var(--crypto); }
-        .trade-btns { display: flex; gap: 10px; }
-        .btn-trade { flex: 1; padding: 15px; border: none; border-radius: 8px; font-weight: bold; font-size: 1rem; color: #000; cursor: pointer; }
-        
+        /* ITEMS GENÉRICOS */
+        .item { background: rgba(255,255,255,0.04); padding: 12px; margin-bottom: 8px; border-radius: 10px; display: flex; justify-content: space-between; align-items: center; border: 1px solid rgba(255,255,255,0.05); }
+        .btn-buy { background: var(--accent); color: white; border: none; padding: 10px 15px; border-radius: 8px; font-weight: bold; cursor: pointer; min-width: 85px; }
+        .btn-buy:disabled { background: #333 !important; color: #555 !important; pointer-events: none; opacity: 0.8; }
+
+        /* DARK WEB & MINERÍA */
+        .mining-box { background: #111; padding: 15px; border-radius: 15px; text-align: center; border: 2px solid #333; margin-bottom: 20px; }
+        .coin-count { font-size: 2.5rem; color: var(--crypto); font-weight: 900; margin: 5px 0; text-shadow: 0 0 10px rgba(243, 156, 18, 0.3); }
+        .mine-btn { width: 48%; padding: 15px; background: #2980b9; color: white; font-size: 1.1rem; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; }
+        .sell-btn { width: 48%; padding: 15px; background: #27ae60; color: white; font-size: 1.1rem; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; }
+        .dark-header { color: var(--red); font-weight: bold; margin-bottom: 10px; border-bottom: 1px solid #444; padding-bottom: 5px; letter-spacing: 1px; }
+
+        /* RULETA */
+        .roulette-box { background: linear-gradient(45deg, #2c3e50, #000); padding: 20px; border-radius: 15px; text-align: center; border: 2px solid var(--gold); margin-bottom: 20px; }
+        .spin-btn { width: 100%; padding: 15px; background: linear-gradient(90deg, #f1c40f, #d35400); color: black; font-size: 1.3rem; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.02); } 100% { transform: scale(1); } }
+
         /* MODALES */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 9999; display: none; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
-        .hacker-alert { border: 3px solid var(--red); box-shadow: 0 0 50px var(--red); background: #220000; padding: 30px; border-radius: 20px; width: 85%; animation: shake 0.4s infinite; }
-        @keyframes shake { 0% { transform: translate(1px, 1px); } 50% { transform: translate(-1px, -2px); } 100% { transform: translate(1px, -1px); } }
-
+        .modal-content { background: var(--panel); padding: 25px; border-radius: 20px; border: 2px solid var(--gold); max-width: 85%; width: 300px; }
+        .hacker-alert { border: 2px solid var(--red); background: #1a0000; padding: 25px; border-radius: 20px; width: 80%; }
+        
+        /* BANNER */
+        .ad-banner { position: absolute; bottom: 0; left: 0; width: 100%; height: 55px; background: rgba(0,0,0,0.3); display: flex; justify-content: center; align-items: center; z-index: 1000; border-top: 1px solid #444; }
     </style>
 </head>
 <body>
 
     <div id="hacker-modal" class="modal-overlay">
         <div class="hacker-alert">
-            <div style="font-size: 4rem;">☠️</div>
-            <h1 style="color:var(--red); margin:10px 0;">¡SISTEMA VULNERADO!</h1>
-            <p style="color:#fff;">Tu firewall ha caído. El hacker está transfiriendo tus fondos.</p>
-            <div style="margin-top: 20px; display: flex; flex-direction: column; gap: 10px;">
-                <button class="btn-buy" style="background: #2ecc71; padding: 15px; font-size: 1.1rem; color:#000;" onclick="resolveHacker(true)">🛡️ ACTIVAR CONTRAMEDIDAS<br><small>(Ver Anuncio de Defensa)</small></button>
-                <button class="btn-buy" style="background: #444; padding: 10px; font-size: 0.9rem;" onclick="resolveHacker(false)">❌ Aceptar Pérdidas (-25%)</button>
-            </div>
+            <h1 style="font-size: 3rem; margin:0;">🚨</h1>
+            <h2 style="color:var(--red);">¡ATAQUE HACKER!</h2>
+            <p style="color:#ddd;">Quieren robar el 25% de tu dinero.</p>
+            <button class="btn-buy" style="background: #2ecc71; width:100%; color:#000; font-size:1rem; padding:15px; margin-bottom:10px;" onclick="resolveHacker(true)">🛡️ BLOQUEAR (Ver Video)</button>
+            <button class="btn-buy" style="background: transparent; border:1px solid #555; width:100%; color:#888;" onclick="resolveHacker(false)">Dejar que me robe...</button>
+        </div>
+    </div>
+
+    <div id="offline-modal" class="modal-overlay">
+        <div class="modal-content">
+            <h2 style="color:var(--gold)">¡BIENVENIDO!</h2>
+            <p>Tus máquinas trabajaron mientras no estabas:</p>
+            <h1 id="offline-amount" style="color:#2ecc71; font-size:2rem;">$0</h1>
+            <button class="btn-buy" style="background: #2ecc71; width:100%; color:#000; font-size:1.1rem; padding:15px;" onclick="document.getElementById('offline-modal').style.display='none'">💰 RECLAMAR</button>
         </div>
     </div>
 
     <div class="header">
         <div class="top-row">
-            <div><strong>EMOJI CORP</strong> <span style="font-size:0.8rem; color:#aaa;">v4.0</span></div>
+            <div><strong>EMOJI TYCOON</strong></div>
             <div class="gems">💎 <span id="gems-ui">0</span></div>
         </div>
         <div class="top-row">
             <div class="money" id="money-ui">$0</div>
-            <div style="font-size:0.8rem; color:#aaa;">PPS: $<span id="pps-ui">0</span>/s</div>
+            <div style="font-size:0.8rem; color:#888;">PPS: <span id="pps-ui">0</span>/s</div>
         </div>
-        
         <div class="threat-container">
             <div class="threat-bar" id="threat-bar"></div>
         </div>
-        <div class="threat-label">AMENAZA: <span id="threat-val">0</span>%</div>
+        <div class="threat-label">PELIGRO</div>
     </div>
 
     <div class="game-zone">
-        <div id="combo-display">COMBO x1!</div>
         <div id="main-emoji" onclick="doClick(event)">💸</div>
-
-        <div style="position: absolute; bottom: 0; left: 0; width: 100%; height: 55px; background: rgba(255,255,255,0.05); display: flex; justify-content: center; align-items: center; z-index: 1000; border-top: 1px solid #333;">
-            <span style="font-size: 0.7rem; color: #444; position: absolute;">Publicidad</span>
+        <div class="ad-banner">
             <script>
-                atOptions = {
-                    'key' : '92cf9b7506a2347b830d7ec0e9445744',
-                    'format' : 'iframe',
-                    'height' : 50,
-                    'width' : 320,
-                    'params' : {}
-                };
+                atOptions = { 'key' : '92cf9b7506a2347b830d7ec0e9445744', 'format' : 'iframe', 'height' : 50, 'width' : 320, 'params' : {} };
             </script>
             <script src="https://www.highperformanceformat.com/92cf9b7506a2347b830d7ec0e9445744/invoke.js"></script>
         </div>
@@ -120,319 +116,227 @@
     <div class="tabs">
         <button class="tab active" onclick="tab('prod')">🏭 Máquinas</button>
         <button class="tab" onclick="tab('sec')">🛡️ Seguridad</button>
-        <button class="tab" onclick="tab('market')">📈 Bolsa</button>
+        <button class="tab" onclick="tab('mine')">🌐 Crypto</button>
         <button class="tab" onclick="tab('shop')">💎 Tienda</button>
     </div>
 
     <div class="panel-container">
-        
         <div id="prod" class="panel active"></div>
 
         <div id="sec" class="panel">
-            <div style="text-align:center; margin-bottom:15px; color:#aaa; font-size:0.9rem;">
-                Reduce la velocidad de la barra de Amenaza.
-            </div>
+            <div style="text-align:center; color:#aaa; font-size:0.8rem; margin-bottom:10px;">Protege tu dinero del hacker.</div>
             <div id="sec-items"></div>
         </div>
 
-        <div id="market" class="panel">
-            <div class="market-card">
-                <div style="color:#aaa;">PRECIO EMOJICOIN</div>
-                <div class="price-tag" id="crypto-price">$100</div>
-                <div class="graph-box" id="graph-box">
-                    </div>
-                <div style="margin-bottom:10px;">Tienes: <b style="color:var(--crypto);" id="crypto-owned">0</b> EC</div>
-                <div class="trade-btns">
-                    <button class="btn-trade" style="background:#ff4757; color:white;" onclick="tradeCrypto(false)">VENDER</button>
-                    <button class="btn-trade" style="background:#2ecc71; color:white;" onclick="tradeCrypto(true)">COMPRAR</button>
+        <div id="mine" class="panel">
+            <div class="mining-box">
+                <div style="color:#aaa;">WALLET BITCOIN</div>
+                <div class="coin-count" id="btc-ui">0</div>
+                <div style="display:flex; justify-content:space-between;">
+                    <button class="mine-btn" onclick="mineBTC(event)">⛏️ MINAR</button>
+                    <button class="sell-btn" onclick="sellBTC()">💰 VENDER</button>
                 </div>
+                <p id="auto-miner-status" style="font-size:0.7rem; color:#2ecc71; margin-top:5px; opacity:0;">🤖 Bot Minero Activo</p>
             </div>
-            <div style="font-size:0.8rem; color:#666; text-align:center;">El mercado es volátil. Invierte bajo tu propio riesgo.</div>
+            
+            <div class="dark-header">🕵️ DARK WEB MARKET (Solo BTC)</div>
+            
+            <div class="item" style="border-color: #555;">
+                <div style="color:#ddd;"><b>USB Virus</b><br><small>Elimina Amenaza (5 BTC)</small></div>
+                <button class="btn-buy" style="background:#8e44ad;" onclick="buyDarkItem('virus')">COMPRAR</button>
+            </div>
+            
+            <div class="item" style="border-color: #555;">
+                <div style="color:#ddd;"><b>Bot Minero v1</b><br><small>Mina Auto (50 BTC)</small></div>
+                <button class="btn-buy" style="background:#8e44ad;" id="btn-bot" onclick="buyDarkItem('bot')">COMPRAR</button>
+            </div>
         </div>
 
         <div id="shop" class="panel">
-            <div class="item">
-                <div class="item-info"><b>10 Gemas Gratis</b><br><small>Ver video corto</small></div>
-                <button class="btn-buy" style="background:#f1c40f; color:black;" onclick="watchAdForGems()">VER 🎬</button>
+            <div class="roulette-box">
+                <h3 style="color:var(--gold); margin:0 0 10px 0;">🎰 RULETA DE LA SUERTE</h3>
+                <p style="color:#ccc; font-size:0.8rem;">Prueba suerte. Puedes ganar Bitcoins, Dinero o el Jackpot.</p>
+                <button class="spin-btn" onclick="spinRoulette()">GIRAR (10 💎)</button>
             </div>
             <div class="item">
-                <div class="item-info"><b>Salto Temporal</b><br><small>+1 Hora de producción (30 💎)</small></div>
-                <button class="btn-buy" style="background:#3498db;" onclick="buyTimeWarp()">USAR</button>
+                <div style="color:#fff;"><b>10 Gemas Gratis</b><br><small>Ver anuncio</small></div>
+                <button class="btn-buy" style="background:#f1c40f; color:#000;" onclick="watchAdForGems()">VER 🎬</button>
             </div>
         </div>
     </div>
 
 <script>
-    /* --- CONFIGURACIÓN DEL JUEGO --- */
+    /* --- CONFIG --- */
     const machinesDB = [
         {name: "Becario", cost: 15, prod: 1, icon: "🤓"},
-        {name: "Servidor", cost: 120, prod: 6, icon: "🖥️"},
-        {name: "Script Kiddy", cost: 1100, prod: 40, icon: "👾"},
-        {name: "Botnet", cost: 12000, prod: 300, icon: "🤖"},
-        {name: "Granja Minería", cost: 130000, prod: 2000, icon: "🏭"},
-        {name: "IA Cuántica", cost: 1500000, prod: 15000, icon: "🧠"}
+        {name: "PC Gamer", cost: 120, prod: 5, icon: "💻"},
+        {name: "Servidor", cost: 1100, prod: 40, icon: "🖥️"},
+        {name: "Hacker Bot", cost: 12000, prod: 300, icon: "🤖"},
+        {name: "Granja Minería", cost: 130000, prod: 2000, icon: "🏭"}
     ];
-
     const securityDB = [
-        {name: "VPN Gratuita", cost: 500, red: 0.1, icon: "🌐", desc: "-10% Amenaza"},
-        {name: "Antivirus Pro", cost: 2500, red: 0.2, icon: "🛡️", desc: "-20% Amenaza"},
-        {name: "Firewall Corp", cost: 15000, red: 0.4, icon: "🧱", desc: "-40% Amenaza"},
-        {name: "IA Defensiva", cost: 100000, red: 0.8, icon: "👮‍♂️", desc: "Amenaza Mínima"}
+        {name: "VPN Básica", cost: 500, red: 0.1, icon: "🌐", desc: "Amenaza -10%"},
+        {name: "Antivirus", cost: 2500, red: 0.2, icon: "🛡️", desc: "Amenaza -20%"},
+        {name: "Firewall", cost: 15000, red: 0.4, icon: "🧱", desc: "Amenaza -40%"},
+        {name: "IA Guardián", cost: 100000, red: 0.8, icon: "👮", desc: "Amenaza Mínima"}
     ];
 
-    /* --- ESTADO DEL JUEGO (SAVEGAME v4) --- */
-    let game = {
-        money: 0,
-        gems: 5,
-        total: 0,
-        startTime: Date.now(),
-        machines: [0,0,0,0,0,0],
-        security: [0,0,0,0], // 0 = no comprado, 1 = comprado
-        crypto: 0, // Cantidad de monedas
-        lastSave: Date.now()
-    };
+    /* --- SAVEGAME v6.1 --- */
+    let game = { money: 0, gems: 15, total: 0, machines: [0,0,0,0,0], security: [0,0,0,0], btc: 0, hasBot: false, lastSave: Date.now() };
+    let threat = 0;
 
-    let threat = 0; // Amenaza actual (0-100)
-    let cryptoPrice = 100;
-    let priceHistory = [80, 90, 100, 95, 110, 105, 100];
-
-    // CARGAR PARTIDA
-    if(localStorage.getItem('EmojiHacker_v4')) {
+    // CARGAR
+    if(localStorage.getItem('EmojiHacker_v6_1')) {
         try {
-            let saved = JSON.parse(localStorage.getItem('EmojiHacker_v4'));
-            if(saved.machines && saved.machines.length === machinesDB.length) {
-                game = saved;
+            let s = JSON.parse(localStorage.getItem('EmojiHacker_v6_1'));
+            if(s.machines) {
+                game = s;
+                setTimeout(checkOffline, 1000); // Comprobar ganancias offline al cargar
             }
-        } catch(e) { console.log("Partida nueva iniciada"); }
+        } catch(e) {}
     }
 
-    /* --- BUCLE PRINCIPAL (CORE) --- */
+    /* --- GAME LOOP --- */
     setInterval(() => {
-        // 1. Producción de dinero
         let pps = getPPS();
-        let inc = pps / 10;
-        game.money += inc;
-        game.total += inc;
-
-        // 2. Sistema de Amenaza (Hacker)
+        if(pps > 0) {
+            let inc = pps / 10;
+            game.money += inc;
+            game.total += inc;
+        }
+        // Bot Minero
+        if(game.hasBot) {
+            if(Math.random() < 0.1) { game.btc++; updateUI(); }
+        }
         updateThreat();
-
-        // 3. UI Updates
         updateUI();
         save();
-        
     }, 100);
 
-    /* --- SISTEMA DE MERCADO (BOLSA) --- */
-    setInterval(() => {
-        // Cambiar precio cada 2 segundos
-        let change = (Math.random() - 0.5) * 20; // Sube o baja hasta 10
-        cryptoPrice += change;
-        if(cryptoPrice < 10) cryptoPrice = 10; // Mínimo
-        if(cryptoPrice > 500) cryptoPrice = 500; // Máximo
+    /* --- FUNCIONES --- */
+    function checkOffline() {
+        let now = Date.now();
+        let diff = (now - game.lastSave) / 1000; // Segundos pasados
+        if(diff > 60) {
+            let pps = getPPS();
+            if(pps > 0) {
+                let earned = pps * diff;
+                if(earned > 0) {
+                    game.money += earned;
+                    document.getElementById('offline-amount').innerText = `$${Math.floor(earned).toLocaleString()}`;
+                    document.getElementById('offline-modal').style.display = 'flex';
+                }
+            }
+        }
+    }
 
-        // Actualizar gráfica
-        priceHistory.push(cryptoPrice);
-        if(priceHistory.length > 7) priceHistory.shift();
-        renderGraph();
-        
-        document.getElementById('crypto-price').innerText = `$${Math.floor(cryptoPrice)}`;
-        
-        // Color del precio
-        let color = change > 0 ? '#2ecc71' : '#ff4757';
-        document.getElementById('crypto-price').style.color = color;
-    }, 2000);
+    function buyDarkItem(type) {
+        if(type === 'virus') {
+            if(game.btc >= 5) { game.btc -= 5; threat = 0; alert("VIRUS: Amenaza 0%."); updateUI(); }
+            else alert("Faltan BTC (5).");
+        }
+        if(type === 'bot') {
+            if(game.hasBot) { alert("Ya tienes el bot."); return; }
+            if(game.btc >= 50) { game.btc -= 50; game.hasBot = true; alert("BOT: Minería auto activada."); updateUI(); }
+            else alert("Faltan BTC (50).");
+        }
+    }
 
-    /* --- LÓGICA DE JUEGO --- */
+    function spinRoulette() {
+        if(game.gems >= 10) {
+            game.gems -= 10;
+            let r = Math.random();
+            let msg = "";
+            if(r < 0.4) { let p = getPPS() * 60 + 100; game.money += p; msg = `Ganaste $${Math.floor(p)}`; }
+            else if (r < 0.7) { game.btc += 10; msg = "Ganaste 10 BTC"; }
+            else if (r < 0.9) { threat = 0; msg = "Amenaza Eliminada"; }
+            else { game.gems += 25; msg = "JACKPOT! 25 Gemas"; }
+            alert(msg); updateUI();
+        } else alert("Faltan gemas (10).");
+    }
+
     function getPPS() {
         let p = 0;
-        game.machines.forEach((qty, i) => p += (machinesDB[i].prod * qty));
+        machinesDB.forEach((m, i) => p += (m.prod * game.machines[i]));
         return p;
     }
 
     function updateThreat() {
-        // La amenaza sube más rápido si tienes más dinero (Riesgo/Recompensa)
-        let baseIncrease = 0.05; 
-        if(game.money > 1000) baseIncrease = 0.1;
-        if(game.money > 10000) baseIncrease = 0.2;
-
-        // Reducción por seguridad comprada
-        let reduction = 1;
-        game.security.forEach((owned, i) => {
-            if(owned) reduction -= securityDB[i].red; // Reduce el multiplicador
-        });
-        if(reduction < 0.1) reduction = 0.1; // Nunca es 0
-
-        // Subir barra
-        if(document.getElementById('hacker-modal').style.display !== 'flex') {
-            threat += (baseIncrease * reduction);
-        }
-
-        // Trigger Hacker
-        if(threat >= 100) {
-            threat = 100;
-            triggerHacker();
-        }
-
-        // Visual
-        document.getElementById('threat-bar').style.width = threat + '%';
-        document.getElementById('threat-val').innerText = Math.floor(threat);
-    }
-
-    function triggerHacker() {
         if(document.getElementById('hacker-modal').style.display === 'flex') return;
-        document.getElementById('hacker-modal').style.display = 'flex';
-        if(navigator.vibrate) navigator.vibrate([500, 200, 500]);
+        let speed = 0.08;
+        if(game.money > 2000) speed = 0.15;
+        let red = 1;
+        game.security.forEach((o, i) => { if(o) red -= securityDB[i].red; });
+        if(red < 0.1) red = 0.1;
+        threat += (speed * red);
+        if(threat >= 100) { threat = 100; triggerHacker(); }
+        document.getElementById('threat-bar').style.width = threat + "%";
     }
 
-    function resolveHacker(watchedAd) {
-        if(watchedAd) {
-            showAd(() => {
-                threat = 0;
-                let bonus = getPPS() * 60; // 1 minuto de producción gratis
-                game.money += bonus;
-                alert(`¡AMENAZA NEUTRALIZADA!\nHas ganado $${Math.floor(bonus)} por proteger el sistema.`);
-                document.getElementById('hacker-modal').style.display = 'none';
-            });
-        } else {
-            threat = 0;
-            let loss = game.money * 0.25;
-            game.money -= loss;
-            alert(`¡ROBO COMPLETADO!\nEl hacker se llevó $${Math.floor(loss)}.`);
-            document.getElementById('hacker-modal').style.display = 'none';
-        }
+    function triggerHacker() { document.getElementById('hacker-modal').style.display = 'flex'; if(navigator.vibrate) navigator.vibrate(500); }
+    function resolveHacker(w) {
+        if(w) showAd(() => { threat=0; game.money += getPPS()*100+500; document.getElementById('hacker-modal').style.display='none'; });
+        else { threat=0; game.money -= Math.floor(game.money*0.25); document.getElementById('hacker-modal').style.display='none'; }
     }
 
-    /* --- COMPRAS Y ACCIONES --- */
-    function buyMachine(id) {
-        let cost = Math.floor(machinesDB[id].cost * Math.pow(1.13, game.machines[id])); // 1.13 Scaling suave
-        if(game.money >= cost) {
-            game.money -= cost;
-            game.machines[id]++;
-            updatePanels();
-        }
+    // Minar con Partículas
+    function mineBTC(e) { 
+        game.btc++; 
+        updateUI();
+        // Efecto visual
+        let p = document.createElement('div'); 
+        p.className = 'particle'; 
+        p.innerText = "+1"; 
+        p.style.color = "#f39c12"; // Color Bitcoin
+        p.style.left = (e.clientX - 10 + Math.random()*20) + 'px';
+        p.style.top = (e.clientY - 30) + 'px';
+        document.body.appendChild(p); 
+        setTimeout(()=>p.remove(), 600);
     }
 
-    function buySecurity(id) {
-        let item = securityDB[id];
-        if(game.money >= item.cost && !game.security[id]) {
-            game.money -= item.cost;
-            game.security[id] = 1;
-            updatePanels();
-            // Efecto visual: bajar amenaza instantáneo un poco
-            threat -= 20; if(threat < 0) threat = 0;
-        }
+    function sellBTC() { 
+        if(game.btc>0) { let g=game.btc*150; game.money+=g; game.btc=0; alert(`Vendido por $${g}`); } 
+        else alert("No tienes BTC.");
+    }
+    
+    function doClick(e) { 
+        let v = 1 + (getPPS()*0.05); game.money+=v; game.total+=v; 
+        let p=document.createElement('div'); p.className='particle'; p.innerText=`+$${Math.floor(v)}`; p.style.color="#2ecc71";
+        p.style.left=(e.clientX-20+Math.random()*40)+'px'; p.style.top=(e.clientY-50)+'px';
+        document.body.appendChild(p); setTimeout(()=>p.remove(),600);
     }
 
-    function tradeCrypto(buy) {
-        if(buy) {
-            // Comprar 1 Coin
-            if(game.money >= cryptoPrice) {
-                game.money -= cryptoPrice;
-                game.crypto++;
-            }
-        } else {
-            // Vender 1 Coin
-            if(game.crypto > 0) {
-                game.money += cryptoPrice;
-                game.crypto--;
-            }
-        }
-        document.getElementById('crypto-owned').innerText = game.crypto;
+    function buyMachine(i) {
+        let cost = Math.floor(machinesDB[i].cost * Math.pow(1.15, game.machines[i]));
+        if(game.money >= cost) { game.money-=cost; game.machines[i]++; updateUI(); }
+    }
+    function buySecurity(i) {
+        if(game.money>=securityDB[i].cost && !game.security[i]) { game.money-=securityDB[i].cost; game.security[i]=1; threat=0; updateUI(); }
     }
 
-    /* --- CLICKS Y COMBOS --- */
-    let combo = 0;
-    let lastClick = 0;
-    function doClick(e) {
-        let now = Date.now();
-        if(now - lastClick < 600) combo++;
-        else combo = 0;
-        lastClick = now;
-
-        // Calcular ganancia
-        let base = 1 + (getPPS() * 0.05);
-        let bonus = 1 + (combo * 0.1);
-        if(combo > 20) bonus = 3; // Cap de combo x3
-
-        let amount = base * bonus;
-        game.money += amount;
-        game.total += amount;
-
-        // Visual
-        createParticle(e.clientX, e.clientY, `+$${Math.floor(amount)}`);
-        
-        let cDisp = document.getElementById('combo-display');
-        if(combo > 1) {
-            cDisp.style.opacity = 1;
-            cDisp.innerText = `COMBO x${combo}!`;
-            cDisp.style.fontSize = (2 + (combo/20)) + 'rem';
-        } else {
-            cDisp.style.opacity = 0;
-        }
-    }
-
-    function createParticle(x, y, txt) {
-        let p = document.createElement('div');
-        p.className = 'particle';
-        p.innerText = txt;
-        p.style.left = (x - 20 + Math.random()*40) + 'px';
-        p.style.top = (y - 40) + 'px';
-        document.body.appendChild(p);
-        setTimeout(() => p.remove(), 800);
-    }
-
-    /* --- UI GESTIÓN --- */
     function updateUI() {
         document.getElementById('money-ui').innerText = `$${Math.floor(game.money).toLocaleString()}`;
         document.getElementById('pps-ui').innerText = Math.floor(getPPS()).toLocaleString();
         document.getElementById('gems-ui').innerText = game.gems;
-        document.getElementById('crypto-owned').innerText = game.crypto;
-    }
+        document.getElementById('btc-ui').innerText = game.btc;
+        if(game.hasBot) document.getElementById('auto-miner-status').style.opacity = 1;
 
-    function updatePanels() {
-        // RENDER MÁQUINAS
-        let html = "";
+        let h = "";
         machinesDB.forEach((m, i) => {
-            let cost = Math.floor(m.cost * Math.pow(1.13, game.machines[i]));
-            let canBuy = game.money >= cost;
-            html += `<div class="item">
-                <div class="item-info">
-                    <span style="font-size:1.4rem;">${m.icon}</span> <b>${m.name}</b> (${game.machines[i]})<br>
-                    <small>+$${m.prod}/s</small>
-                </div>
-                <button class="btn-buy" onclick="buyMachine(${i})" ${!canBuy?'disabled':''}>$${cost.toLocaleString()}</button>
-            </div>`;
+            let cost = Math.floor(m.cost * Math.pow(1.15, game.machines[i]));
+            h += `<div class="item"><div><span style="font-size:1.2rem;">${m.icon}</span> <b>${m.name}</b> (${game.machines[i]})<br><small>+$${m.prod}/s</small></div><button class="btn-buy" onclick="buyMachine(${i})" ${game.money<cost?'disabled':''}>$${cost.toLocaleString()}</button></div>`;
         });
-        document.getElementById('prod').innerHTML = html;
+        document.getElementById('prod').innerHTML = h;
 
-        // RENDER SEGURIDAD
-        html = "";
+        h = "";
         securityDB.forEach((s, i) => {
             let owned = game.security[i];
-            let canBuy = game.money >= s.cost;
-            html += `<div class="item" style="${owned?'border-color:#2ecc71':''}">
-                <div class="item-info">
-                    <span style="font-size:1.4rem;">${s.icon}</span> <b>${s.name}</b><br>
-                    <small>${s.desc}</small>
-                </div>
-                <button class="btn-buy" onclick="buySecurity(${i})" ${owned?'disabled style="background:#2ecc71; color:black;"': (!canBuy?'disabled':'')}>
-                    ${owned ? 'COMPRADO' : '$'+s.cost.toLocaleString()}
-                </button>
-            </div>`;
+            h += `<div class="item" style="${owned?'border-color:#2ecc71':''}"><div><span style="font-size:1.2rem;">${s.icon}</span> <b>${s.name}</b><br><small>${s.desc}</small></div><button class="btn-buy" onclick="buySecurity(${i})" ${owned?'disabled style="background:#2ecc71; color:black;"':(game.money<s.cost?'disabled':'')}>${owned?'LISTO':'$'+s.cost.toLocaleString()}</button></div>`;
         });
-        document.getElementById('sec-items').innerHTML = html;
-    }
-
-    function renderGraph() {
-        let html = "";
-        priceHistory.forEach(h => {
-            // Normalizar altura (de 0 a 100%)
-            let height = (h / 500) * 100;
-            if(height < 10) height = 10;
-            html += `<div class="graph-bar" style="height:${height}%"></div>`;
-        });
-        document.getElementById('graph-box').innerHTML = html;
+        document.getElementById('sec-items').innerHTML = h;
+        
+        let btn = document.getElementById('btn-bot');
+        if(game.hasBot && btn) { btn.innerText = "ACTIVO"; btn.disabled = true; btn.style.background = "#2ecc71"; }
     }
 
     function tab(id) {
@@ -440,46 +344,21 @@
         document.getElementById(id).classList.add('active');
         document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
         event.target.classList.add('active');
-        updatePanels(); // Refrescar botones al cambiar
+        updateUI();
     }
 
-    /* --- SISTEMA ADSTERRA --- */
     window.lastAdTime = 0;
     function showAd(cb) {
-        // Link Directo (Hacker)
-        const link = "https://www.effectivegatecpm.com/ttwcdab5?key=8d51779f7c6cbf2f752d275eb491f8dc";
-        if(Date.now() - window.lastAdTime < 10000) { alert("Anuncio cargando... espera un poco."); return; }
-        window.open(link, '_blank');
+        const url = "https://www.effectivegatecpm.com/ttwcdab5?key=8d51779f7c6cbf2f752d275eb491f8dc";
+        if(Date.now() - window.lastAdTime < 10000) { alert("Cargando anuncio..."); return; }
+        window.open(url, '_blank');
         window.lastAdTime = Date.now();
-        setTimeout(() => { if(cb) cb(); }, 1000);
+        setTimeout(() => { if(cb) cb(); }, 1500);
     }
-    
-    function watchAdForGems() {
-        showAd(() => {
-            game.gems += 10;
-            alert("+10 Gemas recibidas");
-            updateUI();
-        });
-    }
+    function watchAdForGems() { showAd(() => { game.gems += 10; updateUI(); alert("+10 Gemas"); }); }
+    function save() { game.lastSave = Date.now(); localStorage.setItem('EmojiHacker_v6_1', JSON.stringify(game)); }
 
-    function buyTimeWarp() {
-        if(game.gems >= 30) {
-            game.gems -= 30;
-            game.money += getPPS() * 3600;
-            updateUI();
-            alert("¡Salto Temporal! 1 Hora de producción añadida.");
-        } else alert("No tienes suficientes gemas.");
-    }
-
-    function save() {
-        game.lastSave = Date.now();
-        localStorage.setItem('EmojiHacker_v4', JSON.stringify(game));
-    }
-
-    // Inicializar
-    updatePanels();
-    renderGraph();
-
+    updateUI();
 </script>
 </body>
 </html>
