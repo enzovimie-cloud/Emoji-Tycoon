@@ -3,74 +3,84 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Emoji Tycoon: LITE</title>
+    <title>Emoji Tycoon: PLATINUM</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>👑</text></svg>">
     
     <style>
-        /* --- ESTILOS LIMPIOS --- */
-        :root { --bg: #0b0b15; --panel: #1b1b2f; --accent: #ff4757; --gold: #ffd700; --text: #fff; --green: #2ecc71; --blue: #3498db; }
+        /* --- ESTILOS PLATINUM --- */
+        :root { --bg: #0b0b15; --panel: #161625; --accent: #ff4757; --gold: #ffd700; --text: #fff; --green: #2ecc71; --blue: #3498db; }
         body { background-color: var(--bg); color: var(--text); font-family: 'Segoe UI', system-ui, sans-serif; margin: 0; height: 100vh; overflow: hidden; display: flex; flex-direction: column; user-select: none; -webkit-tap-highlight-color: transparent; }
         
         /* HEADER */
-        .header { background: rgba(15, 15, 25, 0.98); padding: 10px 15px; border-bottom: 1px solid #333; z-index: 20; position: relative; box-shadow: 0 5px 20px rgba(0,0,0,0.8); }
+        .header { background: rgba(15, 15, 25, 0.98); padding: 8px 15px; border-bottom: 1px solid #333; z-index: 20; position: relative; box-shadow: 0 5px 20px rgba(0,0,0,0.8); flex-shrink: 0; }
         .top-row { display: flex; justify-content: space-between; align-items: center; }
-        .money { color: var(--green); font-weight: 900; font-size: 1.6rem; text-shadow: 0 0 15px rgba(46, 204, 113, 0.4); }
-        .gems { color: var(--gold); font-weight: bold; font-size: 0.9rem; background: rgba(255, 215, 0, 0.15); padding: 5px 12px; border-radius: 20px; border: 1px solid rgba(255, 215, 0, 0.3); }
+        .money { color: var(--green); font-weight: 900; font-size: 1.4rem; text-shadow: 0 0 10px rgba(46, 204, 113, 0.4); }
+        .gems { color: var(--gold); font-weight: bold; font-size: 0.85rem; background: rgba(255, 215, 0, 0.15); padding: 2px 10px; border-radius: 20px; border: 1px solid rgba(255, 215, 0, 0.3); }
         
-        /* BARRA AMENAZA (SIMPLE) */
-        .threat-box { margin-top: 8px; display: flex; align-items: center; gap: 10px; }
-        .threat-bar-bg { flex: 1; height: 10px; background: #220000; border-radius: 5px; border: 1px solid #500; overflow: hidden; }
+        /* AMENAZA */
+        .threat-box { margin-top: 5px; display: flex; align-items: center; gap: 10px; }
+        .threat-bar-bg { flex: 1; height: 6px; background: #220000; border-radius: 5px; border: 1px solid #500; overflow: hidden; }
         .threat-bar-fill { height: 100%; background: linear-gradient(90deg, #ff9f43, #ff4757); width: 0%; transition: width 0.3s; }
         .threat-icon { font-size: 1rem; animation: pulse 2s infinite; }
         
-        /* ZONA JUEGO */
-        .game-zone { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; background: radial-gradient(circle at center, #2c3e50 0%, #0b0b15 100%); overflow: hidden; padding-bottom: 50px; }
+        /* ZONA JUEGO (FLEXIBLE) */
+        .game-zone { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; background: radial-gradient(circle at center, #2c3e50 0%, #0b0b15 100%); overflow: hidden; padding-bottom: 20px; }
         
-        #main-emoji { font-size: 6rem; cursor: pointer; transition: transform 0.1s; filter: drop-shadow(0 0 30px rgba(255,255,255,0.15)); z-index: 5; margin-top: 10px; }
+        #main-emoji { font-size: 6rem; cursor: pointer; transition: transform 0.1s; filter: drop-shadow(0 0 25px rgba(255,255,255,0.1)); z-index: 5; margin-top: 5px; }
         #main-emoji:active { transform: scale(0.9); filter: brightness(1.3); }
         
-        .news-ticker { position: absolute; top: 10px; width: 90%; background: rgba(0,0,0,0.5); padding: 5px 15px; border-radius: 20px; font-size: 0.8rem; color: #ccc; text-align: center; pointer-events: none; border: 1px solid #333; }
+        .news-ticker { position: absolute; top: 10px; width: 90%; background: rgba(0,0,0,0.5); padding: 4px 15px; border-radius: 20px; font-size: 0.75rem; color: #ccc; text-align: center; pointer-events: none; border: 1px solid #333; z-index: 4; }
+
+        /* EVENTO DORADO (RECUPERADO) */
+        .golden-ufo { position: absolute; font-size: 3rem; z-index: 50; animation: fly 6s linear; cursor: pointer; filter: drop-shadow(0 0 15px gold); }
+        @keyframes fly { 0% { left: -15%; transform: rotate(-10deg); } 100% { left: 115%; transform: rotate(10deg); } }
 
         /* NAVEGACIÓN */
-        .tabs { display: flex; background: #10101a; border-top: 1px solid #333; padding-bottom: env(safe-area-inset-bottom); }
-        .tab { flex: 1; padding: 12px 0; background: none; border: none; color: #666; font-weight: bold; font-size: 0.75rem; border-top: 3px solid transparent; transition: 0.2s; display: flex; flex-direction: column; align-items: center; gap: 4px; }
-        .tab span { font-size: 1.4rem; }
+        .tabs { display: flex; background: #10101a; border-top: 1px solid #333; padding-bottom: env(safe-area-inset-bottom); height: 55px; flex-shrink: 0; }
+        .tab { flex: 1; padding: 5px 0; background: none; border: none; color: #666; font-weight: bold; font-size: 0.7rem; border-top: 2px solid transparent; transition: 0.2s; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; }
+        .tab span { font-size: 1.2rem; }
         .tab.active { color: #fff; background: var(--panel); border-top-color: var(--accent); }
         
-        /* PANELES */
-        .panel-container { height: 42%; background: var(--panel); overflow-y: auto; padding: 15px; padding-bottom: 80px; }
-        .panel { display: none; animation: fadeUp 0.3s ease-out; }
+        /* PANELES FLEXIBLES (Arreglo Visual) */
+        .panel-container { height: 38%; background: var(--panel); overflow-y: auto; padding: 10px; padding-bottom: 60px; box-shadow: inset 0 10px 20px rgba(0,0,0,0.2); flex-shrink: 0; }
+        .panel { display: none; animation: fadeUp 0.2s ease-out; }
         .panel.active { display: block; }
         @keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
         /* ITEMS */
-        .item { background: linear-gradient(to right, rgba(255,255,255,0.04), rgba(255,255,255,0.01)); padding: 12px; margin-bottom: 10px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; border: 1px solid rgba(255,255,255,0.05); }
-        .item-icon { font-size: 1.6rem; margin-right: 12px; }
-        .item-info b { display: block; font-size: 1rem; }
-        .item-info small { color: #888; font-size: 0.75rem; }
+        .item { background: linear-gradient(to right, rgba(255,255,255,0.04), rgba(255,255,255,0.01)); padding: 8px 12px; margin-bottom: 6px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; border: 1px solid rgba(255,255,255,0.05); }
+        .item-icon { font-size: 1.3rem; margin-right: 10px; }
+        .item-info b { display: block; font-size: 0.9rem; }
+        .item-info small { color: #888; font-size: 0.7rem; }
         
-        .btn-buy { background: var(--accent); color: white; border: none; padding: 10px 15px; border-radius: 10px; font-weight: bold; cursor: pointer; min-width: 90px; font-size: 0.9rem; box-shadow: 0 4px 0 #b33939; transition: 0.1s; }
-        .btn-buy:active { transform: translateY(4px); box-shadow: none; }
+        .btn-buy { background: var(--accent); color: white; border: none; padding: 6px 12px; border-radius: 6px; font-weight: bold; cursor: pointer; min-width: 75px; font-size: 0.8rem; box-shadow: 0 3px 0 rgba(0,0,0,0.2); transition: 0.1s; }
+        .btn-buy:active { transform: translateY(2px); box-shadow: none; }
         .btn-buy:disabled { background: #333 !important; color: #666 !important; box-shadow: none; opacity: 0.6; pointer-events: none; }
 
-        /* CRYPTO SIMPLE */
-        .crypto-box { background: #000; padding: 20px; border-radius: 15px; border: 1px solid #333; text-align: center; margin-bottom: 20px; }
-        .btc-count { font-size: 2.5rem; color: #f39c12; font-weight: 900; margin: 10px 0; font-family: monospace; }
-        .price-tag { background: #222; padding: 5px 15px; border-radius: 20px; font-size: 0.8rem; color: #aaa; margin-bottom: 15px; display: inline-block; }
-        
-        /* NOTIFICACIONES */
-        #toast-area { position: fixed; top: 15%; left: 0; width: 100%; pointer-events: none; z-index: 10000; display: flex; flex-direction: column; align-items: center; gap: 8px; }
-        .toast { background: rgba(0,0,0,0.95); color: #fff; padding: 8px 20px; border-radius: 30px; border: 1px solid #444; font-weight: bold; animation: floatUp 2s forwards; display: flex; align-items: center; gap: 8px; }
-        @keyframes floatUp { 0% { opacity:0; transform:translateY(20px); } 10% { opacity:1; transform:translateY(0); } 90% { opacity:1; transform:translateY(0); } 100% { opacity:0; transform:translateY(-20px); } }
+        /* CRYPTO & TIENDA */
+        .crypto-box { background: #000; padding: 15px; border-radius: 12px; border: 1px solid #333; text-align: center; margin-bottom: 15px; display: flex; flex-direction: column; align-items: center; }
+        .btc-count { font-size: 2rem; color: #f39c12; font-weight: 900; margin: 5px 0; font-family: monospace; }
+        .price-tag { background: #222; padding: 4px 12px; border-radius: 15px; font-size: 0.75rem; color: #aaa; margin-bottom: 10px; }
+        .btc-actions { display: flex; gap: 8px; width: 100%; justify-content: center; }
+        .btn-action { flex: 1; padding: 10px; border-radius: 8px; border: none; font-weight: bold; color: white; cursor: pointer; font-size: 0.9rem; }
 
-        /* PARTICULAS */
-        .particle { position: absolute; font-weight: 900; pointer-events: none; animation: pop 0.8s forwards; font-size: 1.4rem; z-index: 4; text-shadow: 2px 2px 0 #000; }
-        @keyframes pop { 0% { opacity: 1; transform: translateY(0) scale(0.5); } 100% { opacity: 0; transform: translateY(-80px) scale(1.2); } }
+        .roulette-box { background: linear-gradient(135deg, #2c3e50, #000); padding: 15px; border-radius: 12px; border: 1px solid var(--gold); text-align: center; margin-bottom: 15px; }
+        .roulette-display { font-size: 2.5rem; background: #000; width: 60px; height: 60px; display: flex; align-items: center; justify-content: center; border-radius: 10px; margin: 10px auto; border: 2px solid #444; }
+
+        .section-title { font-size: 0.7rem; color: #aaa; text-transform: uppercase; letter-spacing: 1px; margin: 15px 0 5px 0; border-bottom: 1px solid #333; }
+
+        /* TOASTS */
+        #toast-area { position: fixed; top: 12%; left: 50%; transform: translateX(-50%); z-index: 10000; text-align: center; pointer-events: none; width: 90%; }
+        .toast { background: rgba(0,0,0,0.9); color: #fff; padding: 8px 16px; border-radius: 20px; border: 1px solid #444; font-weight: bold; animation: floatUp 2s forwards; margin-bottom: 5px; font-size: 0.9rem; display: inline-block; }
+        @keyframes floatUp { 0% { opacity:0; transform:translateY(10px); } 10% { opacity:1; transform:translateY(0); } 90% { opacity:1; transform:translateY(0); } 100% { opacity:0; transform:translateY(-10px); } }
+
+        .particle { position: absolute; font-weight: 900; pointer-events: none; animation: pop 0.6s forwards; font-size: 1.2rem; z-index: 4; text-shadow: 1px 1px 0 #000; }
+        @keyframes pop { 0% { opacity: 1; transform: translateY(0) scale(0.5); } 100% { opacity: 0; transform: translateY(-60px) scale(1.2); } }
 
         /* MODALES */
         .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.92); z-index: 9999; display: none; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
-        .popup { background: var(--panel); padding: 30px; border-radius: 25px; border: 1px solid #444; width: 85%; max-width: 320px; text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,0.9); }
-        .btn-modal { width: 100%; padding: 15px; border-radius: 12px; border: none; font-weight: bold; font-size: 1rem; margin-top: 10px; cursor: pointer; }
+        .popup { background: var(--panel); padding: 25px; border-radius: 20px; border: 1px solid #444; width: 80%; max-width: 300px; text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,0.9); }
+        .btn-modal { width: 100%; padding: 12px; border-radius: 10px; border: none; font-weight: bold; font-size: 1rem; margin-top: 10px; cursor: pointer; }
 
         /* BANNER */
         .ad-space { position: absolute; bottom: 0; left: 0; width: 100%; height: 50px; background: #000; display: flex; justify-content: center; align-items: center; z-index: 1000; border-top: 1px solid #222; }
@@ -80,36 +90,35 @@
 
     <div id="toast-area"></div>
 
+    <div id="hacker-modal" class="overlay">
+        <div class="popup" style="border-color: var(--accent);">
+            <div style="font-size:3rem; animation:pulse 0.5s infinite;">🚨</div>
+            <h2 style="color:var(--accent); margin:0;">¡HACKER!</h2>
+            <p style="color:#aaa; font-size:0.9rem;">Riesgo: -25% Dinero</p>
+            <button class="btn-modal" style="background:var(--green); color:white;" onclick="resolveHacker(true)">🛡️ PROTEGER (Ver Anuncio)</button>
+            <button class="btn-modal" style="background:transparent; border:1px solid #444; color:#666;" onclick="resolveHacker(false)">Ignorar...</button>
+        </div>
+    </div>
+
     <div id="daily-modal" class="overlay">
         <div class="popup" style="border-color: var(--gold);">
             <div style="font-size:3.5rem;">🎁</div>
             <h2 style="color:var(--gold); margin:0;">REGALO DIARIO</h2>
-            <p style="color:#aaa;">¡Gracias por volver a jugar!</p>
+            <p style="color:#aaa;">¡Bienvenido de nuevo!</p>
             <h1 style="color:#fff; margin:15px 0;">+$500</h1>
             <button class="btn-modal" style="background:var(--gold); color:black;" onclick="claimDaily()">RECLAMAR</button>
         </div>
     </div>
 
-    <div id="hacker-modal" class="overlay">
-        <div class="popup" style="border-color: var(--accent);">
-            <div style="font-size:3.5rem; animation:pulse 0.5s infinite;">🚨</div>
-            <h2 style="color:var(--accent); margin:0;">¡HACKER!</h2>
-            <p style="color:#aaa;">Quiere robarte el 25%</p>
-            <button class="btn-modal" style="background:var(--green); color:white;" onclick="resolveHacker(true)">🛡️ PROTEGER (Ver Video)</button>
-            <button class="btn-modal" style="background:transparent; border:1px solid #444; color:#666;" onclick="resolveHacker(false)">Dejar que robe...</button>
-        </div>
-    </div>
-
     <div class="header">
         <div class="top-row">
-            <div style="font-weight:900; color:#fff;">EMOJI TYCOON</div>
+            <div style="font-weight:900; color:#fff; font-size:0.9rem;">EMOJI TYCOON</div>
             <div class="gems">💎 <span id="gems-ui">0</span></div>
         </div>
-        <div class="top-row" style="margin-top:5px;">
+        <div class="top-row" style="margin-top:2px;">
             <div class="money" id="money-ui">$0</div>
-            <div style="color:#888; font-size:0.9rem;">+<span id="pps-ui">0</span>/s</div>
+            <div style="color:#888; font-size:0.8rem;">+<span id="pps-ui">0</span>/s</div>
         </div>
-        
         <div class="threat-box">
             <div class="threat-icon">⚠️</div>
             <div class="threat-bar-bg"><div class="threat-bar-fill" id="threat-bar"></div></div>
@@ -117,9 +126,8 @@
     </div>
 
     <div class="game-zone">
-        <div class="news-ticker" id="news-ticker">¡Haz clic para ganar dinero!</div>
+        <div class="news-ticker" id="news-ticker">¡Toca para ganar!</div>
         <div id="main-emoji" onclick="doClick(event)">👶</div>
-        
         <div class="ad-space">
             <script>
                 atOptions = { 'key' : '92cf9b7506a2347b830d7ec0e9445744', 'format' : 'iframe', 'height' : 50, 'width' : 320, 'params' : {} };
@@ -139,66 +147,66 @@
         <div id="prod" class="panel active"></div>
 
         <div id="sec" class="panel">
-            <div style="text-align:center; margin-bottom:15px; color:#888; font-size:0.8rem;">
-                Sube tu defensa para evitar al Hacker.
-            </div>
+            <div style="text-align:center; margin-bottom:10px; color:#888; font-size:0.75rem;">Protección contra Hackers</div>
             <div id="sec-items"></div>
         </div>
 
         <div id="mine" class="panel">
             <div class="crypto-box">
-                <div style="color:#888; font-size:0.9rem;">TUS BITCOINS</div>
+                <div style="color:#888; font-size:0.8rem;">WALLET BITCOIN</div>
                 <div class="btc-count" id="btc-ui">0</div>
-                <div class="price-tag">Precio actual: <span id="btc-price" style="color:white; font-weight:bold;">$50</span></div>
-                
-                <div style="display:flex; gap:10px;">
-                    <button class="btn-modal" style="background:#3498db; color:white; margin:0;" onclick="mineBTC(event)">⛏️ MINAR</button>
-                    <button class="btn-modal" style="background:#27ae60; color:white; margin:0;" onclick="sellBTC()">💰 VENDER</button>
+                <div class="price-tag">Precio: <span id="btc-price" style="color:white; font-weight:bold;">$50</span></div>
+                <div class="btc-actions">
+                    <button class="btn-action" style="background:#3498db;" onclick="mineBTC(event)">⛏️ MINAR</button>
+                    <button class="btn-action" style="background:#27ae60;" onclick="sellBTC()">💰 VENDER</button>
                 </div>
             </div>
+            <div class="section-title">UTILIDAD BITCOIN</div>
+            <div style="text-align:center; color:#666; font-size:0.8rem; margin-top:5px;">Gasta tus BTC en la Tienda > Mercado Negro</div>
         </div>
 
         <div id="shop" class="panel">
-            <div class="item">
-                <div style="display:flex; align-items:center;">
-                    <span class="item-icon">🎲</span>
-                    <div class="item-info"><b>Ruleta de la Suerte</b><small>Gana premios</small></div>
-                </div>
-                <button class="btn-buy" style="background:var(--gold); color:black;" onclick="spinRoulette()">10 💎</button>
+            <div class="roulette-box">
+                <div style="color:var(--gold); font-weight:bold; font-size:0.9rem;">🎰 RULETA MÁGICA</div>
+                <div class="roulette-display" id="roulette-icon">❓</div>
+                <button class="btn-buy" id="spin-btn" style="background:var(--gold); color:black; width:100%;" onclick="spinRoulette()">GIRAR (10 💎)</button>
             </div>
+
+            <div class="section-title">MEJORAS</div>
             <div class="item">
-                <div style="display:flex; align-items:center;">
-                    <span class="item-icon">⚡</span>
-                    <div class="item-info"><b>Salto Temporal</b><small>+1 Hora de dinero</small></div>
-                </div>
+                <div style="display:flex; align-items:center;"><span class="item-icon">⚡</span><div class="item-info"><b>Salto Temporal</b><small>+1 Hora dinero</small></div></div>
                 <button class="btn-buy" style="background:#3498db;" onclick="buyTimeWarp()">20 💎</button>
             </div>
             <div class="item">
-                <div style="display:flex; align-items:center;">
-                    <span class="item-icon">🎬</span>
-                    <div class="item-info"><b>10 Gemas Gratis</b><small>Ver anuncio</small></div>
-                </div>
+                <div style="display:flex; align-items:center;"><span class="item-icon">📺</span><div class="item-info"><b>Gemas Gratis</b><small>Ver video</small></div></div>
                 <button class="btn-buy" style="background:#fff; color:black;" onclick="watchAdForGems()">VER</button>
+            </div>
+
+            <div class="section-title" style="color:var(--accent); border-color:var(--accent);">🕵️ MERCADO NEGRO (BTC)</div>
+            <div class="item" style="border-color: #444;">
+                <div style="display:flex; align-items:center;"><span class="item-icon">🤖</span><div class="item-info"><b>Auto-Clicker</b><small>El bot trabaja por ti</small></div></div>
+                <button class="btn-buy" id="btn-bot" style="background:#8e44ad;" onclick="buyBot()">50 BTC</button>
             </div>
         </div>
     </div>
 
 <script>
-    /* --- AUDIO --- */
+    /* --- AUDIO FIX (PARA MOVIL) --- */
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     function sfx(type) {
-        if(audioCtx.state === 'suspended') audioCtx.resume();
+        if(audioCtx.state === 'suspended') audioCtx.resume(); // Fix para iPhone/Android
         const osc = audioCtx.createOscillator();
         const gain = audioCtx.createGain();
         osc.connect(gain); gain.connect(audioCtx.destination);
         const t = audioCtx.currentTime;
         if(type=='coin') { osc.frequency.setValueAtTime(1200, t); osc.frequency.exponentialRampToValueAtTime(2000, t+0.1); gain.gain.setValueAtTime(0.1, t); gain.gain.exponentialRampToValueAtTime(0.01, t+0.1); osc.start(t); osc.stop(t+0.1); }
         if(type=='buy') { osc.type='square'; osc.frequency.setValueAtTime(200, t); gain.gain.setValueAtTime(0.1, t); gain.gain.linearRampToValueAtTime(0.01, t+0.1); osc.start(t); osc.stop(t+0.1); }
+        if(type=='spin') { osc.type='triangle'; osc.frequency.setValueAtTime(400, t); gain.gain.setValueAtTime(0.05, t); gain.gain.linearRampToValueAtTime(0.01, t+0.05); osc.start(t); osc.stop(t+0.05); }
     }
 
     /* --- DATA --- */
     const machinesDB = [
-        {name: "Principiante", cost: 15, prod: 1, icon: "👶"},
+        {name: "Novato", cost: 15, prod: 1, icon: "👶"},
         {name: "PC Gamer", cost: 150, prod: 10, icon: "💻"},
         {name: "Servidor", cost: 1400, prod: 80, icon: "🖥️"},
         {name: "Granja Crypto", cost: 20000, prod: 500, icon: "🏭"},
@@ -209,24 +217,22 @@
         {name: "Antivirus", cost: 3000, red: 0.2, icon: "🛡️", desc: "Nivel 2"},
         {name: "Firewall", cost: 25000, red: 0.4, icon: "🔥", desc: "Nivel 3"}
     ];
-    const news = ["¡Bienvenido!", "Haz clic para ganar dinero", "Compra máquinas para ganar solo", "Cuidado con el Hacker", "Compra bajo, vende alto", "Ahorra gemas para la ruleta"];
+    const news = ["¡Bienvenido!", "Haz clic para ganar dinero", "Compra máquinas para ganar solo", "Cuidado con el Hacker", "Compra bajo, vende alto", "El Bot Minero es muy útil"];
 
     /* --- STATE --- */
-    let game = { money: 0, gems: 10, total: 0, machines: [0,0,0,0,0], security: [0,0,0], btc: 0, lastLogin: 0 };
+    let game = { money: 0, gems: 10, total: 0, machines: [0,0,0,0,0], security: [0,0,0], btc: 0, hasBot: false, lastLogin: 0 };
     let threat = 0;
     let btcPrice = 50;
 
     /* --- LOAD --- */
-    if(localStorage.getItem('EmojiLite_v12')) {
+    if(localStorage.getItem('EmojiFinal_v14')) {
         try { 
-            let s = JSON.parse(localStorage.getItem('EmojiLite_v12')); 
+            let s = JSON.parse(localStorage.getItem('EmojiFinal_v14')); 
             if(s.machines && s.machines.length == machinesDB.length) { game = s; checkDaily(); }
         } catch(e) {}
-    } else {
-        checkDaily(); // Primer login
-    }
+    } else { checkDaily(); }
 
-    /* --- FORMAT --- */
+    /* --- HELPERS --- */
     function fmt(n) {
         if(n<1000) return Math.floor(n);
         if(n<1000000) return (n/1000).toFixed(1)+'k';
@@ -242,15 +248,14 @@
     /* --- LOOPS --- */
     setInterval(() => {
         let pps = getPPS();
-        if(pps > 0) {
-            let inc = pps / 10;
-            game.money += inc;
-            game.total += inc;
-        }
+        if(pps > 0) { let inc = pps / 10; game.money += inc; game.total += inc; }
+        // BOT LOGIC (30% chance)
+        if(game.hasBot && Math.random() < 0.3) { doClick({clientX: window.innerWidth/2, clientY: window.innerHeight/3}, true); }
+        
         updateThreat();
         updateEmoji();
         updateUI();
-        localStorage.setItem('EmojiLite_v12', JSON.stringify(game));
+        localStorage.setItem('EmojiFinal_v14', JSON.stringify(game));
     }, 100);
 
     setInterval(() => {
@@ -259,19 +264,35 @@
         document.getElementById('btc-price').style.color = btcPrice>80 ? '#2ecc71' : '#ff4757';
     }, 3000);
 
-    setInterval(() => {
-        document.getElementById('news-ticker').innerText = news[Math.floor(Math.random()*news.length)];
-    }, 5000);
+    setInterval(() => { document.getElementById('news-ticker').innerText = news[Math.floor(Math.random()*news.length)]; }, 5000);
+    
+    // EVENTO DORADO (Cada 15s aprox)
+    setInterval(() => { if(Math.random() < 0.15) spawnGold(); }, 15000);
 
     /* --- LOGIC --- */
-    function doClick(e) {
+    function doClick(e, isBot) {
         let v = 1 + (getPPS() * 0.05);
         game.money += v; game.total += v;
-        sfx('coin');
-        // Particula
-        let p = document.createElement('div'); p.className='particle'; p.innerText=`+$${fmt(v)}`; p.style.color='#2ecc71';
-        p.style.left = (e.clientX-10+Math.random()*20)+'px'; p.style.top = (e.clientY-40)+'px';
-        document.body.appendChild(p); setTimeout(()=>p.remove(), 800);
+        if(!isBot) sfx('coin');
+        
+        if(!isBot) {
+            let p = document.createElement('div'); p.className='particle'; p.innerText=`+$${fmt(v)}`; p.style.color='#2ecc71';
+            p.style.left = (e.clientX-10+Math.random()*20)+'px'; p.style.top = (e.clientY-40)+'px';
+            document.body.appendChild(p); setTimeout(()=>p.remove(), 800);
+        }
+    }
+
+    function spawnGold() {
+        let el = document.createElement('div');
+        el.className = 'golden-ufo'; el.innerText = '🛸';
+        el.style.top = (15 + Math.random() * 40) + '%';
+        el.onclick = function() {
+            let r = getPPS() * 60 + 500; game.money += r;
+            toast(`BONUS: +$${fmt(r)}`); sfx('coin');
+            el.remove();
+        };
+        document.querySelector('.game-zone').appendChild(el);
+        setTimeout(() => el.remove(), 6000);
     }
 
     function updateEmoji() {
@@ -291,27 +312,17 @@
         }
     }
     function claimDaily() {
-        game.money += 500;
-        game.gems += 5;
-        game.lastLogin = Date.now();
+        game.money += 500; game.gems += 5; game.lastLogin = Date.now();
         document.getElementById('daily-modal').style.display = 'none';
-        toast("Recibido: $500 + 5 Gemas");
+        toast("Recibido: $500 + 5 Gemas"); sfx('coin');
     }
 
     function updateThreat() {
         if(document.getElementById('hacker-modal').style.display == 'flex') return;
-        
-        let speed = 0.05;
-        if(game.money > 1000) speed = 0.1;
-        
-        // Defensa
-        let def = 1;
-        game.security.forEach((o,i) => { if(o) def -= securityDB[i].red; });
-        if(def < 0.1) def = 0.1;
-
+        let speed = 0.05; if(game.money > 1000) speed = 0.1;
+        let def = 1; game.security.forEach((o,i) => { if(o) def -= securityDB[i].red; }); if(def < 0.1) def = 0.1;
         threat += (speed * def);
-        if(threat >= 100) { threat = 100; if(game.money > 200) triggerHacker(); else threat=0; } // No ataca si eres pobre
-        
+        if(threat >= 100) { threat = 100; if(game.money > 200) triggerHacker(); else threat=0; }
         document.getElementById('threat-bar').style.width = threat + "%";
     }
 
@@ -329,21 +340,35 @@
     }
     function sellBTC() {
         if(game.btc > 0) {
-            let gain = game.btc * btcPrice;
-            game.money += gain; game.btc = 0; sfx('coin');
-            toast(`Vendido por $${fmt(gain)}`);
+            let gain = game.btc * btcPrice; game.money += gain; game.btc = 0; sfx('coin'); toast(`Vendido por $${fmt(gain)}`);
         } else toast("No tienes Bitcoin");
     }
 
     function spinRoulette() {
         if(game.gems >= 10) {
             game.gems -= 10;
-            let r = Math.random();
-            if(r < 0.5) { let m = getPPS()*60+200; game.money+=m; toast(`Ganaste $${fmt(m)}`); }
-            else if(r < 0.8) { game.btc+=5; toast("Ganaste 5 BTC"); }
-            else { game.gems+=20; toast("¡20 Gemas!"); }
-            sfx('coin'); updateUI();
+            let btn = document.getElementById('spin-btn');
+            let icon = document.getElementById('roulette-icon');
+            btn.disabled = true;
+            let symbols = ["🍒", "💎", "💰", "🍋"];
+            let c = 0;
+            let interval = setInterval(() => { icon.innerText = symbols[c++ % symbols.length]; sfx('spin'); }, 100);
+            
+            setTimeout(() => {
+                clearInterval(interval);
+                let r = Math.random();
+                if(r < 0.5) { let m = getPPS()*60+200; game.money+=m; toast(`Ganaste $${fmt(m)}`); }
+                else if(r < 0.8) { game.btc+=5; toast("Ganaste 5 BTC"); }
+                else { game.gems+=20; toast("¡20 Gemas!"); }
+                sfx('coin'); btn.disabled = false; updateUI();
+            }, 1500);
         } else toast("Faltan gemas");
+    }
+
+    function buyBot() {
+        if(game.hasBot) return;
+        if(game.btc >= 50) { game.btc -= 50; game.hasBot = true; toast("¡Auto-Clicker Activado!"); sfx('buy'); updateUI(); } 
+        else toast("Faltan BTC (50)");
     }
 
     function buyMachine(i) {
@@ -381,6 +406,12 @@
             h+=`<div class="item" style="${o?'border-color:var(--green)':''}"><div><span class="item-icon">${s.icon}</span><div class="item-info"><b>${s.name}</b><small>${s.desc}</small></div></div><button class="btn-buy" onclick="buySecurity(${i})" ${o?'disabled style="background:var(--green); color:black;"':(game.money<s.cost?'disabled':'')}>${o?'OK':'$'+fmt(s.cost)}</button></div>`;
         });
         document.getElementById('sec-items').innerHTML = h;
+        
+        let btnBot = document.getElementById('btn-bot');
+        if(btnBot) {
+            if(game.hasBot) { btnBot.innerText="COMPRADO"; btnBot.disabled=true; btnBot.style.background="var(--green)"; }
+            else { btnBot.disabled = game.btc < 50; }
+        }
     }
 
     function tab(id) {
@@ -405,3 +436,4 @@
 </script>
 </body>
 </html>
+
