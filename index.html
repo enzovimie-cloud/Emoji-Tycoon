@@ -17,14 +17,21 @@
         .gems { color: var(--gold); font-weight: bold; }
         
         /* ZONA DE JUEGO */
-        .game-zone { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; background: radial-gradient(circle, #1f4068 0%, #1a1a2e 80%); }
-        #main-emoji { font-size: 6rem; cursor: pointer; transition: transform 0.05s; filter: drop-shadow(0 0 20px var(--accent)); -webkit-tap-highlight-color: transparent; }
+        .game-zone { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; background: radial-gradient(circle, #1f4068 0%, #1a1a2e 80%); overflow: hidden; }
+        
+        /* EMOJI GIGANTE */
+        #main-emoji { font-size: 6rem; cursor: pointer; transition: transform 0.05s; filter: drop-shadow(0 0 20px var(--accent)); -webkit-tap-highlight-color: transparent; z-index: 5; }
         #main-emoji:active { transform: scale(0.9); }
 
+        /* NUEVO: TEXTO DE COMBO */
+        #combo-display { position: absolute; top: 15%; font-size: 2.5rem; font-weight: 900; color: #ff00de; text-shadow: 0 0 15px #ff00de; opacity: 0; transition: opacity 0.2s, transform 0.1s; pointer-events: none; z-index: 4; }
+
         /* MODALES */
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 999; display: none; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 9999; display: none; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
         .modal-content { background: var(--panel); padding: 25px; border-radius: 20px; border: 2px solid var(--gold); max-width: 85%; width: 300px; box-shadow: 0 0 50px rgba(0,0,0,0.8); }
         .hacker-mode { border-color: #ff0000; box-shadow: 0 0 50px #ff0000; animation: shake 0.5s infinite; }
+        
+        /* ANIMACIONES */
         @keyframes shake { 0% { transform: translate(1px, 1px) rotate(0deg); } 10% { transform: translate(-1px, -2px) rotate(-1deg); } 20% { transform: translate(-3px, 0px) rotate(1deg); } 30% { transform: translate(3px, 2px) rotate(0deg); } 40% { transform: translate(1px, -1px) rotate(1deg); } 50% { transform: translate(-1px, 2px) rotate(-1deg); } 60% { transform: translate(-3px, 1px) rotate(0deg); } 70% { transform: translate(3px, 1px) rotate(-1deg); } 80% { transform: translate(-1px, -1px) rotate(1deg); } 90% { transform: translate(1px, 2px) rotate(0deg); } 100% { transform: translate(1px, -2px) rotate(-1deg); } }
 
         /* BOTONES */
@@ -32,7 +39,17 @@
         .btn-green { background: #2ecc71; color: #000; }
         .btn-gold { background: linear-gradient(45deg, #f1c40f, #e67e22); color: #000; animation: pulse 1.5s infinite; }
         .btn-red { background: #e74c3c; color: white; }
-        .btn:disabled { background: #555; color: #888; animation: none; }
+        
+        /* NUEVO: ARREGLO BOTÓN GRIS */
+        button:disabled {
+            background: #444 !important;
+            color: #888 !important;
+            cursor: not-allowed;
+            animation: none;
+            box-shadow: none;
+            opacity: 0.8;
+            pointer-events: none;
+        }
 
         /* TABS */
         .tabs { display: flex; background: #0f3460; }
@@ -42,11 +59,12 @@
         .panel { display: none; padding: 15px; }
         .panel.active { display: block; }
 
-        /* ITEMS */
+        /* ITEMS DE TIENDA */
         .item { background: rgba(255,255,255,0.05); padding: 10px; margin-bottom: 8px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; }
+        
         @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
-        .particle { position: absolute; color: #2ecc71; font-weight: bold; pointer-events: none; animation: floatUp 0.8s forwards; }
-        @keyframes floatUp { to { transform: translateY(-100px); opacity: 0; } }
+        .particle { position: absolute; color: #2ecc71; font-weight: bold; pointer-events: none; animation: floatUp 0.8s forwards; font-size: 1.2rem; text-shadow: 0 0 5px black; z-index: 6; }
+        @keyframes floatUp { to { transform: translateY(-120px) scale(1.2); opacity: 0; } }
     </style>
 </head>
 <body>
@@ -80,18 +98,22 @@
     </div>
 
     <div class="game-zone">
+        <div id="combo-display">COMBO x2!</div>
         <div id="main-emoji" onclick="doClick(event)">💸</div>
-        <div style="position: absolute; bottom: 5px; font-size: 0.7rem; color: #555;"> <script>
-  atOptions = {
-    'key' : '92cf9b7506a2347b830d7ec0e9445744',
-    'format' : 'iframe',
-    'height' : 50,
-    'width' : 320,
-    'params' : {}
-  };
-</script>
-<script src="https://www.highperformanceformat.com/92cf9b7506a2347b830d7ec0e9445744/invoke.js"></script></div>
-    </div>
+        
+        <div style="position: absolute; bottom: 0; left: 0; width: 100%; height: 55px; display:flex; justify-content:center; align-items:center; z-index: 1000; background: rgba(0,0,0,0.1);">
+            <script>
+                atOptions = {
+                    'key' : '92cf9b7506a2347b830d7ec0e9445744',
+                    'format' : 'iframe',
+                    'height' : 50,
+                    'width' : 320,
+                    'params' : {}
+                };
+            </script>
+            <script src="https://www.highperformanceformat.com/92cf9b7506a2347b830d7ec0e9445744/invoke.js"></script>
+        </div>
+        </div>
 
     <div class="tabs">
         <button class="tab active" onclick="tab('prod')">🏭 Máquinas</button>
@@ -114,7 +136,7 @@
     </div>
 
 <script>
-    // --- CONFIGURACIÓN ---
+    // --- DATOS ---
     const machinesDB = [
         {name: "Becario", cost: 15, prod: 1, icon: "🤓"},
         {name: "Servidor", cost: 100, prod: 5, icon: "🖥️"},
@@ -129,25 +151,21 @@
         {name: "Refrigeración Líquida", cost: 500000, mult: 5, icon: "❄️", desc: "Máquinas x5"}
     ];
 
-    // --- ESTADO (CORREGIDO PARA EVITAR ERRORES) ---
-    // He cambiado el nombre del guardado a 'EmojiHacker_v2' para reiniciar tus datos corruptos
+    // --- ESTADO ---
     let game = { money: 0, gems: 5, qtys: [0,0,0,0,0], upgrades: [], lastSave: Date.now(), prestige: 1, total: 0 };
     
-    // Carga segura
+    // CARGAR PARTIDA
     if(localStorage.getItem('EmojiHacker_v2')) {
         try {
             let savedGame = JSON.parse(localStorage.getItem('EmojiHacker_v2'));
-            // Verificar integridad
             if(savedGame.qtys && savedGame.qtys.length === machinesDB.length) {
                 game = savedGame;
                 setTimeout(checkOffline, 1000);
             }
-        } catch(e) {
-            console.log("Error cargando partida, reiniciando...");
-        }
+        } catch(e) { console.log("Partida corrupta, iniciando de cero."); }
     }
 
-    // --- LÓGICA ---
+    // --- LÓGICA PRINCIPAL ---
     function save() { 
         game.lastSave = Date.now(); 
         localStorage.setItem('EmojiHacker_v2', JSON.stringify(game)); 
@@ -156,30 +174,79 @@
     function getPPS() {
         let p = 0;
         machinesDB.forEach((m, i) => {
-            // Protección contra errores si la partida vieja falla
-            if(game.qtys[i] !== undefined) {
-                p += (m.prod * game.qtys[i]);
-            }
+            if(game.qtys[i] !== undefined) p += (m.prod * game.qtys[i]);
         });
         if(game.upgrades.includes(1)) p *= 2;
         if(game.upgrades.includes(3)) p *= 5;
         return p * game.prestige;
     }
 
+    // BUCLE DEL JUEGO (Se ejecuta 10 veces por segundo)
     setInterval(() => {
         const inc = getPPS() / 10;
         if(inc > 0) { game.money += inc; game.total += inc; }
+        
         document.getElementById('money-ui').innerText = `$${Math.floor(game.money).toLocaleString()}`;
         document.getElementById('lvl-num').innerText = Math.floor(Math.log10(game.total + 1)) + 1;
         save();
+        render(); // Actualizamos botones constantemente
         
-        // POSIBILIDAD DE HACKER (1% cada segundo si tienes dinero)
+        // HACKER (1% probabilidad cada segundo si tienes +1000$)
         if(Math.random() < 0.01 && game.money > 1000 && document.getElementById('hacker-modal').style.display !== 'flex') {
             triggerHacker();
         }
     }, 100);
 
-    // --- EVENTOS ---
+    // --- SISTEMA DE COMBOS (NUEVO) ---
+    let combo = 0;
+    let lastClickTime = 0;
+    
+    function doClick(e) {
+        let now = Date.now();
+        // Si haces clic rápido (menos de 0.8s)
+        if(now - lastClickTime < 800) {
+            combo++;
+        } else {
+            combo = 0; // Si tardas, el combo se rompe
+        }
+        lastClickTime = now;
+
+        // Visual del Combo
+        let comboEl = document.getElementById('combo-display');
+        if(combo > 2) {
+            comboEl.innerText = `COMBO x${combo}!`;
+            comboEl.style.opacity = 1;
+            comboEl.style.transform = `scale(${1 + (combo/50)})`;
+            comboEl.style.color = `hsl(${combo * 20}, 100%, 50%)`; // Colorines
+        } else {
+            comboEl.style.opacity = 0;
+        }
+
+        // Calcular dinero
+        let clickVal = (1 + (getPPS() * 0.05)) * game.prestige;
+        if(game.upgrades.includes(0)) clickVal *= 2;
+        if(game.upgrades.includes(2)) clickVal *= 5;
+        
+        // Bonus de combo
+        let comboBonus = 1 + (combo * 0.1); 
+        let finalMoney = clickVal * comboBonus;
+
+        game.money += finalMoney; 
+        game.total += finalMoney;
+        
+        // Efecto visual de partícula
+        const p = document.createElement('div'); 
+        p.innerText = `+$${Math.floor(finalMoney)}`; 
+        p.className = 'particle';
+        p.style.left = (e.clientX + (Math.random()*40-20)) + 'px'; 
+        p.style.top = (e.clientY - 40) + 'px'; 
+        document.body.appendChild(p); 
+        setTimeout(()=>p.remove(), 800);
+        
+        document.getElementById('money-ui').innerText = `$${Math.floor(game.money).toLocaleString()}`;
+    }
+
+    // --- GESTIÓN DE ANUNCIOS ---
     function triggerHacker() {
         document.getElementById('hacker-modal').style.display = 'flex';
         if(navigator.vibrate) navigator.vibrate([200, 100, 200]);
@@ -201,7 +268,6 @@
         }
     }
 
-    // --- OFFLINE ---
     let offlineCash = 0;
     function checkOffline() {
         const sec = (Date.now() - game.lastSave) / 1000;
@@ -216,7 +282,7 @@
         else { game.money += offlineCash; document.getElementById('offline-modal').style.display = 'none'; }
     }
 
-    // --- COMPRAS ---
+    // --- TIENDA ---
     function buyItem(i) {
         const cost = Math.floor(machinesDB[i].cost * Math.pow(1.15, game.qtys[i]));
         if(game.money >= cost) { game.money -= cost; game.qtys[i]++; render(); }
@@ -239,48 +305,46 @@
     function watchAdForGems() { showAd(() => { game.gems += 10; render(); alert("+10 Gemas"); }); }
     function buyTimeWarp() { if(game.gems >= 30) { game.gems-=30; game.money+=getPPS()*3600; render(); } }
     
-    function doClick(e) {
-        let clickVal = (1 + (getPPS() * 0.05)) * game.prestige;
-        if(game.upgrades.includes(0)) clickVal *= 2;
-        if(game.upgrades.includes(2)) clickVal *= 5;
-        game.money += clickVal; game.total += clickVal;
-        
-        const p = document.createElement('div'); p.innerText=`+$${Math.floor(clickVal)}`; p.className='particle';
-        p.style.left=e.clientX+'px'; p.style.top=(e.clientY-40)+'px'; document.body.appendChild(p); setTimeout(()=>p.remove(),800);
-        document.getElementById('money-ui').innerText = `$${Math.floor(game.money).toLocaleString()}`;
-    }
-
-    // --- UI ---
+    // --- INTERFAZ ---
     function tab(id) {
         document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
         document.getElementById(id).classList.add('active');
         document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
         event.target.classList.add('active');
     }
+    
     function render() {
         document.getElementById('gems-ui').innerText = `💎 ${game.gems}`;
+        
         // Render Máquinas
         const d1 = document.getElementById('prod'); d1.innerHTML = "";
         machinesDB.forEach((m, i) => {
             const cost = Math.floor(m.cost * Math.pow(1.15, game.qtys[i]));
-            d1.innerHTML += `<div class="item"><div><span style="font-size:1.5rem">${m.icon}</span> <b>${m.name}</b> (${game.qtys[i]})<br><small>+$${m.prod}/s</small></div><button class="btn-green" style="width:auto; padding:5px 15px;" onclick="buyItem(${i})" ${game.money<cost?'disabled':''}>$${cost.toLocaleString()}</button></div>`;
+            const canBuy = game.money >= cost;
+            // Botón se desactiva si no hay dinero
+            d1.innerHTML += `<div class="item">
+                <div><span style="font-size:1.5rem">${m.icon}</span> <b>${m.name}</b> (${game.qtys[i]})<br><small>+$${m.prod}/s</small></div>
+                <button class="btn-green" style="width:auto; padding:5px 15px;" onclick="buyItem(${i})" ${!canBuy ? 'disabled' : ''}>$${cost.toLocaleString()}</button>
+            </div>`;
         });
+        
         // Render Mejoras
         const d2 = document.getElementById('upgrades'); d2.innerHTML = "";
         upgradesDB.forEach((u, i) => {
             if(!game.upgrades.includes(i)) {
-                d2.innerHTML += `<div class="item"><div><span style="font-size:1.5rem">${u.icon}</span> <b>${u.name}</b><br><small>${u.desc}</small></div><button class="btn-green" style="width:auto; padding:5px 15px;" onclick="buyUpgrade(${i})" ${game.money<u.cost?'disabled':''}>$${u.cost.toLocaleString()}</button></div>`;
+                const canBuy = game.money >= u.cost;
+                d2.innerHTML += `<div class="item">
+                    <div><span style="font-size:1.5rem">${u.icon}</span> <b>${u.name}</b><br><small>${u.desc}</small></div>
+                    <button class="btn-green" style="width:auto; padding:5px 15px;" onclick="buyUpgrade(${i})" ${!canBuy ? 'disabled' : ''}>$${u.cost.toLocaleString()}</button>
+                </div>`;
             }
         });
         if(d2.innerHTML=="") d2.innerHTML="<center>¡Todo mejorado!</center>";
     }
-    render();
 
-    // ▼▼▼ TU ENLACE YA ESTÁ PUESTO AQUÍ ▼▼▼
+    // --- ENLACE DIRECTO DE PUBLICIDAD ---
     window.lastAdTime = 0;
-    
     function showAd(callback) {
-        // Enlace actualizado que me has pasado
         const adLink = "https://www.effectivegatecpm.com/ttwcdab5?key=8d51779f7c6cbf2f752d275eb491f8dc";
         
         if(Date.now() - window.lastAdTime < 15000) { alert("Anuncio cargando... espera"); return; }
@@ -288,6 +352,9 @@
         window.lastAdTime = Date.now();
         setTimeout(() => { if(callback) callback(); }, 1500);
     }
+    
+    // Iniciar
+    render();
 </script>
 </body>
 </html>
