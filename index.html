@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Emoji Tycoon: FINAL v16.1</title>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>👑</text></svg>">
+    <title>Emoji Tycoon: BUSINESS v18</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🤑</text></svg>">
     
     <style>
-        /* --- ESTILOS GENERALES --- */
+        /* --- ESTILOS --- */
         :root { --bg: #0b0b15; --panel: #161625; --accent: #ff4757; --gold: #ffd700; --text: #fff; --green: #2ecc71; --blue: #3498db; --purple: #9b59b6; }
         body { background-color: var(--bg); color: var(--text); font-family: 'Segoe UI', system-ui, sans-serif; margin: 0; height: 100vh; overflow: hidden; display: flex; flex-direction: column; user-select: none; -webkit-tap-highlight-color: transparent; transition: background 1s; }
         body.matrix-mode { background: radial-gradient(circle at center, #002200 0%, #000 100%); --green: #0f0; --text: #efe; --panel: #001100; --accent: #0f0; }
@@ -16,29 +16,32 @@
         .header { background: rgba(15, 15, 25, 0.98); padding: 5px 15px; border-bottom: 1px solid #333; z-index: 20; position: relative; box-shadow: 0 5px 20px rgba(0,0,0,0.8); }
         .top-row { display: flex; justify-content: space-between; align-items: center; }
         .money { color: var(--green); font-weight: 900; font-size: 1.4rem; text-shadow: 0 0 10px rgba(46, 204, 113, 0.4); }
-        .gems { color: var(--gold); font-weight: bold; font-size: 0.85rem; background: rgba(255, 215, 0, 0.15); padding: 2px 10px; border-radius: 20px; border: 1px solid rgba(255, 215, 0, 0.3); }
+        .gems { color: var(--gold); font-weight: bold; font-size: 0.85rem; background: rgba(255, 215, 0, 0.15); padding: 2px 10px; border-radius: 20px; border: 1px solid rgba(255, 215, 0, 0.3); cursor: pointer; }
         
-        /* BARRA AMENAZA (CON EFECTO URGENCIA) */
+        /* AMENAZA */
         .threat-box { margin-top: 5px; display: flex; align-items: center; gap: 10px; }
         .threat-bar-bg { flex: 1; height: 6px; background: #220000; border-radius: 5px; border: 1px solid #500; overflow: hidden; }
         .threat-bar-fill { height: 100%; background: linear-gradient(90deg, #ff9f43, #ff4757); width: 0%; transition: width 0.3s; }
         .threat-bar-fill.critical { animation: criticalFlash 0.5s infinite alternate; background: #ff0000; box-shadow: 0 0 10px #ff0000; }
         @keyframes criticalFlash { from { opacity: 1; } to { opacity: 0.6; } }
-        .threat-icon { font-size: 1rem; animation: pulse 2s infinite; }
         
         /* ZONA JUEGO */
         .game-zone { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; background: radial-gradient(circle at center, #2c3e50 0%, #0b0b15 100%); overflow: hidden; padding-bottom: 20px; transition: background 1s; }
         body.matrix-mode .game-zone { background: transparent; }
-        #main-emoji { font-size: 6rem; cursor: pointer; transition: transform 0.1s; filter: drop-shadow(0 0 25px rgba(255,255,255,0.1)); z-index: 5; margin-top: 5px; }
+        #main-emoji { font-size: 6.5rem; cursor: pointer; transition: transform 0.1s; filter: drop-shadow(0 0 30px rgba(255,255,255,0.15)); z-index: 5; margin-top: 5px; }
         #main-emoji:active { transform: scale(0.9); filter: brightness(1.3); }
         .news-ticker { position: absolute; top: 10px; width: 90%; background: rgba(0,0,0,0.5); padding: 4px 15px; border-radius: 20px; font-size: 0.75rem; color: #ccc; text-align: center; pointer-events: none; border: 1px solid #333; }
+
+        /* TECLA DE SKIN (NUEVO) */
+        .skin-btn { position: absolute; top: 50px; right: 10px; background: rgba(0,0,0,0.6); color: white; border: 1px solid #555; border-radius: 50%; width: 40px; height: 40px; display: flex; justify-content: center; align-items: center; font-size: 1.2rem; cursor: pointer; z-index: 10; }
 
         /* TABS */
         .tabs { display: flex; background: #10101a; border-top: 1px solid #333; padding-bottom: env(safe-area-inset-bottom); height: 55px; }
         .tab { flex: 1; padding: 5px 0; background: none; border: none; color: #666; font-weight: bold; font-size: 0.7rem; border-top: 2px solid transparent; transition: 0.2s; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; position: relative; }
         .tab span { font-size: 1.2rem; }
         .tab.active { color: #fff; background: var(--panel); border-top-color: var(--accent); }
-        .locked-tab { filter: grayscale(1); opacity: 0.5; pointer-events: none; }
+        .locked-tab { filter: grayscale(1); opacity: 0.6; } 
+        .lock-icon { position: absolute; top: 2px; right: 10px; font-size: 0.6rem; color: #aaa; }
         
         /* PANELES */
         .panel-container { height: 38%; background: var(--panel); overflow-y: auto; padding: 10px; padding-bottom: 150px; box-shadow: inset 0 10px 20px rgba(0,0,0,0.2); }
@@ -52,20 +55,16 @@
         .item-info b { display: block; font-size: 0.9rem; }
         .item-info small { color: #888; font-size: 0.7rem; display: block; line-height: 1.2; }
         
-        .btn-buy { background: var(--accent); color: white; border: none; padding: 6px 12px; border-radius: 6px; font-weight: bold; cursor: pointer; min-width: 75px; font-size: 0.8rem; box-shadow: 0 3px 0 rgba(0,0,0,0.2); transition: 0.1s; }
+        .btn-buy { background: var(--accent); color: white; border: none; padding: 6px 12px; border-radius: 6px; font-weight: bold; cursor: pointer; min-width: 75px; font-size: 0.8rem; box-shadow: 0 3px 0 rgba(0,0,0,0.2); transition: 0.2s; }
         .btn-buy:active { transform: translateY(2px); box-shadow: none; }
-        .btn-buy:disabled { background: #333 !important; color: #666 !important; box-shadow: none; opacity: 0.6; pointer-events: none; }
+        .btn-disabled { background: #333 !important; color: #666 !important; box-shadow: none !important; opacity: 0.7; transform: none !important; }
 
-        /* MUNDO */
-        .world-header { text-align: center; padding: 10px; background: rgba(0,0,0,0.3); border-radius: 10px; margin-bottom: 10px; border: 1px solid #444; }
-        .world-req { font-size: 0.75rem; color: #aaa; margin-top: 5px; }
-        .mission-card { background: linear-gradient(135deg, #2c3e50, #000); border: 1px solid #444; border-radius: 10px; padding: 12px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; opacity: 0.8; }
-        .mission-card.unlocked { border-color: var(--green); opacity: 1; box-shadow: 0 0 10px rgba(46, 204, 113, 0.2); }
-        .mission-card.completed { border-color: var(--gold); background: #1a1a00; }
-        .mission-btn { background: #333; color: #aaa; border: none; padding: 8px 15px; border-radius: 6px; font-weight: bold; font-size: 0.8rem; cursor: not-allowed; }
-        .mission-btn.active { background: var(--blue); color: white; cursor: pointer; animation: pulseBtn 2s infinite; }
-        .mission-btn.done { background: var(--gold); color: black; cursor: default; }
-        @keyframes pulseBtn { 0% { box-shadow: 0 0 0 0 rgba(52, 152, 219, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(52, 152, 219, 0); } 100% { box-shadow: 0 0 0 0 rgba(52, 152, 219, 0); } }
+        /* SKINS GRID */
+        .skins-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; padding: 10px; }
+        .skin-card { background: #111; border: 1px solid #444; border-radius: 10px; padding: 10px; text-align: center; cursor: pointer; position: relative; }
+        .skin-card.active { border-color: var(--green); box-shadow: 0 0 10px var(--green); }
+        .skin-emoji { font-size: 2.5rem; margin-bottom: 5px; }
+        .skin-lock { position: absolute; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); border-radius:10px; display:flex; justify-content:center; align-items:center; font-size:1.5rem; }
 
         /* CRYPTO & TIENDA */
         .crypto-box { background: #000; padding: 15px; border-radius: 12px; border: 1px solid #333; text-align: center; margin-bottom: 15px; display: flex; flex-direction: column; align-items: center; }
@@ -86,10 +85,20 @@
         @keyframes floatUp { 0% { opacity:0; transform:translateY(10px); } 10% { opacity:1; transform:translateY(0); } 90% { opacity:1; transform:translateY(0); } 100% { opacity:0; transform:translateY(-10px); } }
 
         .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.92); z-index: 9999; display: none; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
-        .popup { background: var(--panel); padding: 25px; border-radius: 20px; border: 1px solid #444; width: 80%; max-width: 300px; text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,0.9); }
+        .popup { background: var(--panel); padding: 25px; border-radius: 20px; border: 1px solid #444; width: 80%; max-width: 300px; text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,0.9); position: relative; }
         .btn-modal { width: 100%; padding: 12px; border-radius: 10px; border: none; font-weight: bold; font-size: 1rem; margin-top: 10px; cursor: pointer; }
         .particle { position: absolute; font-weight: 900; pointer-events: none; animation: pop 0.6s forwards; font-size: 1.2rem; z-index: 4; text-shadow: 1px 1px 0 #000; }
         @keyframes pop { 0% { opacity: 1; transform: translateY(0) scale(0.5); } 100% { opacity: 0; transform: translateY(-60px) scale(1.2); } }
+
+        .golden-ufo { position: absolute; font-size: 3rem; z-index: 50; animation: fly 6s linear; cursor: pointer; filter: drop-shadow(0 0 15px gold); }
+        @keyframes fly { 0% { left: -15%; transform: rotate(-10deg); } 100% { left: 115%; transform: rotate(10deg); } }
+
+        /* PROGRESO */
+        .progress-container { margin: 15px 0; text-align: left; }
+        .progress-label { font-size: 0.75rem; color: #aaa; margin-bottom: 5px; display: flex; justify-content: space-between; }
+        .progress-track { height: 10px; background: #333; border-radius: 5px; overflow: hidden; }
+        .progress-fill { height: 100%; background: var(--gold); width: 0%; transition: width 0.5s; }
+        .progress-fill.green { background: var(--green); }
 
         .ad-space { position: absolute; bottom: 0; left: 0; width: 100%; height: 50px; background: #000; display: flex; justify-content: center; align-items: center; z-index: 1000; border-top: 1px solid #222; }
     </style>
@@ -97,6 +106,15 @@
 <body>
 
     <div id="toast-area"></div>
+
+    <div id="skins-modal" class="overlay">
+        <div class="popup" style="border-color: #fff;">
+            <h2 style="margin:0; color:#fff;">TIENDA DE SKINS</h2>
+            <p style="color:#aaa; font-size:0.8rem;">Personaliza tu experiencia</p>
+            <div id="skins-list" class="skins-grid"></div>
+            <button class="btn-modal" style="background:#333; color:#fff;" onclick="document.getElementById('skins-modal').style.display='none'">CERRAR</button>
+        </div>
+    </div>
 
     <div id="hacker-modal" class="overlay">
         <div class="popup" style="border-color: var(--accent);">
@@ -110,11 +128,33 @@
 
     <div id="daily-modal" class="overlay">
         <div class="popup" style="border-color: var(--gold);">
-            <div style="font-size:3.5rem;">🎁</div>
-            <h2 style="color:var(--gold); margin:0;">REGALO DIARIO</h2>
-            <p style="color:#aaa;">¡Bienvenido de nuevo!</p>
-            <h1 style="color:#fff; margin:15px 0;">+$500</h1>
-            <button class="btn-modal" style="background:var(--gold); color:black;" onclick="claimDaily()">RECLAMAR</button>
+            <div style="font-size:3.5rem;">💤</div>
+            <h2 style="color:var(--gold); margin:0;">¡BIENVENIDO!</h2>
+            <p style="color:#aaa;">Ganaste mientras dormías:</p>
+            <h1 style="color:#fff; margin:10px 0;" id="offline-earn">$0</h1>
+            
+            <button class="btn-modal" style="background:var(--green); color:black;" onclick="claimOffline(2)">🎬 DUPLICAR (Ver Video)</button>
+            <button class="btn-modal" style="background:#333; color:#fff;" onclick="claimOffline(1)">Reclamar normal</button>
+        </div>
+    </div>
+
+    <div id="unlock-modal" class="overlay">
+        <div class="popup" style="border-color: var(--blue);">
+            <div style="font-size:3rem;">🔒</div>
+            <h2 style="color:var(--text); margin:0;">ZONA BLOQUEADA</h2>
+            <p style="color:#aaa; font-size:0.8rem;">Requisitos para acceder:</p>
+            
+            <div class="progress-container">
+                <div class="progress-label"><span>Gemas (100)</span> <span id="req-gems">0/100</span></div>
+                <div class="progress-track"><div class="progress-fill" id="bar-gems"></div></div>
+            </div>
+            
+            <div class="progress-container">
+                <div class="progress-label"><span>Tecnología (Tener Servidor)</span> <span id="req-tech">NO</span></div>
+                <div class="progress-track"><div class="progress-fill green" id="bar-tech"></div></div>
+            </div>
+
+            <button class="btn-modal" style="background:#333; color:#fff;" onclick="document.getElementById('unlock-modal').style.display='none'">CERRAR</button>
         </div>
     </div>
 
@@ -135,6 +175,7 @@
 
     <div class="game-zone">
         <div class="news-ticker" id="news-ticker">¡Bienvenido al Mercado!</div>
+        <button class="skin-btn" onclick="openSkins()">👕</button>
         <div id="main-emoji" onclick="doClick(event)">👶</div>
         <div class="ad-space">
             <script>
@@ -149,7 +190,10 @@
         <button class="tab" onclick="tab('sec')"><span>🛡️</span>Defensa</button>
         <button class="tab" onclick="tab('mine')"><span>📈</span>Crypto</button>
         <button class="tab" onclick="tab('shop')"><span>🛒</span>Tienda</button>
-        <button class="tab locked-tab" id="tab-world" onclick="tab('world')"><span>🌍</span>Mundo</button>
+        <button class="tab locked-tab" id="tab-world" onclick="tab('world')">
+            <span>🌍</span>Mundo
+            <span class="lock-icon">🔒</span>
+        </button>
     </div>
 
     <div class="panel-container">
@@ -182,7 +226,7 @@
                 <button class="btn-buy" id="btn-fake" style="background:#8e44ad;" onclick="buyItem('fake', 500, 'btc')">500 ₿</button>
             </div>
             <div class="item" style="border-color: #444;">
-                <div style="display:flex; align-items:center;"><span class="item-icon">⚛️</span><div class="item-info"><b>Overclock</b><small>Prod +10% (Acumulable)</small></div></div>
+                <div style="display:flex; align-items:center;"><span class="item-icon">⚛️</span><div class="item-info"><b>Overclock</b><small>Prod +10% (Perm)</small></div></div>
                 <button class="btn-buy" id="btn-over" style="background:#8e44ad;" onclick="buyItem('overclock', 1000, 'btc')">1k ₿</button>
             </div>
         </div>
@@ -209,11 +253,13 @@
                 <div style="display:flex; align-items:center;"><span class="item-icon">📺</span><div class="item-info"><b>Gemas Gratis</b><small>Ver video</small></div></div>
                 <button class="btn-buy" style="background:#fff; color:black;" onclick="watchAdForGems()">VER</button>
             </div>
+            <div style="margin-top:20px; text-align:center;">
+                <button onclick="if(confirm('¿Reiniciar? Se perderá todo.')){localStorage.clear();location.reload();}" style="background:transparent; color:#555; border:1px solid #333; border-radius:5px; font-size:0.7rem;">Reset Save</button>
+            </div>
         </div>
         <div id="world" class="panel">
             <div class="world-header">
                 <div style="font-weight:bold; color:var(--gold);">🌍 DOMINACIÓN MUNDIAL</div>
-                <div class="world-req" id="world-lock-msg">Requiere: 100 Gemas + 1 Servidor</div>
             </div>
             <div id="mission-list"></div>
         </div>
@@ -231,32 +277,43 @@
         if(type=='coin') { osc.frequency.setValueAtTime(1200, t); osc.frequency.exponentialRampToValueAtTime(2000, t+0.1); gain.gain.setValueAtTime(0.1, t); gain.gain.exponentialRampToValueAtTime(0.01, t+0.1); osc.start(t); osc.stop(t+0.1); }
         if(type=='buy') { osc.type='square'; osc.frequency.setValueAtTime(200, t); gain.gain.setValueAtTime(0.1, t); gain.gain.linearRampToValueAtTime(0.01, t+0.1); osc.start(t); osc.stop(t+0.1); }
         if(type=='shield') { osc.type='sine'; osc.frequency.setValueAtTime(400, t); osc.frequency.linearRampToValueAtTime(800, t+0.3); gain.gain.setValueAtTime(0.2, t); gain.gain.exponentialRampToValueAtTime(0.01, t+0.3); osc.start(t); osc.stop(t+0.3); }
+        if(type=='denied') { osc.type='sawtooth'; osc.frequency.setValueAtTime(100, t); osc.frequency.linearRampToValueAtTime(50, t+0.3); gain.gain.setValueAtTime(0.2, t); gain.gain.exponentialRampToValueAtTime(0.01, t+0.3); osc.start(t); osc.stop(t+0.3); }
     }
 
-    /* --- DATA --- */
+    /* --- CONFIG --- */
     const machinesDB = [ {name: "Principiante", cost: 15, prod: 1, icon: "👶"}, {name: "PC Gamer", cost: 150, prod: 10, icon: "💻"}, {name: "Servidor", cost: 1400, prod: 80, icon: "🖥️"}, {name: "Granja Crypto", cost: 20000, prod: 500, icon: "🏭"}, {name: "IA Maestra", cost: 500000, prod: 3000, icon: "🧠"} ];
     const securityDB = [ {name: "Contraseña", cost: 500, red: 0.1, icon: "🔑", desc: "Amenaza -10%"}, {name: "Antivirus", cost: 3000, red: 0.2, icon: "🛡️", desc: "Amenaza -20%"}, {name: "Firewall", cost: 25000, red: 0.4, icon: "🔥", desc: "Amenaza -40%"} ];
-    const news = ["¡Precios del Mercado Negro han subido!", "Compra Escudos en la tienda", "Overclocking es acumulable", "Cuidado con el Hacker", "Compra bajo, vende alto"];
-    const missions = [
-        {name: "WiFi del Vecino", cost: 5000, reward: "+1 Gema/min", id: 0},
-        {name: "Red de Cajeros", cost: 50000, reward: "Máquinas -10% Coste", id: 1},
-        {name: "Banco Central", cost: 500000, reward: "Bitcoin x2 Valor", id: 2},
-        {name: "Satélite Espía", cost: 5000000, reward: "Amenaza sube 50% lento", id: 3},
-        {name: "Bolsa N.Y.", cost: 50000000, reward: "Producción x3", id: 4},
-        {name: "Códigos Nucleares", cost: 500000000, reward: "Clics x10", id: 5},
-        {name: "La Matrix", cost: 5000000000, reward: "MODO INFINITO (x100)", id: 6}
+    const news = ["¡Compra Skins en la tienda!", "Gana doble al volver al juego", "Overclocking es acumulable", "Compra bajo, vende alto"];
+    const missions = [ {name: "WiFi del Vecino", cost: 5000, reward: "+1 Gema/min", id: 0}, {name: "Red de Cajeros", cost: 50000, reward: "Máquinas -10% Coste", id: 1}, {name: "Banco Central", cost: 500000, reward: "Bitcoin x2 Valor", id: 2}, {name: "Satélite Espía", cost: 5000000, reward: "Amenaza sube 50% lento", id: 3}, {name: "Bolsa N.Y.", cost: 50000000, reward: "Producción x3", id: 4}, {name: "Códigos Nucleares", cost: 500000000, reward: "Clics x10", id: 5}, {name: "La Matrix", cost: 5000000000, reward: "MODO INFINITO (x100)", id: 6} ];
+    
+    const skinsDB = [
+        {id: "baby", icon: "👶", cost: 0, name: "Default"},
+        {id: "cool", icon: "😎", cost: 50, name: "Cool"},
+        {id: "robot", icon: "🤖", cost: 150, name: "Robot"},
+        {id: "devil", icon: "😈", cost: 300, name: "Hacker"},
+        {id: "alien", icon: "👽", cost: 500, name: "Alien"},
+        {id: "btc", icon: "₿", cost: 1000, name: "Bitcoin Lord"}
     ];
 
     /* --- STATE --- */
-    let game = { money: 0, gems: 10, total: 0, machines: [0,0,0,0,0], security: [0,0,0], btc: 0, hasBot: false, hasSpy: false, hasFake: false, hasShield: false, overclock: 0, missions: [0,0,0,0,0,0,0], worldUnlocked: false, lastLogin: 0 };
-    let threat = 0; let btcPrice = 50; let nextBtcPrice = 50;
+    let game = { money: 0, gems: 10, total: 0, machines: [0,0,0,0,0], security: [0,0,0], btc: 0, hasBot: false, hasSpy: false, hasFake: false, hasShield: false, overclock: 0, missions: [0,0,0,0,0,0,0], worldUnlocked: false, lastLogin: Date.now(), ownedSkins: ["baby"], currentSkin: "baby" };
+    let threat = 0; let btcPrice = 50; let nextBtcPrice = 50; let offlineEarnings = 0;
 
     /* --- LOAD --- */
-    if(localStorage.getItem('EmojiWorld_v16_1')) {
-        try { let s = JSON.parse(localStorage.getItem('EmojiWorld_v16_1')); if(s.machines && s.machines.length == machinesDB.length) game = s; } catch(e) {}
-    } else checkDaily();
+    if(localStorage.getItem('EmojiBiz_v18')) {
+        try { 
+            let s = JSON.parse(localStorage.getItem('EmojiBiz_v18')); 
+            if(s.machines && s.machines.length == machinesDB.length) { 
+                game = s; 
+                // Migration fixes
+                if(!game.ownedSkins) game.ownedSkins = ["baby"];
+                if(!game.currentSkin) game.currentSkin = "baby";
+            }
+        } catch(e) {}
+    }
+    checkOffline();
 
-    /* --- FORMAT --- */
+    /* --- HELPERS --- */
     function fmt(n) { if(n<1000) return Math.floor(n); if(n<1000000) return (n/1000).toFixed(1)+'k'; if(n<1000000000) return (n/1000000).toFixed(2)+'M'; return (n/1000000000).toFixed(2)+'B'; }
     function toast(msg) { let d=document.createElement('div'); d.className='toast'; d.innerText=msg; document.getElementById('toast-area').appendChild(d); setTimeout(()=>d.remove(), 2000); }
 
@@ -266,8 +323,8 @@
         if(pps > 0) { let inc = pps / 10; game.money += inc; game.total += inc; }
         if(game.missions[0] && Math.random() < 0.0016) { game.gems++; updateUI(); }
         if(game.hasBot && Math.random() < 0.3) { doClick({clientX: window.innerWidth/2, clientY: window.innerHeight/3}, true); }
-        checkWorldUnlock(); updateThreat(); updateEmoji(); updateUI();
-        localStorage.setItem('EmojiWorld_v16_1', JSON.stringify(game));
+        checkWorldUnlock(); updateThreat(); updateUI();
+        localStorage.setItem('EmojiBiz_v18', JSON.stringify(game));
     }, 100);
 
     setInterval(() => {
@@ -294,9 +351,89 @@
         document.body.appendChild(p); setTimeout(()=>p.remove(), 800);
     }
 
+    function checkOffline() {
+        let now = Date.now();
+        let seconds = (now - game.lastLogin) / 1000;
+        if(seconds > 60) {
+            offlineEarnings = getPPS() * seconds;
+            if(offlineEarnings > 0) {
+                document.getElementById('offline-earn').innerText = `$${fmt(offlineEarnings)}`;
+                document.getElementById('daily-modal').style.display = 'flex';
+            }
+        }
+        game.lastLogin = now;
+    }
+
+    function claimOffline(multiplier) {
+        if(multiplier === 2) {
+            showAd(() => {
+                game.money += offlineEarnings * 2;
+                toast(`¡Ganaste el DOBLE: $${fmt(offlineEarnings*2)}!`);
+                sfx('coin');
+                document.getElementById('daily-modal').style.display = 'none';
+            });
+        } else {
+            game.money += offlineEarnings;
+            toast(`Recogido: $${fmt(offlineEarnings)}`);
+            sfx('coin');
+            document.getElementById('daily-modal').style.display = 'none';
+        }
+    }
+
+    function openSkins() {
+        let h = "";
+        skinsDB.forEach(s => {
+            let owned = game.ownedSkins.includes(s.id);
+            let active = game.currentSkin === s.id;
+            let lock = owned ? "" : `<div class="skin-lock">🔒 <span style="font-size:0.8rem; margin-left:5px;">${s.cost}💎</span></div>`;
+            let border = active ? "border-color:#2ecc71; box-shadow:0 0 10px #2ecc71;" : "";
+            
+            h += `<div class="skin-card" style="${border}" onclick="selectSkin('${s.id}', ${s.cost})">
+                <div class="skin-emoji">${s.icon}</div>
+                <div style="font-size:0.7rem; color:#aaa;">${s.name}</div>
+                ${lock}
+            </div>`;
+        });
+        document.getElementById('skins-list').innerHTML = h;
+        document.getElementById('skins-modal').style.display = 'flex';
+    }
+
+    function selectSkin(id, cost) {
+        if(game.ownedSkins.includes(id)) {
+            game.currentSkin = id;
+            updateUI(); // Update Main Emoji
+            openSkins(); // Refresh Modal
+            sfx('buy');
+        } else {
+            if(game.gems >= cost) {
+                if(confirm(`¿Comprar ${id} por ${cost} Gemas?`)) {
+                    game.gems -= cost;
+                    game.ownedSkins.push(id);
+                    game.currentSkin = id;
+                    toast("Skin Comprada!");
+                    updateUI();
+                    openSkins();
+                    sfx('coin');
+                }
+            } else toast("Faltan Gemas");
+        }
+    }
+
     function checkWorldUnlock() {
         if(game.worldUnlocked) return;
         if(game.gems >= 100 && game.machines[2] > 0) { game.worldUnlocked = true; document.getElementById('tab-world').classList.remove('locked-tab'); toast("¡MUNDO DESBLOQUEADO!"); sfx('shield'); }
+    }
+
+    function showUnlockModal() {
+        if(game.worldUnlocked) return;
+        let gemsPct = Math.min((game.gems / 100) * 100, 100);
+        let techPct = game.machines[2] > 0 ? 100 : (game.machines[1]>0?50:(game.machines[0]>0?10:0));
+        document.getElementById('bar-gems').style.width = gemsPct + "%";
+        document.getElementById('req-gems').innerText = `${game.gems}/100`;
+        document.getElementById('bar-tech').style.width = techPct + "%";
+        document.getElementById('req-tech').innerText = techPct >= 100 ? "¡Listo!" : "Falta Servidor";
+        document.getElementById('unlock-modal').style.display = 'flex';
+        sfx('denied');
     }
 
     function doMission(id) {
@@ -311,7 +448,7 @@
         let p=0; machinesDB.forEach((m,i)=>p+=(m.prod*game.machines[i])); 
         let oc = 1 + (game.overclock || 0);
         let m5 = game.missions[4] ? 3 : 1;
-        let m6 = game.missions[6] ? 100 : 1; // Matrix Boost
+        let m6 = game.missions[6] ? 100 : 1; 
         return p * oc * m5 * m6;
     }
 
@@ -324,38 +461,67 @@
         document.getElementById('overclock-icon').style.display = game.overclock > 0 ? "inline" : "none";
         if(game.overclock > 0) document.getElementById('overclock-val').innerText = `(+${(game.overclock*100).toFixed(0)}%)`;
 
-        if(game.worldUnlocked) { document.getElementById('tab-world').classList.remove('locked-tab'); document.getElementById('world-lock-msg').style.display = 'none'; }
+        // Update Main Emoji
+        let skinIcon = skinsDB.find(s=>s.id===game.currentSkin).icon;
+        document.getElementById('main-emoji').innerText = skinIcon;
+
+        if(game.worldUnlocked) document.getElementById('tab-world').classList.remove('locked-tab');
         if(game.missions[6]) document.body.classList.add('matrix-mode');
 
+        // Machines
         let h="";
         machinesDB.forEach((m,i)=>{
             let discount = game.missions[1] ? 0.9 : 1;
             let c = Math.floor(m.cost * Math.pow(1.15, game.machines[i]) * discount);
-            h+=`<div class="item"><div><span class="item-icon">${m.icon}</span><div class="item-info"><b>${m.name}</b><small>${game.machines[i]} | +$${fmt(m.prod)}/s</small></div></div><button class="btn-buy" onclick="buyMachine(${i})" ${game.money<c?'disabled':''}>$${fmt(c)}</button></div>`;
+            let disabledClass = game.money < c ? "btn-disabled" : "";
+            h+=`<div class="item"><div><span class="item-icon">${m.icon}</span><div class="item-info"><b>${m.name}</b><small>${game.machines[i]} | +$${fmt(m.prod)}/s</small></div></div><button class="btn-buy ${disabledClass}" onclick="buyMachine(${i})" ${game.money<c?'disabled':''}>$${fmt(c)}</button></div>`;
         });
         document.getElementById('prod').innerHTML = h;
 
+        // Security
         h="";
         securityDB.forEach((s,i)=>{
             let o = game.security[i];
-            h+=`<div class="item" style="${o?'border-color:var(--green)':''}"><div><span class="item-icon">${s.icon}</span><div class="item-info"><b>${s.name}</b><small>${s.desc}</small></div></div><button class="btn-buy" onclick="buySecurity(${i})" ${o?'disabled style="background:var(--green); color:black;"':(game.money<s.cost?'disabled':'')}>${o?'LISTO':'$'+fmt(s.cost)}</button></div>`;
+            let disabledClass = (!o && game.money < s.cost) ? "btn-disabled" : "";
+            h+=`<div class="item" style="${o?'border-color:var(--green)':''}"><div><span class="item-icon">${s.icon}</span><div class="item-info"><b>${s.name}</b><small>${s.desc}</small></div></div><button class="btn-buy ${disabledClass}" onclick="buySecurity(${i})" ${o?'disabled style="background:var(--green); color:black;"':(game.money<s.cost?'disabled':'')}>${o?'LISTO':'$'+fmt(s.cost)}</button></div>`;
         });
         document.getElementById('sec-items').innerHTML = h;
 
+        // Missions
         h="";
         missions.forEach((m, i) => {
             let done = game.missions[i];
             let active = !done && (i === 0 || game.missions[i-1]);
             let cls = done ? "mission-card completed" : (active ? "mission-card unlocked" : "mission-card");
-            let btn = done ? `<button class="mission-btn done">HECHO</button>` : (active ? `<button class="mission-btn active" onclick="doMission(${i})">$${fmt(m.cost)}</button>` : `<button class="mission-btn">🔒</button>`);
+            let disabledClass = (active && game.money < m.cost) ? "btn-disabled" : "";
+            let btn = done ? `<button class="mission-btn done">HECHO</button>` : (active ? `<button class="mission-btn active ${disabledClass}" onclick="doMission(${i})">$${fmt(m.cost)}</button>` : `<button class="mission-btn">🔒</button>`);
             h += `<div class="${cls}"><div><b>${m.name}</b><br><small style="color:#aaa;">${m.reward}</small></div>${btn}</div>`;
         });
         document.getElementById('mission-list').innerHTML = h;
         
-        const updateBtn = (id, owned) => { let b = document.getElementById(id); if(b && owned && id!='btn-over') { b.innerText="LISTO"; b.disabled=true; b.style.background="var(--green)"; } };
-        updateBtn('btn-bot', game.hasBot); updateBtn('btn-spy', game.hasSpy); updateBtn('btn-fake', game.hasFake);
-        // FIX OVERCLOCK BUTTON
-        let btnOver = document.getElementById('btn-over'); if(btnOver) { let cost = 1000 * Math.pow(1.5, (game.overclock/0.1)||0); btnOver.innerText = `$${fmt(cost)} BTC`; btnOver.disabled = game.btc < cost; btnOver.onclick = ()=>buyItem('overclock', cost, 'btc'); }
+        // Dark Market Buttons logic
+        const updateDarkBtn = (id, owned, cost) => { 
+            let b = document.getElementById(id);
+            if(!b) return;
+            if(owned && id!=='btn-over') { 
+                b.innerText="LISTO"; b.disabled=true; b.style.background="var(--green)"; b.style.color="#000"; b.classList.remove("btn-disabled");
+            } else {
+                if(game.btc < cost) { b.classList.add("btn-disabled"); b.disabled = true; } 
+                else { b.classList.remove("btn-disabled"); b.style.background = "#8e44ad"; b.style.color = "#fff"; b.disabled = false; }
+            }
+        };
+        updateDarkBtn('btn-spy', game.hasSpy, 50);
+        updateDarkBtn('btn-bot', game.hasBot, 200);
+        updateDarkBtn('btn-fake', game.hasFake, 500);
+        
+        let overCost = 1000 * Math.pow(1.5, (game.overclock/0.1)||0);
+        let btnOver = document.getElementById('btn-over');
+        if(btnOver) {
+            btnOver.innerText = `$${fmt(overCost)} BTC`;
+            btnOver.onclick = ()=>buyItem('overclock', overCost, 'btc');
+            if(game.btc < overCost) { btnOver.classList.add("btn-disabled"); btnOver.disabled=true; }
+            else { btnOver.classList.remove("btn-disabled"); btnOver.disabled=false; }
+        }
     }
 
     function spawnGold() {
@@ -363,12 +529,7 @@
         el.onclick = function() { let r = getPPS() * 60 + 500; game.money += r; toast(`BONUS: +$${fmt(r)}`); sfx('coin'); el.remove(); };
         document.querySelector('.game-zone').appendChild(el); setTimeout(() => el.remove(), 6000);
     }
-    function updateEmoji() {
-        let e = document.getElementById('main-emoji'), m = game.total;
-        if(m < 1000) e.innerText = "👶"; else if(m < 50000) e.innerText = "💻"; else if(m < 1000000) e.innerText = "💸"; else if(m < 100000000) e.innerText = "💎"; else e.innerText = "👽";
-    }
-    function checkDaily() { if(Date.now() - game.lastLogin > 86400000) document.getElementById('daily-modal').style.display = 'flex'; }
-    function claimDaily() { game.money += 500; game.gems += 5; game.lastLogin = Date.now(); document.getElementById('daily-modal').style.display = 'none'; toast("Recibido: $500 + 5 Gemas"); sfx('coin'); }
+    
     function updateThreat() {
         if(document.getElementById('hacker-modal').style.display == 'flex') return;
         let speed = 0.05; if(game.money > 1000) speed = 0.1;
@@ -434,7 +595,19 @@
     function buyMachine(i) { let c = Math.floor(machinesDB[i].cost * Math.pow(1.15, game.machines[i])); if(game.money >= c) { game.money-=c; game.machines[i]++; sfx('buy'); updateUI(); } }
     function buySecurity(i) { if(game.money>=securityDB[i].cost && !game.security[i]) { game.money-=securityDB[i].cost; game.security[i]=1; threat=0; sfx('buy'); updateUI(); } }
     function buyTimeWarp() { if(game.gems >= 20) { game.gems-=20; game.money += (getPPS()*3600)+1000; toast("¡Salto temporal!"); updateUI(); } else toast("Faltan gemas"); }
-    function tab(id) { document.querySelectorAll('.panel').forEach(p => p.classList.remove('active')); document.getElementById(id).classList.add('active'); document.querySelectorAll('.tab').forEach(t => t.classList.remove('active')); event.currentTarget.classList.add('active'); sfx('buy'); }
+    
+    function tab(id) { 
+        if(id === 'world' && !game.worldUnlocked) {
+            showUnlockModal();
+            return;
+        }
+        document.querySelectorAll('.panel').forEach(p => p.classList.remove('active')); 
+        document.getElementById(id).classList.add('active'); 
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active')); 
+        if(id === 'world') document.getElementById('tab-world').classList.add('active');
+        else event.currentTarget.classList.add('active'); 
+        sfx('buy'); 
+    }
     window.lastAdTime=0;
     function showAd(cb) { const url="https://www.effectivegatecpm.com/ttwcdab5?key=8d51779f7c6cbf2f752d275eb491f8dc"; if(Date.now()-window.lastAdTime<10000) { toast("Cargando anuncio..."); return; } window.open(url,'_blank'); window.lastAdTime=Date.now(); setTimeout(()=>{ if(cb) cb(); }, 1500); }
     function watchAdForGems() { showAd(()=>{ game.gems+=10; updateUI(); toast("+10 Gemas"); }); }
