@@ -3,95 +3,109 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Emoji Tycoon: GOLD v30</title>
+    <title>Emoji Tycoon: PRO v32</title>
     <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;700;900&display=swap" rel="stylesheet">
     
     <style>
         /* --- ESTILOS GENERALES --- */
-        :root { --bg: #050505; --panel: #14141f; --accent: #ff0055; --gold: #ffd700; --text: #fff; --green: #00ff88; --blue: #00ccff; --purple: #bc13fe; }
+        :root { --bg: #050505; --panel: rgba(20, 20, 31, 0.95); --accent: #ff0055; --gold: #ffd700; --text: #fff; --green: #00ff88; --blue: #00ccff; --purple: #bc13fe; }
         
         body { background-color: #000; margin: 0; height: 100vh; display: flex; justify-content: center; align-items: center; font-family: 'Rajdhani', sans-serif; user-select: none; overflow: hidden; color: var(--text); }
         
-        #game-app { width: 100%; max-width: 480px; height: 100%; background-color: var(--bg); position: relative; display: flex; flex-direction: column; box-shadow: 0 0 50px rgba(0,0,0,0.8); overflow: hidden; }
+        #game-app { width: 100%; max-width: 480px; height: 100%; background: radial-gradient(circle at center, #1a1a2e 0%, #000 100%); position: relative; display: flex; flex-direction: column; box-shadow: 0 0 50px rgba(0,0,0,0.8); overflow: hidden; }
 
         /* PANTALLA DE INICIO */
-        #start-screen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle, #1a1a2e 0%, #000 100%); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
-        .start-btn { background: var(--green); color: #000; font-size: 1.5rem; font-weight: 900; padding: 15px 40px; border: none; border-radius: 50px; box-shadow: 0 0 20px var(--green); cursor: pointer; animation: pulseBtn 1.5s infinite; font-family: 'Rajdhani', sans-serif; text-transform: uppercase; }
+        #start-screen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+        .start-btn { background: var(--green); color: #000; font-size: 1.5rem; font-weight: 900; padding: 15px 40px; border: none; border-radius: 50px; box-shadow: 0 0 25px rgba(0, 255, 136, 0.4); cursor: pointer; animation: pulseBtn 2s infinite; font-family: 'Rajdhani', sans-serif; text-transform: uppercase; letter-spacing: 2px; }
         @keyframes pulseBtn { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
 
         /* HEADER */
-        .header { background: rgba(20, 20, 30, 0.95); padding: 10px 15px; border-bottom: 1px solid #333; z-index: 20; flex-shrink: 0; backdrop-filter: blur(10px); }
+        .header { background: rgba(10, 10, 15, 0.9); padding: 8px 15px; border-bottom: 1px solid #333; z-index: 20; flex-shrink: 0; backdrop-filter: blur(10px); }
         .top-row { display: flex; justify-content: space-between; align-items: center; }
-        .money { color: var(--green); font-weight: 900; font-size: 1.8rem; text-shadow: 0 0 10px rgba(0, 255, 136, 0.3); }
-        .gems-display { color: var(--gold); font-weight: bold; font-size: 1rem; background: rgba(255, 215, 0, 0.1); padding: 4px 12px; border-radius: 20px; border: 1px solid rgba(255, 215, 0, 0.3); }
+        .money { color: var(--green); font-weight: 900; font-size: 1.6rem; text-shadow: 0 0 15px rgba(0, 255, 136, 0.3); }
+        .gems-display { color: var(--gold); font-weight: bold; font-size: 0.9rem; background: rgba(255, 215, 0, 0.15); padding: 4px 12px; border-radius: 20px; border: 1px solid rgba(255, 215, 0, 0.4); }
 
-        /* NOTICIAS (NEWS TICKER) */
-        .news-container { position: absolute; top: 10px; width: 90%; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.6); border: 1px solid #333; border-radius: 20px; padding: 5px 15px; overflow: hidden; white-space: nowrap; z-index: 10; }
-        .news-text { font-size: 0.85rem; color: #ccc; display: inline-block; animation: scrollText 10s linear infinite; }
+        /* NOTICIAS */
+        .news-container { position: absolute; top: 10px; width: 85%; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.7); border: 1px solid #444; border-radius: 20px; padding: 4px 15px; overflow: hidden; white-space: nowrap; z-index: 10; pointer-events: none; backdrop-filter: blur(4px); }
+        .news-text { font-size: 0.75rem; color: #eee; display: inline-block; animation: scrollText 12s linear infinite; }
         @keyframes scrollText { 0% { transform: translateX(100%); } 100% { transform: translateX(-150%); } }
 
         /* ZONA JUEGO */
-        .game-zone { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; background: radial-gradient(circle at center, #1a1a2e 0%, #000 100%); overflow: hidden; }
-        #main-emoji { font-size: 7rem; cursor: pointer; transition: transform 0.05s; z-index: 5; filter: drop-shadow(0 0 30px rgba(255,255,255,0.1)); }
+        .game-zone { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; overflow: hidden; min-height: 0; }
+        #main-emoji { font-size: 18vh; cursor: pointer; transition: transform 0.05s; z-index: 5; filter: drop-shadow(0 0 40px rgba(255,255,255,0.15)); max-height: 220px; }
         #main-emoji:active { transform: scale(0.92); filter: brightness(1.3); }
 
-        /* HYPE TRAIN BUTTON */
-        #hype-btn { position: absolute; bottom: 20px; right: 20px; background: linear-gradient(45deg, #f1c40f, #e74c3c); color: #fff; border: none; padding: 10px 15px; border-radius: 50px; font-weight: bold; font-size: 0.9rem; cursor: pointer; box-shadow: 0 0 15px rgba(241, 196, 15, 0.5); z-index: 40; display: none; animation: bounce 1s infinite; }
-        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+        /* DRON & CAJA */
+        .drone { position: absolute; font-size: 3.5rem; z-index: 50; animation: droneFly 8s linear; cursor: pointer; filter: drop-shadow(0 0 15px var(--blue)); top: 20%; left:-20%; }
+        @keyframes droneFly { 0% { left: -20%; } 100% { left: 120%; } }
+        .supply-crate { position: absolute; font-size: 3rem; z-index: 45; animation: drop 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; cursor: pointer; filter: drop-shadow(0 10px 10px rgba(0,0,0,0.5)); }
+        @keyframes drop { to { top: 75%; transform: rotate(-5deg); } }
 
-        /* TABS */
-        .tabs { display: flex; background: #0f0f15; border-top: 1px solid #333; height: 65px; flex-shrink: 0; z-index: 30; overflow-x: auto; scrollbar-width: none; }
+        /* TABS (MENÚ INFERIOR COLORIDO) */
+        .tabs { display: flex; background: #0a0a10; border-top: 1px solid #333; height: 55px; flex-shrink: 0; z-index: 30; overflow-x: auto; scrollbar-width: none; }
         .tabs::-webkit-scrollbar { display: none; }
-        .tab { flex: 1; min-width: 70px; padding: 5px 0; background: none; border: none; color: #666; font-family: 'Rajdhani', sans-serif; font-weight: 700; font-size: 0.8rem; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: 0.2s; }
-        .tab span { font-size: 1.4rem; margin-bottom: 3px; filter: grayscale(1); }
-        .tab.active { color: #fff; background: #1a1a25; border-top: 3px solid var(--accent); }
-        .tab.active span { filter: grayscale(0); transform: scale(1.1); }
+        .tab { flex: 1; min-width: 65px; padding: 2px 0; background: none; border: none; font-family: 'Rajdhani', sans-serif; font-weight: 700; font-size: 0.7rem; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: 0.2s; position: relative; opacity: 0.7; }
+        .tab span { font-size: 1.2rem; margin-bottom: 2px; transition: 0.2s; }
+        
+        /* COLORES ESPECÍFICOS PARA CADA TAB */
+        .tab:nth-child(1) { color: var(--green); } /* Prod */
+        .tab:nth-child(2) { color: var(--blue); }  /* Def */
+        .tab:nth-child(3) { color: var(--gold); }  /* Crypto */
+        .tab:nth-child(4) { color: var(--purple); } /* Tienda */
+        
+        .tab.active { opacity: 1; background: rgba(255,255,255,0.05); border-top: 3px solid currentColor; }
+        .tab.active span { transform: scale(1.15); filter: drop-shadow(0 0 5px currentColor); }
+
+        /* MUNDO BLOQUEADO (GRIS) */
+        .tab-locked { color: #555 !important; filter: grayscale(1); opacity: 0.5; }
+        .lock-icon { position: absolute; top: 5px; right: 15px; font-size: 0.6rem; color: #fff; background: #000; border-radius: 50%; padding: 2px; }
 
         /* PANELES */
-        .panel-container { height: 42%; background: var(--panel); overflow-y: auto; padding: 15px; padding-bottom: 100px; box-shadow: inset 0 10px 30px rgba(0,0,0,0.5); }
+        .panel-container { height: 35%; background: var(--panel); backdrop-filter: blur(10px); overflow-y: auto; padding: 10px; padding-bottom: 80px; box-shadow: inset 0 10px 30px rgba(0,0,0,0.5); }
         .panel { display: none; animation: slideUp 0.3s; }
         .panel.active { display: block; }
         @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* ITEMS (UI MEJORADA) */
-        .card { background: linear-gradient(145deg, #1e1e2d, #14141f); padding: 12px; margin-bottom: 10px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #333; }
-        .card-left { display: flex; align-items: center; gap: 12px; }
-        .card-icon { font-size: 2rem; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.05); border-radius: 10px; }
-        .card-info b { display: block; font-size: 1rem; color: #fff; }
-        .card-info small { color: #888; font-size: 0.8rem; }
+        /* TARJETAS MEJORADAS */
+        .card { background: linear-gradient(145deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02)); padding: 10px; margin-bottom: 8px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; border: 1px solid rgba(255,255,255,0.08); transition: 0.2s; }
+        .card:hover { border-color: rgba(255,255,255,0.2); }
+        .card-left { display: flex; align-items: center; gap: 10px; }
+        .card-icon { font-size: 1.8rem; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.3); border-radius: 8px; }
+        .card-info b { display: block; font-size: 0.9rem; color: #fff; }
+        .card-info small { color: #888; font-size: 0.7rem; }
         
-        .btn-buy { background: var(--accent); color: white; border: none; padding: 10px 15px; border-radius: 8px; font-weight: bold; cursor: pointer; min-width: 85px; font-family: 'Rajdhani', sans-serif; font-size: 1rem; box-shadow: 0 4px 0 #900; }
-        .btn-buy:active { transform: translateY(2px); box-shadow: 0 1px 0 #900; }
-        .btn-buy:disabled { background: #333 !important; color: #555 !important; box-shadow: none !important; cursor: not-allowed; }
+        .btn-buy { background: var(--accent); color: white; border: none; padding: 8px 12px; border-radius: 6px; font-weight: bold; cursor: pointer; min-width: 70px; font-family: 'Rajdhani', sans-serif; font-size: 0.9rem; box-shadow: 0 3px 0 rgba(0,0,0,0.3); transition: 0.1s; }
+        .btn-buy:active { transform: translateY(2px); box-shadow: none; }
+        .btn-buy:disabled { background: #333 !important; color: #555 !important; box-shadow: none !important; cursor: not-allowed; opacity: 0.7; }
 
         /* MODALES */
-        .overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 5000; display: none; align-items: center; justify-content: center; backdrop-filter: blur(8px); }
-        .popup { background: var(--panel); width: 85%; padding: 25px; border-radius: 25px; border: 1px solid #444; text-align: center; position: relative; animation: popIn 0.3s; }
+        .overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.92); z-index: 5000; display: none; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
+        .popup { background: #1a1a25; width: 85%; padding: 20px; border-radius: 20px; border: 1px solid #444; text-align: center; position: relative; animation: popIn 0.3s; box-shadow: 0 0 50px rgba(0,0,0,0.8); }
         @keyframes popIn { 0% { transform: scale(0.5); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+        .popup h2 { margin-top: 0; color: var(--text); font-size: 1.5rem; }
         .popup-btns { display: flex; gap: 10px; margin-top: 20px; }
-        .modal-btn { flex: 1; padding: 12px; border-radius: 12px; border: none; font-weight: bold; cursor: pointer; font-size: 1rem; font-family: 'Rajdhani', sans-serif; }
+        .modal-btn { flex: 1; padding: 12px; border-radius: 10px; border: none; font-weight: bold; cursor: pointer; font-size: 1rem; font-family: 'Rajdhani', sans-serif; }
 
-        /* SKINS */
-        .skins-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
-        .skin-item { background: #111; padding: 10px; border-radius: 12px; border: 2px solid #333; text-align: center; cursor: pointer; transition: 0.2s; position: relative; }
-        .skin-item.active { border-color: var(--green); background: rgba(46, 204, 113, 0.05); }
-        .skin-item.locked { filter: grayscale(1); opacity: 0.6; }
-        .skin-item.locked::after { content: "🔒"; position: absolute; top:50%; left:50%; transform:translate(-50%,-50%); font-size:1.5rem; }
-
-        /* MUNDO */
-        .world-lock { text-align: center; padding: 30px; border: 2px dashed #444; border-radius: 15px; margin-top: 20px; color: #666; }
-        .progress-box { margin: 10px 0; text-align: left; }
-        .prog-bar { height: 8px; background: #333; border-radius: 4px; overflow: hidden; margin-top: 5px; }
+        /* BARRAS PROGRESO */
+        .prog-container { margin: 15px 0; text-align: left; }
+        .prog-label { display: flex; justify-content: space-between; font-size: 0.8rem; color: #ccc; margin-bottom: 5px; }
+        .prog-bg { height: 10px; background: #222; border-radius: 5px; overflow: hidden; }
         .prog-fill { height: 100%; background: var(--blue); width: 0%; transition: width 0.5s; }
         .prog-fill.green { background: var(--green); }
 
-        /* BANNER */
-        .ad-space { width: 100%; height: 50px; background: #000; display: flex; justify-content: center; align-items: center; border-top: 1px solid #222; position: relative; z-index: 25; }
+        /* SKINS */
+        .skins-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+        .skin-item { background: rgba(255,255,255,0.05); padding: 8px; border-radius: 10px; border: 1px solid #333; text-align: center; cursor: pointer; transition: 0.2s; position: relative; }
+        .skin-item.active { border-color: var(--green); background: rgba(0, 255, 136, 0.1); box-shadow: 0 0 10px rgba(0, 255, 136, 0.2); }
+        .skin-item.locked { filter: grayscale(1); opacity: 0.5; }
+        .skin-item.locked::after { content: "🔒"; position: absolute; top:50%; left:50%; transform:translate(-50%,-50%); font-size:1.2rem; }
+
+        .ad-space { width: 100%; height: 50px; background: #000; display: flex; justify-content: center; align-items: center; border-top: 1px solid #222; position: relative; z-index: 25; flex-shrink: 0; }
         
-        /* TOASTS */
         #toast-area { position: absolute; top: 90px; left: 50%; transform: translateX(-50%); width: 90%; z-index: 4000; pointer-events: none; }
-        .toast { background: rgba(255,255,255,0.95); color: #000; padding: 10px; border-radius: 50px; font-weight: bold; font-size: 0.9rem; margin-bottom: 8px; animation: slideDown 3s forwards; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.5); }
+        .toast { background: rgba(255,255,255,0.95); color: #000; padding: 8px 15px; border-radius: 50px; font-weight: bold; font-size: 0.85rem; margin-bottom: 8px; animation: slideDown 3s forwards; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.5); }
         @keyframes slideDown { 0% { opacity:0; transform:translateY(-20px); } 10% { opacity:1; transform:translateY(0); } 90% { opacity:1; transform:translateY(0); } 100% { opacity:0; transform:translateY(-20px); } }
+        
         .particle { position: absolute; font-weight: 900; pointer-events: none; animation: floatUp 1s forwards; font-size: 1.2rem; z-index: 10; text-shadow: 0 0 5px rgba(0,0,0,0.5); }
         @keyframes floatUp { 0% { opacity: 1; transform: translateY(0) scale(1); } 100% { opacity: 0; transform: translateY(-120px) scale(1.5); } }
     </style>
@@ -103,25 +117,45 @@
     <div id="start-screen">
         <div style="font-size: 6rem; animation: floatUp 3s infinite alternate;">🚀</div>
         <h1 style="font-size: 3rem; margin: 10px 0; color: var(--text); text-shadow: 0 0 20px var(--purple);">EMOJI TYCOON</h1>
-        <p style="color: #888; font-size: 1.2rem;">Construye tu Imperio Digital</p>
-        <button class="start-btn" onclick="startGame()">JUGAR AHORA</button>
+        <p style="color: #888; font-size: 1.2rem; margin-bottom: 30px;">Toca para Empezar</p>
+        <button class="start-btn" onclick="startGame()">START</button>
     </div>
 
-    <div id="custom-modal" class="overlay">
-        <div class="popup">
-            <h2 id="modal-title" style="color:var(--text)">AVISO</h2>
-            <p id="modal-msg" style="color:#aaa;">...</p>
-            <div id="modal-actions" class="popup-btns"></div>
+    <div id="world-modal" class="overlay">
+        <div class="popup" style="border-color: var(--blue);">
+            <div style="font-size: 3rem; margin-bottom:10px;">🔒</div>
+            <h2 style="color:var(--blue);">ACCESO DENEGADO</h2>
+            <p style="color:#aaa; font-size:0.9rem;">Necesitas completar los requisitos.</p>
+            
+            <div class="prog-container">
+                <div class="prog-label"><span>Gemas (100)</span><span id="txt-gems">0/100</span></div>
+                <div class="prog-bg"><div class="prog-fill" id="bar-gems"></div></div>
+            </div>
+            
+            <div class="prog-container">
+                <div class="prog-label"><span>Servidor (Nvl 1)</span><span id="txt-tech">NO</span></div>
+                <div class="prog-bg"><div class="prog-fill green" id="bar-tech"></div></div>
+            </div>
+
+            <button class="modal-btn" style="background:#333; color:#fff;" onclick="document.getElementById('world-modal').style.display='none'">CERRAR</button>
         </div>
     </div>
 
     <div id="offline-modal" class="overlay">
         <div class="popup" style="border-color: var(--gold);">
-            <div style="font-size:3rem;">💤💰</div>
+            <div style="font-size:3rem; margin-bottom:10px;">💤💰</div>
             <h2 style="color:var(--gold);">GANANCIAS OFFLINE</h2>
-            <p>Tus servidores trabajaron mientras dormías.</p>
-            <h1 id="offline-amount" style="color:#fff; font-family: monospace; font-size: 2.5rem;">$0</h1>
-            <button class="modal-btn" style="background:var(--green); color:#000; width:100%; margin-top:15px; font-size:1.1rem;" onclick="claimOffline()">🎬 VER VIDEO Y RECOGER</button>
+            <p>¡Has ganado dinero mientras dormías!</p>
+            <h1 id="offline-amount" style="color:#fff; font-family: monospace; font-size: 2.5rem; margin:15px 0;">$0</h1>
+            <button class="modal-btn" style="background:var(--green); color:#000; width:100%;" onclick="claimOffline()">🎬 VER VIDEO Y RECOGER</button>
+        </div>
+    </div>
+
+    <div id="custom-modal" class="overlay">
+        <div class="popup">
+            <h2 id="modal-title">AVISO</h2>
+            <p id="modal-msg" style="color:#aaa;">...</p>
+            <div id="modal-actions" class="popup-btns"></div>
         </div>
     </div>
 
@@ -129,24 +163,23 @@
 
     <div class="header">
         <div class="top-row">
-            <div style="font-weight:900; font-size:1.1rem; color:var(--blue);">EMOJI TYCOON</div>
+            <div style="font-weight:900; letter-spacing:1px; font-size:1rem;">EMOJI TYCOON</div>
             <div class="gems-display">💎 <span id="ui-gems">0</span></div>
         </div>
         <div class="top-row" style="margin-top:5px;">
             <div class="money" id="ui-money">$0</div>
-            <div style="font-size:0.9rem; color:#888;">+<span id="ui-pps">0</span>/s <span id="hype-tag" style="color:var(--gold); display:none;">(x5 🔥)</span></div>
+            <div style="font-size:0.8rem; color:#888;">+<span id="ui-pps">0</span>/s <span id="boost-tag" style="color:var(--gold); display:none; font-weight:bold;">(x2)</span></div>
         </div>
-        <div style="width:100%; height:6px; background:#220000; margin-top:8px; border-radius:3px; overflow:hidden;">
+        <div style="width:100%; height:6px; background:#220000; margin-top:5px; border-radius:3px; overflow:hidden;">
             <div id="threat-bar" style="height:100%; width:0%; background:linear-gradient(90deg, #ff9f43, #ff4757); transition:width 0.5s;"></div>
         </div>
     </div>
 
     <div class="game-zone">
         <div class="news-container">
-            <div class="news-text" id="news-text">Bienvenido a la red... El Bitcoin está estable... ¡Cuidado con los hackers!...</div>
+            <div class="news-text" id="news-text">Bienvenido al mercado... El Bitcoin está estable...</div>
         </div>
-        <button onclick="document.getElementById('start-screen').style.display='flex'" style="position:absolute; top:40px; right:10px; background:none; border:none; font-size:1.5rem; cursor:pointer;">⚙️</button>
-        <button id="hype-btn" onclick="activateHypeTrain()">🔥 HYPE TRAIN (x5)</button>
+        <button onclick="hardReset()" style="position:absolute; top:40px; right:10px; background:none; border:none; font-size:1.5rem; cursor:pointer; opacity:0.5;">⚙️</button>
         <div id="main-emoji" onclick="doClick(event)">👶</div>
     </div>
 
@@ -162,13 +195,12 @@
         <button class="tab" onclick="tab('def', this)"><span>🛡️</span>Def</button>
         <button class="tab" onclick="tab('btc', this)"><span>🪙</span>Crypto</button>
         <button class="tab" onclick="tab('shop', this)"><span>🛒</span>Tienda</button>
-        <button class="tab locked" onclick="checkWorld(this)"><span>🌍</span>Mundo<span class="lock-icon">🔒</span></button>
+        <button class="tab tab-locked" id="tab-world-btn" onclick="clickWorld(this)"><span>🌍</span>Mundo<span class="lock-icon">🔒</span></button>
     </div>
 
     <div class="panel-container">
         
         <div id="prod" class="panel active"></div>
-
         <div id="def" class="panel"></div>
 
         <div id="btc" class="panel">
@@ -181,7 +213,7 @@
                     <button class="modal-btn" style="background:#27ae60; color:#fff;" onclick="sellBTC()">💰 VENDER</button>
                 </div>
             </div>
-            <div style="margin-top:20px; font-weight:bold; color:var(--purple); border-bottom:1px solid #333; padding-bottom:5px;">MERCADO NEGRO (BTC)</div>
+            <div style="margin-top:20px; font-weight:bold; color:var(--purple); border-bottom:1px solid #333; padding-bottom:5px;">MERCADO NEGRO</div>
             <div id="dark-list"></div>
         </div>
 
@@ -192,35 +224,36 @@
             </div>
 
             <div id="items-view">
-                <button class="modal-btn" style="background:var(--blue); color:#fff; width:100%; margin-bottom:15px; box-shadow:0 0 15px rgba(0,204,255,0.3); animation:pulseBtn 2s infinite;" onclick="watchAdForGems()">💎 +10 GEMAS GRATIS (VIDEO)</button>
+                <div class="card" style="border-color:var(--gold); background:rgba(255,215,0,0.05);">
+                    <div class="card-left">
+                        <div class="card-icon" style="font-size:1.5rem;">🔥</div>
+                        <div class="card-info"><b>Hype Train</b><small>x5 Producción (60s)</small></div>
+                    </div>
+                    <button class="btn-buy" style="background:var(--gold); color:black;" onclick="activateHypeTrain()">VER 🎬</button>
+                </div>
+                <div class="card" style="border-color:var(--blue); background:rgba(0,204,255,0.05);">
+                    <div class="card-left">
+                        <div class="card-icon" style="font-size:1.5rem;">💎</div>
+                        <div class="card-info"><b>Gemas Gratis</b><small>+10 Gemas</small></div>
+                    </div>
+                    <button class="btn-buy" style="background:var(--blue); color:white;" onclick="watchAdForGems()">VER 🎬</button>
+                </div>
+                
                 <div id="gem-list"></div>
             </div>
 
             <div id="skins-view" style="display:none; grid-template-columns: repeat(3, 1fr); gap:10px;"></div>
-            
-            <div style="margin-top:30px; text-align:center;">
-                <button onclick="hardReset()" style="background:transparent; color:#555; border:none; text-decoration:underline; font-size:0.7rem;">Borrar Partida</button>
-            </div>
         </div>
 
         <div id="world" class="panel">
-            <div id="world-lock" class="world-lock">
-                <div style="font-size:3rem; margin-bottom:10px;">🔒</div>
-                <p>ACCESO DENEGADO</p>
-                <div class="progress-box"><div class="prog-label">Gemas (100): <span id="p-gems">0/100</span></div><div class="prog-bar"><div class="prog-fill" id="pb-gems"></div></div></div>
-                <div class="progress-box"><div class="prog-label">Servidor: <span id="p-serv">NO</span></div><div class="prog-bar"><div class="prog-fill green" id="pb-serv"></div></div></div>
-            </div>
-            <div id="world-content" style="display:none;">
-                <div style="text-align:center; padding:10px; background:rgba(0,200,255,0.1); border:1px solid var(--blue); border-radius:10px; margin-bottom:15px; font-weight:bold; color:var(--blue);">RED GLOBAL DE MISIONES</div>
-                <div id="mission-list"></div>
-            </div>
+            <div style="text-align:center; padding:10px; background:rgba(0,200,255,0.1); border:1px solid var(--blue); border-radius:10px; margin-bottom:15px; font-weight:bold; color:var(--blue);">MISIONES GLOBALES</div>
+            <div id="mission-list"></div>
         </div>
 
     </div>
 </div>
 
 <script>
-    /* --- AUDIO ENGINE --- */
     const AudioContext = window.AudioContext || window.webkitAudioContext;
     const audioCtx = new AudioContext();
     
@@ -228,7 +261,7 @@
         document.getElementById('start-screen').style.display = 'none';
         if(audioCtx.state === 'suspended') audioCtx.resume();
         checkOfflineEarnings();
-        setInterval(updateNews, 10000);
+        setInterval(updateNews, 8000);
     }
 
     function playSfx(type) {
@@ -237,7 +270,6 @@
         const gain = audioCtx.createGain();
         osc.connect(gain); gain.connect(audioCtx.destination);
         const now = audioCtx.currentTime;
-        
         if (type === 'coin') {
             osc.frequency.setValueAtTime(1200, now); osc.frequency.exponentialRampToValueAtTime(3000, now+0.1);
             gain.gain.setValueAtTime(0.1, now); gain.gain.exponentialRampToValueAtTime(0.01, now+0.1);
@@ -246,20 +278,16 @@
             osc.type='sawtooth'; osc.frequency.setValueAtTime(100, now); osc.frequency.linearRampToValueAtTime(50, now+0.5);
             gain.gain.setValueAtTime(0.2, now); gain.gain.linearRampToValueAtTime(0.01, now+0.5);
             osc.start(now); osc.stop(now+0.5);
-        } else if (type === 'train') {
-            osc.type='square'; osc.frequency.setValueAtTime(200, now); osc.frequency.linearRampToValueAtTime(600, now+0.5);
-            gain.gain.setValueAtTime(0.1, now); gain.gain.linearRampToValueAtTime(0.01, now+0.5);
-            osc.start(now); osc.stop(now+0.5);
         }
     }
 
-    /* --- DATA --- */
+    /* DATA */
     const machinesDB = [
-        {name: "Script Básico", cost: 15, prod: 1, icon: "👶", desc: "Ingresos pasivos mínimos."},
-        {name: "PC Gamer", cost: 150, prod: 12, icon: "💻", desc: "Equipo decente."},
-        {name: "Servidor Rack", cost: 1400, prod: 90, icon: "🖥️", desc: "Procesamiento 24/7."},
-        {name: "Granja Crypto", cost: 25000, prod: 600, icon: "🏭", desc: "Minería industrial."},
-        {name: "IA Maestra", cost: 500000, prod: 4000, icon: "🧠", desc: "Inteligencia pura."}
+        {name: "Script Básico", cost: 15, prod: 1, icon: "👶"},
+        {name: "PC Gamer", cost: 150, prod: 12, icon: "💻"},
+        {name: "Servidor Rack", cost: 1400, prod: 90, icon: "🖥️"},
+        {name: "Granja Crypto", cost: 25000, prod: 600, icon: "🏭"},
+        {name: "IA Maestra", cost: 500000, prod: 4000, icon: "🧠"}
     ];
     const defDB = [
         {name: "VPN Básica", cost: 500, desc: "Amenaza -10%"},
@@ -269,7 +297,7 @@
     const gemItemsDB = [
         {id: 'coffee', name: "Café Dev", cost: 10, desc: "x2 Prod (1min)", icon: "☕"},
         {id: 'shield', name: "Escudo", cost: 20, desc: "Bloquea 1 ataque", icon: "🛡️"},
-        {id: 'warp', name: "Salto", cost: 30, desc: "+2 Horas de Cash", icon: "⏩"}
+        {id: 'warp', name: "Salto", cost: 30, desc: "+2h Cash", icon: "⏩"}
     ];
     const darkItemsDB = [
         {id: 'bot', name: "Bot Clicker", cost: 50, desc: "Clics auto", icon: "🤖"},
@@ -286,20 +314,14 @@
         {name: "Banco Central", cost: 500000, reward: "x2 Valor Dinero"},
         {name: "La Matrix", cost: 1000000000, reward: "MODO DIOS"}
     ];
-    const newsDB = [
-        "El Bitcoin alcanza máximos históricos...", "Hackers atacan el servidor central...", 
-        "Elon Musk tuitea un emoji...", "Se descubre nuevo algoritmo cuántico...",
-        "Los gatos dominan internet...", "¡Toca el emoji para ganar más!",
-        "Invierte en seguridad, es un consejo...", "El mercado negro está abierto..."
-    ];
+    const newsDB = ["Bitcoin sube...", "Hackers activos...", "Nuevo emoji viral...", "Mercado estable...", "Invierte ahora..."];
 
-    /* --- STATE --- */
-    let game = { money: 0, gems: 20, btc: 0, machines: [0,0,0,0,0], security: [0,0,0], ownedSkins: ["baby"], currentSkin: "baby", missions: [0,0,0], hasBot:false, hasSpy:false, hasShield:false, overclock:0, lastLogin: Date.now() };
+    /* STATE */
+    let game = { money: 0, gems: 20, btc: 0, machines: [0,0,0,0,0], security: [0,0,0], ownedSkins: ["baby"], currentSkin: "baby", missions: [0,0,0], hasBot:false, hasSpy:false, hasShield:false, overclock:0, lastLogin: Date.now(), worldUnlocked: false };
     let threat = 0, btcPrice = 50, oldPrice=50, pendingOffline = 0, boostMult = 1;
 
-    /* --- INIT --- */
-    if(localStorage.getItem('EmojiGold_v30')) {
-        try { game = JSON.parse(localStorage.getItem('EmojiGold_v30')); } catch(e){}
+    if(localStorage.getItem('EmojiClean_v32')) {
+        try { game = JSON.parse(localStorage.getItem('EmojiClean_v32')); } catch(e){}
     }
     
     function checkOfflineEarnings() {
@@ -319,7 +341,6 @@
         document.getElementById('news-text').innerText = newsDB[Math.floor(Math.random()*newsDB.length)];
     }
 
-    /* --- CORE --- */
     function getPPS() {
         let p = 0; machinesDB.forEach((m,i)=>p+=(m.prod*game.machines[i]));
         if(game.missions[2]) p *= 100;
@@ -330,36 +351,66 @@
         let val = 1 + (getPPS() * 0.05);
         game.money += val;
         playSfx('coin');
-        
         let p = document.createElement('div'); p.className='particle'; p.innerText="+$"+fmt(val); 
         p.style.left=e.clientX+'px'; p.style.top=e.clientY+'px'; p.style.color='var(--green)';
         document.body.appendChild(p); setTimeout(()=>p.remove(),1000);
         updateUI();
     }
 
-    /* --- MONETIZACION "HYPE TRAIN" --- */
     function activateHypeTrain() {
-        showModal("🔥 HYPE TRAIN", "¡Mira un video para multiplicar x5 tu producción durante 60s!", ()=>{}, ()=>{
-            showAd(()=>{
-                boostMult = 5;
-                document.getElementById('hype-tag').style.display = 'inline';
-                document.getElementById('hype-btn').style.display = 'none';
-                notify("🔥 ¡HYPE ACTIVADO! x5");
-                setTimeout(()=>{
-                    boostMult = 1;
-                    document.getElementById('hype-tag').style.display = 'none';
-                }, 60000);
-            });
+        showAd(()=>{
+            boostMult = 5;
+            document.getElementById('boost-tag').style.display = 'inline';
+            notify("🔥 HYPE x5 ACTIVADO");
+            setTimeout(()=>{
+                boostMult = 1;
+                document.getElementById('boost-tag').style.display = 'none';
+            }, 60000);
         });
     }
 
-    function showAd(cb) {
-        const url = "https://www.effectivegatecpm.com/ttwcdab5?key=8d51779f7c6cbf2f752d275eb491f8dc";
-        window.open(url, '_blank');
-        setTimeout(cb, 2000);
+    function spawnDrone() {
+        let d = document.createElement('div'); d.className='drone'; d.innerText='🛸';
+        document.querySelector('.game-zone').appendChild(d);
+        d.onclick = (e) => {
+            d.remove();
+            let c = document.createElement('div'); c.className='supply-crate'; c.innerText='📦';
+            c.style.left = e.clientX + 'px'; c.style.top = '20%';
+            document.querySelector('.game-zone').appendChild(c);
+            c.onclick = () => {
+                c.remove();
+                let reward = getPPS() * 120 + 500;
+                game.money += reward;
+                notify(`📦 +$${fmt(reward)}`);
+                playSfx('coin');
+            }
+        };
+        setTimeout(()=>d.remove(), 6000);
     }
 
-    /* --- ACTIONS --- */
+    function clickWorld(el) {
+        if(game.worldUnlocked) {
+            tab('world', el);
+        } else {
+            let gemsPct = Math.min((game.gems / 100) * 100, 100);
+            let techPct = game.machines[2] > 0 ? 100 : 0;
+            document.getElementById('txt-gems').innerText = game.gems + "/100";
+            document.getElementById('bar-gems').style.width = gemsPct + "%";
+            document.getElementById('txt-tech').innerText = techPct === 100 ? "¡LISTO!" : "FALTA";
+            document.getElementById('bar-tech').style.width = techPct + "%";
+
+            if(gemsPct === 100 && techPct === 100) {
+                game.worldUnlocked = true;
+                notify("¡MUNDO DESBLOQUEADO!");
+                document.getElementById('tab-world-btn').classList.remove('tab-locked');
+                document.querySelector('#tab-world-btn .lock-icon').style.display='none';
+                tab('world', el);
+            } else {
+                document.getElementById('world-modal').style.display = 'flex';
+            }
+        }
+    }
+
     function buyMachine(i) {
         let cost = Math.floor(machinesDB[i].cost * Math.pow(1.2, game.machines[i]));
         if(game.money >= cost) { game.money-=cost; game.machines[i]++; playSfx('coin'); updateUI(); }
@@ -376,6 +427,13 @@
             updateUI();
         } else notify("Faltan Gemas");
     }
+    function buyDarkItem(id, cost) {
+        if(game.btc >= cost) {
+            game.btc -= cost;
+            if(id=='bot') game.hasBot=true; if(id=='spy') game.hasSpy=true; if(id=='over') game.overclock++;
+            notify("Item Comprado"); updateUI();
+        }
+    }
     function buySkin(id, cost) {
         if(game.ownedSkins.includes(id)) { game.currentSkin=id; updateUI(); }
         else if(game.gems >= cost) {
@@ -384,19 +442,19 @@
             });
         }
     }
-    function buyDarkItem(id, cost) {
-        if(game.btc >= cost) {
-            game.btc -= cost;
-            if(id=='bot') game.hasBot=true; if(id=='spy') game.hasSpy=true; if(id=='over') game.overclock++;
-            notify("Item Comprado"); updateUI();
-        }
-    }
     function doMission(i) {
         let m = missionsDB[i];
-        if(game.money >= m.cost) { game.money -= m.cost; game.missions[i] = 1; notify("HACKEO COMPLETADO"); updateUI(); }
+        if(game.money >= m.cost) { game.money -= m.cost; game.missions[i] = 1; notify("Misión Completada"); updateUI(); }
     }
 
-    /* --- UI HELPERS --- */
+    function showAd(cb) {
+        const url = "https://www.effectivegatecpm.com/ttwcdab5?key=8d51779f7c6cbf2f752d275eb491f8dc";
+        window.open(url, '_blank');
+        setTimeout(cb, 2000);
+    }
+    function watchAdForGems() { showAd(()=>{game.gems+=10; notify("+10 Gemas"); updateUI();}); }
+    function claimOffline() { showAd(()=>{game.money+=pendingOffline; document.getElementById('offline-modal').style.display='none'; updateUI();}); }
+
     function updateUI() {
         document.getElementById('ui-money').innerText = "$" + fmt(game.money);
         document.getElementById('ui-pps').innerText = fmt(getPPS());
@@ -405,25 +463,21 @@
         document.getElementById('btc-price-ui').innerText = "$"+btcPrice;
         document.getElementById('main-emoji').innerText = skinsDB.find(s=>s.id==game.currentSkin).icon;
 
-        // Render Prod
         let h = ""; machinesDB.forEach((m,i)=>{
             let cost = Math.floor(m.cost*Math.pow(1.2,game.machines[i]));
             h+=`<div class="card"><div class="card-left"><div class="card-icon">${m.icon}</div><div class="card-info"><b>${m.name}</b><small>Nv.${game.machines[i]} (+${fmt(m.prod)}/s)</small></div></div><button class="btn-buy" ${game.money<cost?'disabled':''} onclick="buyMachine(${i})">$${fmt(cost)}</button></div>`;
         }); document.getElementById('prod').innerHTML = h;
 
-        // Render Def
         h=""; defDB.forEach((d,i)=>{
             h+=`<div class="card"><div class="card-left"><div class="card-icon">🛡️</div><div class="card-info"><b>${d.name}</b><small>${d.desc}</small></div></div><button class="btn-buy" ${game.security[i]||game.money<d.cost?'disabled':''} onclick="buyDef(${i})">${game.security[i]?'LISTO':'$'+fmt(d.cost)}</button></div>`;
         }); document.getElementById('def').innerHTML = h;
 
-        // Render Dark Market
         h=""; darkItemsDB.forEach(d=>{
             let cost = d.id=='over'?500*(game.overclock+1):d.cost;
             let owned = (d.id=='bot'&&game.hasBot)||(d.id=='spy'&&game.hasSpy);
             h+=`<div class="card" style="border-color:#bc13fe;"><div class="card-left"><div class="card-icon">${d.icon}</div><div class="card-info"><b>${d.name}</b><small>${d.desc}</small></div></div><button class="btn-buy" style="background:var(--purple);" ${owned||game.btc<cost?'disabled':''} onclick="buyDarkItem('${d.id}',${cost})">${owned?'OK':cost+' ₿'}</button></div>`;
         }); document.getElementById('dark-list').innerHTML = h;
 
-        // Render Shop
         h=""; gemItemsDB.forEach(g=>{
             h+=`<div class="card"><div class="card-left"><div class="card-icon">${g.icon}</div><div class="card-info"><b>${g.name}</b><small>${g.desc}</small></div></div><button class="btn-buy" style="background:var(--blue);" ${game.gems<g.cost?'disabled':''} onclick="buyGemItem('${g.id}',${g.cost})">${g.cost} 💎</button></div>`;
         }); document.getElementById('gem-list').innerHTML = h;
@@ -433,15 +487,14 @@
             h+=`<div class="skin-item ${game.currentSkin==s.id?'active':''} ${!owned&&game.gems<s.cost?'locked':''}" onclick="buySkin('${s.id}',${s.cost})"><div style="font-size:2rem;">${s.icon}</div>${!owned?`<small style="color:gold">${s.cost}💎</small>`:''}</div>`;
         }); document.getElementById('skins-view').innerHTML = h;
 
-        // World
-        let gp = Math.min((game.gems/100)*100,100); let tp = game.machines[2]>0?100:0;
-        document.getElementById('p-gems').innerText = game.gems+"/100"; document.getElementById('pb-gems').style.width = gp+"%";
-        document.getElementById('p-serv').innerText = tp?"SI":"NO"; document.getElementById('pb-serv').style.width = tp+"%";
-        if(gp==100 && tp==100) { document.getElementById('world-lock').style.display='none'; document.getElementById('world-content').style.display='block'; }
-        
+        if(game.worldUnlocked) {
+            document.getElementById('tab-world-btn').classList.remove('tab-locked');
+            document.querySelector('#tab-world-btn .lock-icon').style.display='none';
+        }
+
         h=""; missionsDB.forEach((m,i)=>{
             let done = game.missions[i]; let can = game.money >= m.cost;
-            h+=`<div class="card" style="border-left:4px solid var(--blue);"><div class="card-left"><div class="card-icon">${m.icon}</div><div class="card-info"><b>${m.name}</b><small>Recompensa: ${m.reward}</small></div></div><button class="btn-buy" ${done||!can?'disabled':''} onclick="doMission(${i})">${done?'OK':'$'+fmt(m.cost)}</button></div>`;
+            h+=`<div class="card" style="border-left:4px solid var(--blue);"><div class="card-left"><div class="card-icon">🌍</div><div class="card-info"><b>${m.name}</b><small>Premio: ${m.reward}</small></div></div><button class="btn-buy" ${done||!can?'disabled':''} onclick="doMission(${i})">${done?'OK':'$'+fmt(m.cost)}</button></div>`;
         }); document.getElementById('mission-list').innerHTML = h;
     }
 
@@ -465,21 +518,11 @@
         b2.onclick=()=>{document.getElementById('custom-modal').style.display='none'; ok();}; acts.appendChild(b2);
         document.getElementById('custom-modal').style.display='flex';
     }
-    function checkWorld(el) {
-        if(game.gems>=100 && game.machines[2]>0) {
-            tab('world', el);
-        } else {
-            notify("Bloqueado: Revisa los requisitos");
-            tab('world', el); // Shows lock screen
-        }
-    }
 
     function notify(m) { let t=document.createElement('div'); t.className='toast'; t.innerText=m; document.getElementById('toast-area').appendChild(t); setTimeout(()=>t.remove(),3000); }
     function fmt(n) { if(n<1000)return Math.floor(n); let s=["","k","M","B","T"]; let e=Math.floor(Math.log10(n)/3); return (n/Math.pow(1000,e)).toFixed(1)+s[e]; }
     function mineBTC() { game.btc++; playSfx('coin'); updateUI(); }
     function sellBTC() { if(game.btc>0) { game.money+=game.btc*btcPrice; game.btc=0; playSfx('coin'); updateUI(); } }
-    function watchAdForGems() { showAd(()=>{game.gems+=10; notify("+10 Gemas"); updateUI();}); }
-    function claimOffline() { showAd(()=>{game.money+=pendingOffline; document.getElementById('offline-modal').style.display='none'; updateUI();}); }
     function hardReset() { showModal("RESET", "¿Seguro? Perderás todo.", null, ()=>{localStorage.clear(); location.reload();}); }
 
     setInterval(() => {
@@ -490,29 +533,26 @@
             threat=0;
             if(game.security[2]) { game.btc+=5; notify("🛡️ Señuelo: +5 BTC"); }
             else if(game.hasShield) { game.hasShield=false; notify("🛡️ Escudo Usado"); }
-            else { game.money*=0.8; notify("🚨 HACKEADO (-20%)"); }
+            else { playSfx('hacker'); game.money*=0.8; notify("🚨 HACKEADO (-20%)"); }
         }
         document.getElementById('threat-bar').style.width = threat+"%";
         if(game.hasBot && Math.random()<0.1) doClick({clientX:window.innerWidth/2, clientY:window.innerHeight/3});
         
-        // Hype Train Trigger Chance
-        if(Math.random() < 0.002) { 
-            document.getElementById('hype-btn').style.display = 'block'; 
-            setTimeout(()=>document.getElementById('hype-btn').style.display='none', 10000);
-        }
+        if(Math.random() < 0.005) spawnDrone();
         
         updateUI();
     }, 100);
 
     setInterval(() => { 
-        oldPrice = btcPrice; btcPrice = Math.floor(Math.random()*200)+20; 
+        oldPrice = btcPrice; 
+        btcPrice = Math.floor(Math.random()*200)+20; 
         if(game.hasSpy) {
             document.getElementById('btc-trend').innerText = btcPrice > oldPrice ? "📈" : "📉";
             document.getElementById('btc-trend').style.color = btcPrice > oldPrice ? "var(--green)" : "var(--accent)";
         }
     }, 4000);
     
-    setInterval(() => { game.lastLogin=Date.now(); localStorage.setItem('EmojiGold_v30', JSON.stringify(game)); }, 5000);
+    setInterval(() => { game.lastLogin=Date.now(); localStorage.setItem('EmojiClean_v32', JSON.stringify(game)); }, 5000);
 
     updateUI();
 </script>
