@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Emoji Tycoon: PRO v32</title>
+    <title>Emoji Tycoon: FINAL v36</title>
     <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;700;900&display=swap" rel="stylesheet">
     
     <style>
@@ -14,7 +14,7 @@
         
         #game-app { width: 100%; max-width: 480px; height: 100%; background: radial-gradient(circle at center, #1a1a2e 0%, #000 100%); position: relative; display: flex; flex-direction: column; box-shadow: 0 0 50px rgba(0,0,0,0.8); overflow: hidden; }
 
-        /* PANTALLA DE INICIO */
+        /* PANTALLAS DE INICIO Y CARGA */
         #start-screen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
         .start-btn { background: var(--green); color: #000; font-size: 1.5rem; font-weight: 900; padding: 15px 40px; border: none; border-radius: 50px; box-shadow: 0 0 25px rgba(0, 255, 136, 0.4); cursor: pointer; animation: pulseBtn 2s infinite; font-family: 'Rajdhani', sans-serif; text-transform: uppercase; letter-spacing: 2px; }
         @keyframes pulseBtn { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
@@ -34,29 +34,27 @@
         .game-zone { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; overflow: hidden; min-height: 0; }
         #main-emoji { font-size: 18vh; cursor: pointer; transition: transform 0.05s; z-index: 5; filter: drop-shadow(0 0 40px rgba(255,255,255,0.15)); max-height: 220px; }
         #main-emoji:active { transform: scale(0.92); filter: brightness(1.3); }
+        #main-emoji.critical-hit { animation: shake 0.2s; filter: drop-shadow(0 0 50px var(--gold)); }
+        @keyframes shake { 0% { transform: rotate(0deg); } 25% { transform: rotate(10deg); } 75% { transform: rotate(-10deg); } 100% { transform: rotate(0deg); } }
 
-        /* DRON & CAJA */
+        /* DRON */
         .drone { position: absolute; font-size: 3.5rem; z-index: 50; animation: droneFly 8s linear; cursor: pointer; filter: drop-shadow(0 0 15px var(--blue)); top: 20%; left:-20%; }
         @keyframes droneFly { 0% { left: -20%; } 100% { left: 120%; } }
         .supply-crate { position: absolute; font-size: 3rem; z-index: 45; animation: drop 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; cursor: pointer; filter: drop-shadow(0 10px 10px rgba(0,0,0,0.5)); }
         @keyframes drop { to { top: 75%; transform: rotate(-5deg); } }
 
-        /* TABS (MENÚ INFERIOR COLORIDO) */
+        /* TABS */
         .tabs { display: flex; background: #0a0a10; border-top: 1px solid #333; height: 55px; flex-shrink: 0; z-index: 30; overflow-x: auto; scrollbar-width: none; }
         .tabs::-webkit-scrollbar { display: none; }
         .tab { flex: 1; min-width: 65px; padding: 2px 0; background: none; border: none; font-family: 'Rajdhani', sans-serif; font-weight: 700; font-size: 0.7rem; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: 0.2s; position: relative; opacity: 0.7; }
-        .tab span { font-size: 1.2rem; margin-bottom: 2px; transition: 0.2s; }
         
-        /* COLORES ESPECÍFICOS PARA CADA TAB */
-        .tab:nth-child(1) { color: var(--green); } /* Prod */
-        .tab:nth-child(2) { color: var(--blue); }  /* Def */
-        .tab:nth-child(3) { color: var(--gold); }  /* Crypto */
-        .tab:nth-child(4) { color: var(--purple); } /* Tienda */
+        .tab:nth-child(1) { color: var(--green); }
+        .tab:nth-child(2) { color: var(--blue); }
+        .tab:nth-child(3) { color: var(--gold); }
+        .tab:nth-child(4) { color: var(--purple); }
         
         .tab.active { opacity: 1; background: rgba(255,255,255,0.05); border-top: 3px solid currentColor; }
-        .tab.active span { transform: scale(1.15); filter: drop-shadow(0 0 5px currentColor); }
-
-        /* MUNDO BLOQUEADO (GRIS) */
+        
         .tab-locked { color: #555 !important; filter: grayscale(1); opacity: 0.5; }
         .lock-icon { position: absolute; top: 5px; right: 15px; font-size: 0.6rem; color: #fff; background: #000; border-radius: 50%; padding: 2px; }
 
@@ -66,40 +64,36 @@
         .panel.active { display: block; }
         @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* TARJETAS MEJORADAS */
-        .card { background: linear-gradient(145deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02)); padding: 10px; margin-bottom: 8px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; border: 1px solid rgba(255,255,255,0.08); transition: 0.2s; }
-        .card:hover { border-color: rgba(255,255,255,0.2); }
+        /* TARJETAS */
+        .card { background: linear-gradient(145deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02)); padding: 10px; margin-bottom: 8px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; border: 1px solid rgba(255,255,255,0.08); }
         .card-left { display: flex; align-items: center; gap: 10px; }
         .card-icon { font-size: 1.8rem; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.3); border-radius: 8px; }
         .card-info b { display: block; font-size: 0.9rem; color: #fff; }
         .card-info small { color: #888; font-size: 0.7rem; }
         
-        .btn-buy { background: var(--accent); color: white; border: none; padding: 8px 12px; border-radius: 6px; font-weight: bold; cursor: pointer; min-width: 70px; font-family: 'Rajdhani', sans-serif; font-size: 0.9rem; box-shadow: 0 3px 0 rgba(0,0,0,0.3); transition: 0.1s; }
+        .btn-buy { background: var(--accent); color: white; border: none; padding: 8px 12px; border-radius: 6px; font-weight: bold; cursor: pointer; min-width: 70px; font-family: 'Rajdhani', sans-serif; font-size: 0.9rem; box-shadow: 0 3px 0 rgba(0,0,0,0.3); }
         .btn-buy:active { transform: translateY(2px); box-shadow: none; }
         .btn-buy:disabled { background: #333 !important; color: #555 !important; box-shadow: none !important; cursor: not-allowed; opacity: 0.7; }
+
+        /* RULETA */
+        .roulette-box { background: linear-gradient(135deg, #20002c, #cbb4d4); padding: 10px; border-radius: 15px; text-align: center; border: 1px solid var(--purple); margin-bottom: 15px; box-shadow: 0 0 15px rgba(188, 19, 254, 0.3); }
+        .roulette-display { font-size: 2.5rem; background: rgba(0,0,0,0.5); width: 60px; height: 60px; display: flex; align-items: center; justify-content: center; border-radius: 10px; margin: 10px auto; border: 2px solid #fff; }
 
         /* MODALES */
         .overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.92); z-index: 5000; display: none; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
         .popup { background: #1a1a25; width: 85%; padding: 20px; border-radius: 20px; border: 1px solid #444; text-align: center; position: relative; animation: popIn 0.3s; box-shadow: 0 0 50px rgba(0,0,0,0.8); }
         @keyframes popIn { 0% { transform: scale(0.5); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
         .popup h2 { margin-top: 0; color: var(--text); font-size: 1.5rem; }
-        .popup-btns { display: flex; gap: 10px; margin-top: 20px; }
-        .modal-btn { flex: 1; padding: 12px; border-radius: 10px; border: none; font-weight: bold; cursor: pointer; font-size: 1rem; font-family: 'Rajdhani', sans-serif; }
+        .modal-btn { padding: 12px; border-radius: 10px; border: none; font-weight: bold; cursor: pointer; font-size: 1rem; font-family: 'Rajdhani', sans-serif; width: 100%; margin-top: 10px; }
 
-        /* BARRAS PROGRESO */
-        .prog-container { margin: 15px 0; text-align: left; }
-        .prog-label { display: flex; justify-content: space-between; font-size: 0.8rem; color: #ccc; margin-bottom: 5px; }
-        .prog-bg { height: 10px; background: #222; border-radius: 5px; overflow: hidden; }
-        .prog-fill { height: 100%; background: var(--blue); width: 0%; transition: width 0.5s; }
-        .prog-fill.green { background: var(--green); }
-
-        /* SKINS */
+        /* SKINS GRID */
         .skins-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
         .skin-item { background: rgba(255,255,255,0.05); padding: 8px; border-radius: 10px; border: 1px solid #333; text-align: center; cursor: pointer; transition: 0.2s; position: relative; }
         .skin-item.active { border-color: var(--green); background: rgba(0, 255, 136, 0.1); box-shadow: 0 0 10px rgba(0, 255, 136, 0.2); }
         .skin-item.locked { filter: grayscale(1); opacity: 0.5; }
         .skin-item.locked::after { content: "🔒"; position: absolute; top:50%; left:50%; transform:translate(-50%,-50%); font-size:1.2rem; }
 
+        /* BANNER AREA */
         .ad-space { width: 100%; height: 50px; background: #000; display: flex; justify-content: center; align-items: center; border-top: 1px solid #222; position: relative; z-index: 25; flex-shrink: 0; }
         
         #toast-area { position: absolute; top: 90px; left: 50%; transform: translateX(-50%); width: 90%; z-index: 4000; pointer-events: none; }
@@ -117,24 +111,23 @@
     <div id="start-screen">
         <div style="font-size: 6rem; animation: floatUp 3s infinite alternate;">🚀</div>
         <h1 style="font-size: 3rem; margin: 10px 0; color: var(--text); text-shadow: 0 0 20px var(--purple);">EMOJI TYCOON</h1>
-        <p style="color: #888; font-size: 1.2rem; margin-bottom: 30px;">Toca para Empezar</p>
-        <button class="start-btn" onclick="startGame()">START</button>
+        <p style="color:#aaa;">v36.0 Gold Edition</p>
+        <button class="start-btn" onclick="startGame()">JUGAR</button>
     </div>
 
     <div id="world-modal" class="overlay">
         <div class="popup" style="border-color: var(--blue);">
             <div style="font-size: 3rem; margin-bottom:10px;">🔒</div>
-            <h2 style="color:var(--blue);">ACCESO DENEGADO</h2>
-            <p style="color:#aaa; font-size:0.9rem;">Necesitas completar los requisitos.</p>
+            <h2 style="color:var(--blue);">ZONA RESTRINGIDA</h2>
             
-            <div class="prog-container">
-                <div class="prog-label"><span>Gemas (100)</span><span id="txt-gems">0/100</span></div>
-                <div class="prog-bg"><div class="prog-fill" id="bar-gems"></div></div>
+            <div style="margin: 15px 0; text-align:left;">
+                <div style="display:flex; justify-content:space-between; font-size:0.8rem; color:#ccc;"><span>Gemas (100)</span><span id="txt-gems">0/100</span></div>
+                <div style="height:10px; background:#222; border-radius:5px;"><div style="height:100%; background:var(--blue); width:0%" id="bar-gems"></div></div>
             </div>
             
-            <div class="prog-container">
-                <div class="prog-label"><span>Servidor (Nvl 1)</span><span id="txt-tech">NO</span></div>
-                <div class="prog-bg"><div class="prog-fill green" id="bar-tech"></div></div>
+            <div style="margin: 15px 0; text-align:left;">
+                <div style="display:flex; justify-content:space-between; font-size:0.8rem; color:#ccc;"><span>Servidor (Nvl 1)</span><span id="txt-tech">NO</span></div>
+                <div style="height:10px; background:#222; border-radius:5px;"><div style="height:100%; background:var(--green); width:0%" id="bar-tech"></div></div>
             </div>
 
             <button class="modal-btn" style="background:#333; color:#fff;" onclick="document.getElementById('world-modal').style.display='none'">CERRAR</button>
@@ -145,9 +138,21 @@
         <div class="popup" style="border-color: var(--gold);">
             <div style="font-size:3rem; margin-bottom:10px;">💤💰</div>
             <h2 style="color:var(--gold);">GANANCIAS OFFLINE</h2>
-            <p>¡Has ganado dinero mientras dormías!</p>
-            <h1 id="offline-amount" style="color:#fff; font-family: monospace; font-size: 2.5rem; margin:15px 0;">$0</h1>
-            <button class="modal-btn" style="background:var(--green); color:#000; width:100%;" onclick="claimOffline()">🎬 VER VIDEO Y RECOGER</button>
+            <p>¡Tus servidores trabajaron duro!</p>
+            <h1 id="offline-amount" style="color:#fff; font-family: monospace; font-size: 2.2rem; margin:15px 0;">$0</h1>
+            <button class="modal-btn" style="background:var(--green); color:#000; width:100%; margin-bottom:10px; font-size:1.1rem; box-shadow: 0 0 15px rgba(0,255,136,0.3);" onclick="claimOffline(true)">🎬 VER VIDEO (x2 DINERO)</button>
+            <button style="background:transparent; border:none; color:#555; text-decoration:underline; cursor:pointer;" onclick="claimOffline(false)">Recoger normal</button>
+        </div>
+    </div>
+
+    <div id="daily-modal" class="overlay">
+        <div class="popup" style="border-color: var(--purple);">
+            <div style="font-size:3rem; margin-bottom:10px;">📅</div>
+            <h2 style="color:var(--purple);">REGALO DIARIO</h2>
+            <p>¡Gracias por volver!</p>
+            <div style="font-size:2rem; color:var(--text); margin:10px;">💎 5</div>
+            <button class="modal-btn" style="background:var(--purple); color:#fff; width:100%;" onclick="claimDaily(true)">🎬 VER VIDEO (+15 GEMAS)</button>
+            <button style="background:transparent; border:none; color:#555; text-decoration:underline; cursor:pointer; margin-top:10px;" onclick="claimDaily(false)">Solo recoger 5</button>
         </div>
     </div>
 
@@ -155,7 +160,7 @@
         <div class="popup">
             <h2 id="modal-title">AVISO</h2>
             <p id="modal-msg" style="color:#aaa;">...</p>
-            <div id="modal-actions" class="popup-btns"></div>
+            <div id="modal-actions" style="display:flex; gap:10px;"></div>
         </div>
     </div>
 
@@ -195,7 +200,7 @@
         <button class="tab" onclick="tab('def', this)"><span>🛡️</span>Def</button>
         <button class="tab" onclick="tab('btc', this)"><span>🪙</span>Crypto</button>
         <button class="tab" onclick="tab('shop', this)"><span>🛒</span>Tienda</button>
-        <button class="tab tab-locked" id="tab-world-btn" onclick="clickWorld(this)"><span>🌍</span>Mundo<span class="lock-icon">🔒</span></button>
+        <button class="tab tab-locked" id="tab-world-btn" onclick="clickWorld(this)"><span>🌍</span>Mundo <span class="lock-icon">🔒</span></button>
     </div>
 
     <div class="panel-container">
@@ -207,38 +212,44 @@
             <div style="background:#000; padding:15px; border-radius:15px; text-align:center; border:1px solid #333;">
                 <div style="color:#888; font-size:0.8rem;">WALLET</div>
                 <div style="font-size:2.5rem; color:#f39c12; font-weight:bold; font-family:monospace;" id="btc-ui">0</div>
-                <div style="color:#aaa; font-size:0.9rem; margin-bottom:15px;">Precio: <span style="color:#fff;" id="btc-price-ui">$50</span> <span id="btc-trend">➖</span></div>
-                <div style="display:flex; gap:10px;">
-                    <button class="modal-btn" style="background:#f39c12; color:#000;" onclick="mineBTC()">⛏️ MINAR</button>
-                    <button class="modal-btn" style="background:#27ae60; color:#fff;" onclick="sellBTC()">💰 VENDER</button>
+                <div style="color:#aaa; font-size:0.9rem; margin-bottom:15px;">
+                    1 BTC = <span id="btc-price-ui" style="font-weight:bold;">$50</span> <span id="btc-trend"></span>
                 </div>
+                <div style="display:flex; gap:10px;">
+                    <button class="modal-btn" style="background:#f39c12; color:#000; margin-top:0;" onclick="mineBTC()">⛏️ MINAR</button>
+                    <button class="modal-btn" style="background:#27ae60; color:#fff; margin-top:0;" onclick="sellBTC()">💰 VENDER</button>
+                </div>
+                <button id="btn-broker" class="modal-btn" style="background:#444; color:#fff; font-size:0.8rem; margin-top:10px;" onclick="activateBroker()">🤖 IA TRADER (3 MIN)</button>
             </div>
+            
+            <div style="background:rgba(255,255,255,0.05); padding:10px; border-radius:10px; margin:15px 0; font-size:0.75rem; color:#aaa; line-height:1.4;">
+                <b style="color:#fff;">ℹ️ GUÍA CRIPTO:</b><br>
+                - Precio oscila entre <span style="color:var(--accent)">$5</span> y <span style="color:var(--green)">$60</span>.<br>
+                - <span style="color:var(--green)">VERDE:</span> Precio subió. <span style="color:var(--accent)">ROJO:</span> Precio bajó.<br>
+                - Compra el <b>SPYWARE</b> para ver flechas de predicción.
+            </div>
+
             <div style="margin-top:20px; font-weight:bold; color:var(--purple); border-bottom:1px solid #333; padding-bottom:5px;">MERCADO NEGRO</div>
             <div id="dark-list"></div>
         </div>
 
         <div id="shop" class="panel">
+            <div class="roulette-box">
+                <div style="color:#fff; font-weight:bold;">RULETA</div>
+                <div class="roulette-display" id="roulette-icon">❓</div>
+                <button class="spin-btn" style="width:100%; background:var(--gold); color:#000; font-weight:900; padding:10px; border:none; border-radius:8px; cursor:pointer;" id="btn-spin" onclick="spinRoulette()">GIRAR (10 💎)</button>
+            </div>
+
             <div style="display:flex; gap:10px; margin-bottom:15px;">
-                <button class="modal-btn" style="background:#222; color:#fff; border:1px solid #444;" onclick="showShopSection('items')">📦 MEJORAS</button>
-                <button class="modal-btn" style="background:#222; color:#fff; border:1px solid #444;" onclick="showShopSection('skins')">🎭 SKINS</button>
+                <button class="modal-btn" style="background:#222; color:#fff; border:1px solid #444; margin:0;" onclick="showShopSection('items')">📦 MEJORAS</button>
+                <button class="modal-btn" style="background:#222; color:#fff; border:1px solid #444; margin:0;" onclick="showShopSection('skins')">🎭 SKINS</button>
             </div>
 
             <div id="items-view">
-                <div class="card" style="border-color:var(--gold); background:rgba(255,215,0,0.05);">
-                    <div class="card-left">
-                        <div class="card-icon" style="font-size:1.5rem;">🔥</div>
-                        <div class="card-info"><b>Hype Train</b><small>x5 Producción (60s)</small></div>
-                    </div>
-                    <button class="btn-buy" style="background:var(--gold); color:black;" onclick="activateHypeTrain()">VER 🎬</button>
+                <div class="card" style="background:rgba(0, 204, 255, 0.1); border-color:var(--blue);">
+                    <div class="card-left"><div class="card-icon">💎</div><b>Pack Gemas</b></div>
+                    <button class="btn-buy" style="background:var(--blue); color:white;" onclick="watchAdForGems()">VIDEO (+10)</button>
                 </div>
-                <div class="card" style="border-color:var(--blue); background:rgba(0,204,255,0.05);">
-                    <div class="card-left">
-                        <div class="card-icon" style="font-size:1.5rem;">💎</div>
-                        <div class="card-info"><b>Gemas Gratis</b><small>+10 Gemas</small></div>
-                    </div>
-                    <button class="btn-buy" style="background:var(--blue); color:white;" onclick="watchAdForGems()">VER 🎬</button>
-                </div>
-                
                 <div id="gem-list"></div>
             </div>
 
@@ -260,6 +271,7 @@
     function startGame() {
         document.getElementById('start-screen').style.display = 'none';
         if(audioCtx.state === 'suspended') audioCtx.resume();
+        checkDailyReward();
         checkOfflineEarnings();
         setInterval(updateNews, 8000);
     }
@@ -283,25 +295,25 @@
 
     /* DATA */
     const machinesDB = [
-        {name: "Script Básico", cost: 15, prod: 1, icon: "👶"},
-        {name: "PC Gamer", cost: 150, prod: 12, icon: "💻"},
-        {name: "Servidor Rack", cost: 1400, prod: 90, icon: "🖥️"},
-        {name: "Granja Crypto", cost: 25000, prod: 600, icon: "🏭"},
-        {name: "IA Maestra", cost: 500000, prod: 4000, icon: "🧠"}
+        {name: "Script", cost: 15, prod: 1, icon: "👶", desc: "Ingreso básico"},
+        {name: "PC Gamer", cost: 150, prod: 12, icon: "💻", desc: "Potencia media"},
+        {name: "Servidor", cost: 1400, prod: 90, icon: "🖥️", desc: "Data Center"},
+        {name: "Crypto Farm", cost: 25000, prod: 600, icon: "🏭", desc: "Minería"},
+        {name: "IA God", cost: 500000, prod: 4000, icon: "🧠", desc: "Red Neuronal"}
     ];
     const defDB = [
-        {name: "VPN Básica", cost: 500, desc: "Amenaza -10%"},
-        {name: "Firewall Pro", cost: 5000, desc: "Amenaza -25%"},
-        {name: "Señuelo Datos", cost: 50000, desc: "Gana BTC si te atacan"}
+        {name: "Antivirus", cost: 500, desc: "Amenaza -10%", icon: "💊"},
+        {name: "Firewall", cost: 5000, desc: "Amenaza -25%", icon: "🔥"},
+        {name: "Señuelo", cost: 50000, desc: "Gana BTC al ser atacado"}
     ];
     const gemItemsDB = [
-        {id: 'coffee', name: "Café Dev", cost: 10, desc: "x2 Prod (1min)", icon: "☕"},
-        {id: 'shield', name: "Escudo", cost: 20, desc: "Bloquea 1 ataque", icon: "🛡️"},
-        {id: 'warp', name: "Salto", cost: 30, desc: "+2h Cash", icon: "⏩"}
+        {id: 'coffee', name: "Café", cost: 5, desc: "x2 Prod (1min)", icon: "☕"},
+        {id: 'shield', name: "Escudo", cost: 15, desc: "Bloquea 1 ataque", icon: "🛡️"},
+        {id: 'warp', name: "Salto", cost: 20, desc: "+2h Cash", icon: "⏩"}
     ];
     const darkItemsDB = [
-        {id: 'bot', name: "Bot Clicker", cost: 50, desc: "Clics auto", icon: "🤖"},
-        {id: 'spy', name: "Spyware", cost: 100, desc: "Ver precio BTC", icon: "👁️"},
+        {id: 'bot', name: "Bot", cost: 50, desc: "Auto-clic", icon: "🤖"},
+        {id: 'spy', name: "Spy", cost: 100, desc: "Predice Precio", icon: "👁️"},
         {id: 'over', name: "Overclock", cost: 500, desc: "+10% Prod", icon: "⚡"}
     ];
     const skinsDB = [
@@ -310,21 +322,23 @@
         {id: "alien", icon: "👽", cost: 500}, {id: "king", icon: "👑", cost: 1000}
     ];
     const missionsDB = [
-        {name: "Hackear WiFi", cost: 5000, reward: "+1 Gema/min"},
-        {name: "Banco Central", cost: 500000, reward: "x2 Valor Dinero"},
-        {name: "La Matrix", cost: 1000000000, reward: "MODO DIOS"}
+        {name: "Hack WiFi", cost: 5000, reward: "+1 Gema/min"},
+        {name: "Banco", cost: 500000, reward: "x2 Valor Dinero"},
+        {name: "Matrix", cost: 1000000000, reward: "MODO DIOS"}
     ];
     const newsDB = ["Bitcoin sube...", "Hackers activos...", "Nuevo emoji viral...", "Mercado estable...", "Invierte ahora..."];
 
     /* STATE */
-    let game = { money: 0, gems: 20, btc: 0, machines: [0,0,0,0,0], security: [0,0,0], ownedSkins: ["baby"], currentSkin: "baby", missions: [0,0,0], hasBot:false, hasSpy:false, hasShield:false, overclock:0, lastLogin: Date.now(), worldUnlocked: false };
-    let threat = 0, btcPrice = 50, oldPrice=50, pendingOffline = 0, boostMult = 1;
+    let game = { money: 0, gems: 20, btc: 0, machines: [0,0,0,0,0], security: [0,0,0,0,0], ownedSkins: ["baby"], currentSkin: "baby", missions: [0,0,0,0,0,0,0], hasBot:false, hasSpy:false, hasShield:false, overclock:0, lastLogin: Date.now(), worldUnlocked: false, dayStreak: Date.now() };
+    let threat = 0, btcPrice = 20, oldPrice=20, nextPrice=25, pendingOffline = 0, boostMult = 1, brokerActive = false;
+    let clickCount = 0;
 
-    if(localStorage.getItem('EmojiClean_v32')) {
-        try { game = JSON.parse(localStorage.getItem('EmojiClean_v32')); } catch(e){}
+    if(localStorage.getItem('EmojiFinal_v36')) {
+        try { game = JSON.parse(localStorage.getItem('EmojiFinal_v36')); } catch(e){}
     }
     
     function checkOfflineEarnings() {
+        if(!game.lastLogin) game.lastLogin = Date.now();
         let seconds = (Date.now() - game.lastLogin) / 1000;
         if(seconds > 60) {
             let pps = 0; machinesDB.forEach((m,i)=>pps+=(m.prod*game.machines[i]));
@@ -337,8 +351,25 @@
         game.lastLogin = Date.now();
     }
 
+    function checkDailyReward() {
+        // Simple logic: if more than 24h passed since "dayStreak"
+        let now = Date.now();
+        if(now - game.dayStreak > 86400000) {
+            document.getElementById('daily-modal').style.display = 'flex';
+            game.dayStreak = now;
+        }
+    }
+
+    function claimDaily(watchAd) {
+        if(watchAd) {
+            showAd(()=>{ game.gems += 15; notify("+15 Gemas"); document.getElementById('daily-modal').style.display='none'; updateUI(); });
+        } else {
+            game.gems += 5; notify("+5 Gemas"); document.getElementById('daily-modal').style.display='none'; updateUI();
+        }
+    }
+
     function updateNews() {
-        document.getElementById('news-text').innerText = newsDB[Math.floor(Math.random()*newsDB.length)];
+        document.getElementById('news-text').innerText = newsDB[Math.floor(Math.random()*newsDB.length)] + "   |   " + newsDB[Math.floor(Math.random()*newsDB.length)];
     }
 
     function getPPS() {
@@ -348,44 +379,41 @@
     }
 
     function doClick(e) {
-        let val = 1 + (getPPS() * 0.05);
+        clickCount++;
+        let isCrit = clickCount % 50 === 0;
+        let val = (1 + (getPPS() * 0.05)) * (isCrit ? 10 : 1);
+        
         game.money += val;
         playSfx('coin');
-        let p = document.createElement('div'); p.className='particle'; p.innerText="+$"+fmt(val); 
-        p.style.left=e.clientX+'px'; p.style.top=e.clientY+'px'; p.style.color='var(--green)';
+        
+        if(isCrit) {
+            document.getElementById('main-emoji').classList.add('critical-hit');
+            setTimeout(()=>document.getElementById('main-emoji').classList.remove('critical-hit'), 200);
+            notify("⭐ CRÍTICO ⭐");
+        }
+
+        let p = document.createElement('div'); p.className='particle'; 
+        p.innerText="+$"+fmt(val); 
+        p.style.left=e.clientX+'px'; p.style.top=e.clientY+'px'; 
+        p.style.color= isCrit ? 'var(--gold)' : 'var(--green)';
+        p.style.fontSize = isCrit ? '2rem' : '1.2rem';
         document.body.appendChild(p); setTimeout(()=>p.remove(),1000);
         updateUI();
     }
 
-    function activateHypeTrain() {
+    function activateBroker() {
         showAd(()=>{
-            boostMult = 5;
-            document.getElementById('boost-tag').style.display = 'inline';
-            notify("🔥 HYPE x5 ACTIVADO");
-            setTimeout(()=>{
-                boostMult = 1;
-                document.getElementById('boost-tag').style.display = 'none';
-            }, 60000);
+            brokerActive = true;
+            notify("🤖 IA TRADER ACTIVA (3 min)");
+            document.getElementById('btn-broker').innerText = "🤖 ACTIVO...";
+            document.getElementById('btn-broker').disabled = true;
+            setTimeout(() => {
+                brokerActive = false;
+                notify("🤖 IA Finalizada");
+                document.getElementById('btn-broker').innerText = "🤖 IA TRADER (VIDEO)";
+                document.getElementById('btn-broker').disabled = false;
+            }, 180000); // 3 min
         });
-    }
-
-    function spawnDrone() {
-        let d = document.createElement('div'); d.className='drone'; d.innerText='🛸';
-        document.querySelector('.game-zone').appendChild(d);
-        d.onclick = (e) => {
-            d.remove();
-            let c = document.createElement('div'); c.className='supply-crate'; c.innerText='📦';
-            c.style.left = e.clientX + 'px'; c.style.top = '20%';
-            document.querySelector('.game-zone').appendChild(c);
-            c.onclick = () => {
-                c.remove();
-                let reward = getPPS() * 120 + 500;
-                game.money += reward;
-                notify(`📦 +$${fmt(reward)}`);
-                playSfx('coin');
-            }
-        };
-        setTimeout(()=>d.remove(), 6000);
     }
 
     function clickWorld(el) {
@@ -411,6 +439,31 @@
         }
     }
 
+    function doMission(i) {
+        let m = missionsDB[i];
+        if(game.money >= m.cost) { game.money -= m.cost; game.missions[i] = 1; notify("Misión Completada"); updateUI(); }
+    }
+
+    function spawnDrone() {
+        let d = document.createElement('div'); d.className='drone'; d.innerText='🛸';
+        document.querySelector('.game-zone').appendChild(d);
+        d.onclick = (e) => {
+            d.remove();
+            let c = document.createElement('div'); c.className='supply-crate'; c.innerText='📦';
+            c.style.left = e.clientX + 'px'; c.style.top = '20%';
+            document.querySelector('.game-zone').appendChild(c);
+            c.onclick = () => {
+                c.remove();
+                let reward = getPPS() * 120 + 500;
+                game.money += reward;
+                notify(`📦 +$${fmt(reward)}`);
+                playSfx('coin');
+            }
+        };
+        setTimeout(()=>d.remove(), 10000);
+    }
+
+    /* --- COMPRAS --- */
     function buyMachine(i) {
         let cost = Math.floor(machinesDB[i].cost * Math.pow(1.2, game.machines[i]));
         if(game.money >= cost) { game.money-=cost; game.machines[i]++; playSfx('coin'); updateUI(); }
@@ -442,10 +495,6 @@
             });
         }
     }
-    function doMission(i) {
-        let m = missionsDB[i];
-        if(game.money >= m.cost) { game.money -= m.cost; game.missions[i] = 1; notify("Misión Completada"); updateUI(); }
-    }
 
     function showAd(cb) {
         const url = "https://www.effectivegatecpm.com/ttwcdab5?key=8d51779f7c6cbf2f752d275eb491f8dc";
@@ -453,7 +502,32 @@
         setTimeout(cb, 2000);
     }
     function watchAdForGems() { showAd(()=>{game.gems+=10; notify("+10 Gemas"); updateUI();}); }
-    function claimOffline() { showAd(()=>{game.money+=pendingOffline; document.getElementById('offline-modal').style.display='none'; updateUI();}); }
+    
+    function claimOffline(watch) { 
+        if(watch) {
+            showAd(()=>{game.money+=pendingOffline*2; document.getElementById('offline-modal').style.display='none'; updateUI(); notify("x2 GANANCIAS!");}); 
+        } else {
+            game.money+=pendingOffline; document.getElementById('offline-modal').style.display='none'; updateUI();
+        }
+    }
+
+    function spinRoulette() {
+        if(game.gems >= 10) {
+            game.gems -= 10;
+            let disp = document.getElementById('roulette-icon');
+            let items = ["💰","💎","🪙","🛡️"];
+            let interval = setInterval(() => { disp.innerText = items[Math.floor(Math.random()*4)]; }, 100);
+            setTimeout(() => {
+                clearInterval(interval);
+                let r = Math.random();
+                if(r < 0.4) { let m = getPPS()*300+5000; game.money+=m; disp.innerText="💰"; notify(`+$${fmt(m)}`); }
+                else if(r < 0.7) { game.btc+=5; disp.innerText="🪙"; notify("+5 BTC"); }
+                else if(r < 0.9) { game.gems+=20; disp.innerText="💎"; notify("+20 Gemas"); }
+                else { game.hasShield=true; disp.innerText="🛡️"; notify("Escudo"); }
+                updateUI();
+            }, 2000);
+        } else notify("Faltan Gemas");
+    }
 
     function updateUI() {
         document.getElementById('ui-money').innerText = "$" + fmt(game.money);
@@ -463,13 +537,26 @@
         document.getElementById('btc-price-ui').innerText = "$"+btcPrice;
         document.getElementById('main-emoji').innerText = skinsDB.find(s=>s.id==game.currentSkin).icon;
 
+        let priceEl = document.getElementById('btc-price-ui');
+        let trendEl = document.getElementById('btc-trend');
+        
+        if(game.hasSpy) {
+            priceEl.style.color = "#fff";
+            trendEl.innerText = nextPrice > btcPrice ? " 🔼" : " 🔽";
+            trendEl.style.color = nextPrice > btcPrice ? "var(--green)" : "var(--accent)";
+        } else {
+            trendEl.innerText = "";
+            priceEl.style.color = btcPrice >= oldPrice ? "var(--green)" : "var(--accent)";
+        }
+
         let h = ""; machinesDB.forEach((m,i)=>{
-            let cost = Math.floor(m.cost*Math.pow(1.2,game.machines[i]));
+            let discount = game.missions[1] ? 0.9 : 1;
+            let cost = Math.floor(m.cost*Math.pow(1.2,game.machines[i]) * discount);
             h+=`<div class="card"><div class="card-left"><div class="card-icon">${m.icon}</div><div class="card-info"><b>${m.name}</b><small>Nv.${game.machines[i]} (+${fmt(m.prod)}/s)</small></div></div><button class="btn-buy" ${game.money<cost?'disabled':''} onclick="buyMachine(${i})">$${fmt(cost)}</button></div>`;
         }); document.getElementById('prod').innerHTML = h;
 
         h=""; defDB.forEach((d,i)=>{
-            h+=`<div class="card"><div class="card-left"><div class="card-icon">🛡️</div><div class="card-info"><b>${d.name}</b><small>${d.desc}</small></div></div><button class="btn-buy" ${game.security[i]||game.money<d.cost?'disabled':''} onclick="buyDef(${i})">${game.security[i]?'LISTO':'$'+fmt(d.cost)}</button></div>`;
+            h+=`<div class="card"><div class="card-left"><div class="card-icon">${d.icon}</div><div class="card-info"><b>${d.name}</b><small>${d.desc}</small></div></div><button class="btn-buy" ${game.security[i]||game.money<d.cost?'disabled':''} onclick="buyDef(${i})">${game.security[i]?'LISTO':'$'+fmt(d.cost)}</button></div>`;
         }); document.getElementById('def').innerHTML = h;
 
         h=""; darkItemsDB.forEach(d=>{
@@ -527,32 +614,38 @@
 
     setInterval(() => {
         game.money += getPPS()/10;
-        let red = 1; if(game.security[0]) red-=0.1; if(game.security[1]) red-=0.25;
+        let red = 1; if(game.security[0]) red-=0.1; if(game.security[1]) red-=0.25; if(game.missions[4]) red-=0.5;
         threat += 0.08 * red;
         if(threat>=100) {
             threat=0;
             if(game.security[2]) { game.btc+=5; notify("🛡️ Señuelo: +5 BTC"); }
             else if(game.hasShield) { game.hasShield=false; notify("🛡️ Escudo Usado"); }
-            else { playSfx('hacker'); game.money*=0.8; notify("🚨 HACKEADO (-20%)"); }
+            else { 
+                playSfx('hacker');
+                game.money *= 0.8; 
+                notify("🚨 HACKEADO (-20%)");
+            }
         }
         document.getElementById('threat-bar').style.width = threat+"%";
         if(game.hasBot && Math.random()<0.1) doClick({clientX:window.innerWidth/2, clientY:window.innerHeight/3});
         
-        if(Math.random() < 0.005) spawnDrone();
+        if(Math.random() < 0.003) spawnDrone();
         
         updateUI();
     }, 100);
 
     setInterval(() => { 
         oldPrice = btcPrice; 
-        btcPrice = Math.floor(Math.random()*200)+20; 
-        if(game.hasSpy) {
-            document.getElementById('btc-trend').innerText = btcPrice > oldPrice ? "📈" : "📉";
-            document.getElementById('btc-trend').style.color = btcPrice > oldPrice ? "var(--green)" : "var(--accent)";
+        btcPrice = nextPrice;
+        nextPrice = Math.floor(Math.random()*55)+5; 
+        
+        if(brokerActive) {
+            if(btcPrice < 15 && game.money >= 1000) { game.money-=btcPrice; game.btc++; notify("🤖 Bot Compra"); }
+            if(btcPrice > 45 && game.btc > 0) { game.money+=btcPrice; game.btc--; notify("🤖 Bot Vende"); }
         }
     }, 4000);
     
-    setInterval(() => { game.lastLogin=Date.now(); localStorage.setItem('EmojiClean_v32', JSON.stringify(game)); }, 5000);
+    setInterval(() => { game.lastLogin=Date.now(); localStorage.setItem('EmojiFinal_v36', JSON.stringify(game)); }, 5000);
 
     updateUI();
 </script>
