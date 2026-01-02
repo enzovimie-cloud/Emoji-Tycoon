@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Emoji Tycoon: v83 FINAL</title>
+    <title>Emoji Tycoon: v84 FINAL</title>
     <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700;800;900&display=swap" rel="stylesheet">
     
     <style>
@@ -62,9 +62,33 @@
         .money { color: var(--green); font-weight: 900; font-size: 1.6rem; letter-spacing: 1px; text-shadow: 0 0 15px rgba(0, 230, 118, 0.25); }
         .gems-pill { background: rgba(255, 215, 0, 0.1); border: 1px solid rgba(255, 215, 0, 0.4); color: var(--gold); padding: 4px 12px; border-radius: 20px; font-weight: 800; display: flex; align-items: center; gap: 5px; }
         
-        .news-bar { background: #050505; border-bottom: 1px solid #222; height: 26px; width: 100%; overflow: hidden; white-space: nowrap; display: flex; align-items: center; position: relative; z-index: 15; flex-shrink: 0; }
-        .news-text { font-size: 0.7rem; color: #aaa; display: inline-block; animation: scrollText 25s linear infinite; padding-left: 100%; font-weight: 700; text-transform: uppercase; }
-        @keyframes scrollText { 0% { transform: translateX(0); } 100% { transform: translateX(-150%); } }
+        /* --- NOTICIAS CORREGIDAS --- */
+        .news-bar { 
+            background: #050505; 
+            border-bottom: 1px solid #222; 
+            height: 26px; 
+            width: 100%; 
+            overflow: hidden; 
+            white-space: nowrap; 
+            display: block; /* IMPORTANTE: Block evita problemas de flex con padding */
+            position: relative; 
+            z-index: 15; 
+            flex-shrink: 0; 
+        }
+        .news-text { 
+            font-size: 0.7rem; 
+            color: #aaa; 
+            display: inline-block; /* Permite que el padding funcione correctamente */
+            padding-left: 100%; /* Empieza fuera de la pantalla a la derecha */
+            animation: scrollText 20s linear infinite; 
+            font-weight: 700; 
+            text-transform: uppercase; 
+            line-height: 26px; /* Centrado vertical */
+        }
+        @keyframes scrollText { 
+            0% { transform: translate3d(0, 0, 0); } 
+            100% { transform: translate3d(-100%, 0, 0); } /* Recorre exactamente su ancho total */
+        }
 
         /* --- GAME ZONE --- */
         .game-zone { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; overflow: hidden; min-height: 200px; }
@@ -208,7 +232,7 @@
     <div id="start-screen" style="position:fixed; top:0; left:0; width:100%; height:100%; background:#000; z-index:20000; display:flex; flex-direction:column; align-items:center; justify-content:center;">
         <div style="font-size: 6rem; animation: floatIcon 3s infinite;">💎</div>
         <h1 style="color:#fff; font-size:3rem; margin-bottom:5px;">EMOJI TYCOON</h1>
-        <p style="color:#666; letter-spacing:3px; margin-bottom:40px;">v83 FINAL</p>
+        <p style="color:#666; letter-spacing:3px; margin-bottom:40px;">v84 FINAL</p>
         
         <button id="btn-start-main" onclick="showLangSelector()" style="background:var(--green); padding:15px 60px; border:none; border-radius:50px; font-weight:900; font-size:1.5rem; cursor:pointer; box-shadow: 0 0 25px rgba(0,255,136,0.4); animation: pulse 2s infinite;">PLAY</button>
         
@@ -406,10 +430,10 @@
     let game = { money: 0, gems: 20, btc: 0, machines: [0,0,0,0,0,0], security: [0,0,0,0], ownedSkins: ["baby"], currentSkin: "baby", missions: [0,0,0,0,0], artifacts: [], hasSpy:false, hasShield:false, overclock:0, lastLogin: Date.now(), worldUnlocked: false, level: 1, xp: 0, prestigeChips: 0 };
     let threat=0, btcPrice=20, nextPrice=25, pendingOffline=0, boostMult=1, brokerActive=false, fever=0, feverMode=false, nextUfoTime=Date.now()+120000;
 
-    // --- REPAIR DATA ON LOAD (EmojiV83_Final) ---
-    if(localStorage.getItem('EmojiV83_Final')) { 
+    // --- REPAIR DATA ON LOAD (EmojiV84_Final) ---
+    if(localStorage.getItem('EmojiV84_Final')) { 
         try { 
-            let saved = JSON.parse(localStorage.getItem('EmojiV83_Final'));
+            let saved = JSON.parse(localStorage.getItem('EmojiV84_Final'));
             game = {...game, ...saved};
             // Asegurar compatibilidad con la nueva maquina (indice 5)
             if(!game.machines || game.machines.length < 6) { 
@@ -427,7 +451,7 @@
     function getText(key) { return dict[lang][key] || key; }
     function setLang(l) { 
         lang = l; 
-        // CORRECCIÓN AUDIO: Activar AudioContext al iniciar el juego (para navegadores moviles)
+        // CORRECCIÓN AUDIO: Activar AudioContext al iniciar el juego
         if (audioCtx.state === 'suspended') audioCtx.resume();
 
         document.getElementById('start-screen').style.display='none'; 
@@ -437,7 +461,7 @@
     }
     function showLangSelector() { document.getElementById('btn-start-main').style.display = 'none'; document.getElementById('lang-select').style.display = 'flex'; }
     
-    // FUNCION DE NOTICIAS QUE FALTABA
+    // FUNCION DE NOTICIAS
     function updateNews() {
         const newsList = [
             {es: "EL BITCOIN SUBE COMO LA ESPUMA 🚀", en: "BITCOIN SKYROCKETING 🚀"},
@@ -454,7 +478,7 @@
         let el = document.getElementById('news-text');
         el.style.animation = 'none';
         el.offsetHeight; /* trigger reflow */
-        el.style.animation = 'scrollText 25s linear infinite';
+        el.style.animation = 'scrollText 20s linear infinite';
     }
 
     function notify(m, type='success') { 
@@ -635,7 +659,6 @@
         document.getElementById('lbl-dark').innerText = t.dark;
         document.getElementById('txt-wheel-btn').innerText = t.txt_wheel;
         document.getElementById('txt-pack').innerText = t.txt_pack;
-        // Traducción Crypto
         document.getElementById('lbl-wallet').innerText = t.wallet;
         document.getElementById('btn-mine').innerText = t.mine;
         document.getElementById('btn-sell').innerText = t.sell;
@@ -791,7 +814,7 @@
         if(brokerActive){ if(btcPrice<15&&game.money>=1000){game.money-=btcPrice; game.btc++; notify("🤖 COMPRA", 'success');} if(btcPrice>45&&game.btc>0){game.money+=btcPrice; game.btc--; notify("🤖 VENTA", 'success');} } 
     }, 4000);
     
-    setInterval(() => { game.lastLogin=Date.now(); localStorage.setItem('EmojiV83_Final', JSON.stringify(game)); }, 5000);
+    setInterval(() => { game.lastLogin=Date.now(); localStorage.setItem('EmojiV84_Final', JSON.stringify(game)); }, 5000);
     setInterval(spawnUFO_Logic, 1000); 
     
     setInterval(() => { if(Math.random() < 0.05) startMatrixRain(); }, 60000);
