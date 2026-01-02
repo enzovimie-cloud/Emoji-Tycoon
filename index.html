@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Emoji Tycoon: v79 RESTORED</title>
+    <title>Emoji Tycoon: COMPLETE v80</title>
     <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700;800;900&display=swap" rel="stylesheet">
     
     <style>
@@ -54,7 +54,6 @@
         /* --- HEADER --- */
         .header { background: rgba(15, 15, 22, 0.98); padding: 10px 15px; border-bottom: 1px solid #333; z-index: 20; flex-shrink: 0; backdrop-filter: blur(10px); }
         .top-row { display: flex; justify-content: space-between; align-items: center; width: 100%; }
-        
         .settings-btn { background: none; border: none; font-size: 1.5rem; cursor: pointer; padding: 0; margin-right: 10px; color: #888; transition:0.3s; }
         .settings-btn.spinning { animation: spinGear 0.5s ease-out; color: #fff; }
         @keyframes spinGear { 100% { transform: rotate(180deg); } }
@@ -82,8 +81,11 @@
         .xp-fill { background: linear-gradient(90deg, #0055ff, var(--blue)); }
         .fever-fill { background: linear-gradient(90deg, #ff8800, #ff0055); }
         .status-label { font-size: 0.65rem; color: #888; font-weight: 800; display: flex; justify-content: space-between; margin-bottom: 2px; }
+        
+        /* AD WRAPPER */
+        #ad-wrapper { width: 100%; height: 50px; background: #000; border-top: 1px solid #222; display: none; justify-content: center; align-items: center; flex-shrink: 0; z-index: 25; }
 
-        /* --- TABS (MENU ESTILO v58 - CON GLOW Y LINEAS) --- */
+        /* --- TABS --- */
         .tabs { display: flex; background: #080808; border-top: 1px solid #222; height: 75px; z-index: 30; padding-bottom: env(safe-area-inset-bottom); flex-shrink: 0; }
         .tab { 
             flex: 1; background: none; border: none; color: #555; 
@@ -93,7 +95,6 @@
         }
         .tab span { font-size: 1.6rem; filter: grayscale(1) opacity(0.5); margin-bottom: 3px; transition: 0.2s; position: relative; z-index: 2; }
         
-        /* LINEA SUPERIOR & GLOW TRASERO */
         .tab.active { background: radial-gradient(circle at bottom, rgba(255,255,255,0.05), transparent 70%); }
         .tab.active::after {
             content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 3px;
@@ -106,7 +107,6 @@
         }
         .tab.active span { filter: grayscale(0) opacity(1); transform: scale(1.15) translateY(-3px); text-shadow: 0 0 10px currentColor; }
         
-        /* COLORES */
         .tab:nth-child(1).active { color: var(--green); } 
         .tab:nth-child(2).active { color: var(--blue); } 
         .tab:nth-child(3).active { color: var(--orange); } 
@@ -122,33 +122,28 @@
         .panel.active { display: block; }
         @keyframes fadeIn { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
 
-        /* --- CARDS (CORREGIDO: LAYOUT FLEX ROBUSTO) --- */
+        /* --- CARDS (GRID + STABLE) --- */
         .card { 
             background: var(--card); padding: 10px; margin-bottom: 8px; border-radius: 10px; 
             border: 1px solid #2a2a35; box-shadow: 0 4px 6px rgba(0,0,0,0.2); 
-            display: flex; align-items: center; justify-content: space-between; gap: 10px;
+            display: grid; grid-template-columns: 50px 1fr auto; align-items: center; gap: 10px;
         }
         .card:active { transform: scale(0.99); }
-        
-        /* ESTO ARREGLA EL TEXTO CORTADO */
-        .card-left { display: flex; align-items: center; gap: 12px; flex: 1; min-width: 0; }
-        .card-icon { font-size: 1.6rem; width: 45px; height: 45px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.03); border-radius: 10px; border: 1px solid rgba(255,255,255,0.08); }
+        .card-icon { font-size: 1.6rem; width: 45px; height: 45px; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.03); border-radius: 10px; border: 1px solid rgba(255,255,255,0.08); }
         .card-info { display: flex; flex-direction: column; overflow: hidden; }
         .card-info b { display: block; color: #eee; font-size: 0.95rem; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; }
         .card-info small { color: #888; font-size: 0.7rem; font-weight: 600; white-space: nowrap; }
         
-        /* BOTONES DE COMPRA AJUSTADOS */
         .btn-buy { 
             background: linear-gradient(180deg, #3a3a40, #2a2a30); color: #777; border: 1px solid #444; 
-            padding: 8px 10px; border-radius: 8px; font-weight: 800; cursor: pointer; 
-            min-width: 80px; max-width: 90px; flex-shrink: 0;
-            font-family: 'Rajdhani', sans-serif; font-size: 0.8rem; box-shadow: 0 3px 0 #1a1a20; transition: 0.1s; 
+            padding: 8px 12px; border-radius: 8px; font-weight: 800; cursor: pointer; min-width: 75px; 
+            font-family: 'Rajdhani', sans-serif; font-size: 0.85rem; box-shadow: 0 3px 0 #1a1a20; transition: 0.1s; 
         }
         .btn-buy.affordable { background: linear-gradient(180deg, #2ecc71, #27ae60); color: #fff; border-color: #2ecc71; box-shadow: 0 3px 0 #1e8449; text-shadow: 0 1px 2px rgba(0,0,0,0.3); }
         .btn-buy.hacker-btn { background: linear-gradient(180deg, #9b59b6, #8e44ad); color: #fff; border-color: #8e44ad; box-shadow: 0 3px 0 #6c3483; }
         .btn-buy:active { top: 3px; box-shadow: none; }
         .btn-buy:disabled { opacity: 0.5; cursor: not-allowed; }
-
+        
         .btn-mega { width: 100%; padding: 14px; border-radius: 10px; margin-top: 8px; font-size: 1rem; font-weight: 900; text-transform: uppercase; background: linear-gradient(45deg, #f1c40f, #f39c12); color: #000; border: 2px solid rgba(255,255,255,0.5); box-shadow: 0 0 15px rgba(241, 196, 15, 0.3); animation: pulseOffer 2s infinite; cursor: pointer; }
         @keyframes pulseOffer { 0% { transform: scale(1); } 50% { transform: scale(1.02); } 100% { transform: scale(1); } }
 
@@ -160,15 +155,17 @@
         .popup { background: #16161e; width: 85%; max-width: 380px; padding: 25px; border-radius: 16px; border: 1px solid #333; text-align: center; position: relative; animation: popIn 0.3s; box-shadow: 0 20px 60px rgba(0,0,0,0.8); }
         @keyframes popIn { 0% { transform: scale(0.8); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
 
+        /* SHOP TOGGLE MEJORADO */
         .shop-toggle-container { display: flex; gap: 10px; margin-bottom: 12px; }
         .shop-toggle { flex: 1; padding: 8px; background: #222; border: 1px solid #333; color: #666; font-weight: bold; cursor: pointer; border-radius: 8px; transition: 0.3s; font-size: 0.9rem; }
-        .shop-toggle.active { background: #2a2a35; border-color: var(--purple); color: #fff; box-shadow: 0 0 10px rgba(188,19,254,0.2); }
+        /* BORDE LILA Y FONDO ILUMINADO CUANDO ACTIVO */
+        .shop-toggle.active { background: rgba(155, 89, 182, 0.2); border-color: var(--purple); color: #fff; box-shadow: 0 0 10px rgba(155, 89, 182, 0.3); }
 
         .skins-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
         .skin-item { background: rgba(255,255,255,0.05); padding: 10px; border-radius: 10px; border: 1px solid #333; text-align: center; cursor: pointer; position:relative; }
         .skin-item.active { border-color: var(--green); background: rgba(0,255,136,0.15); }
         
-        #wheel-canvas { width: 250px; height: 250px; margin: 0 auto; display: block; border-radius:50%; }
+        #wheel-canvas { width: 250px; height: 250px; margin: 0 auto; display: block; transition: transform 4s cubic-bezier(0.1, 0, 0.1, 1); border-radius:50%; }
         #lang-container { display: flex; gap: 15px; justify-content: center; margin-top: 30px; }
         .lang-card { background: rgba(255,255,255,0.1); border: 2px solid #444; padding: 15px; border-radius: 15px; cursor: pointer; transition: 0.2s; text-align: center; width: 100px; }
         .lang-card:hover { border-color: var(--green); background: rgba(0,255,136,0.1); transform: scale(1.05); }
@@ -188,7 +185,7 @@
         @keyframes blink { 50% { opacity:0.5; } }
         @keyframes glowItem { from{text-shadow:0 0 5px currentColor;} to{text-shadow:0 0 15px currentColor;} }
 
-        /* REAL AD BANNER (Fijo abajo, no molesta) */
+        /* REAL AD BANNER */
         #ad-wrapper { width: 100%; height: 50px; background: #000; border-top: 1px solid #222; display: none; justify-content: center; align-items: center; flex-shrink: 0; z-index: 25; }
     </style>
 </head>
@@ -203,7 +200,7 @@
     <div id="start-screen" style="position:fixed; top:0; left:0; width:100%; height:100%; background:#000; z-index:20000; display:flex; flex-direction:column; align-items:center; justify-content:center;">
         <div style="font-size: 6rem; animation: floatIcon 3s infinite;">💎</div>
         <h1 style="color:#fff; font-size:3rem; margin-bottom:5px;">EMOJI TYCOON</h1>
-        <p style="color:#666; letter-spacing:3px; margin-bottom:40px;">v79 RESTORED</p>
+        <p style="color:#666; letter-spacing:3px; margin-bottom:40px;">v80 COMPLETE</p>
         
         <button id="btn-start-main" onclick="showLangSelector()" style="background:var(--green); padding:15px 60px; border:none; border-radius:50px; font-weight:900; font-size:1.5rem; cursor:pointer; box-shadow: 0 0 25px rgba(0,255,136,0.4); animation: pulse 2s infinite;">PLAY</button>
         
@@ -232,7 +229,7 @@
         <div style="width:100%; height:4px; background:#222; margin-top:8px; border-radius:2px; overflow:hidden;"><div id="threat-bar" style="height:100%; width:0%; background:var(--accent); transition:width 0.5s; box-shadow:0 0 10px var(--accent);"></div></div>
     </div>
 
-    <div class="news-bar"><div class="news-text" id="news-text">EL PRECIO DEL BITCOIN SE DISPARA 🚀</div></div>
+    <div class="news-bar"><div class="news-text" id="news-text">...</div></div>
 
     <div class="game-zone">
         <div id="main-emoji-container" style="position:relative; z-index:5;">
@@ -318,7 +315,6 @@
     <div id="box-modal" class="overlay"><div class="popup" style="border-color:var(--purple);"><h2 id="txt-box-title" style="color:var(--purple);"></h2><p id="txt-box-msg" style="color:#aaa;"></p><button id="btn-box-vid" class="modal-btn btn-green" onclick="openBox(true)"></button><button id="btn-box-norm" class="modal-btn" style="background:#333; color:#aaa;" onclick="openBox(false)"></button></div></div>
     <div id="hacker-modal" class="overlay"><div class="popup" style="border-color:var(--accent);"><h2 id="txt-hacker-title" style="color:var(--accent);"></h2><p id="txt-hacker-msg" style="color:#aaa;"></p><h2 id="hacker-loss" style="color:#fff; font-size:2rem; margin:10px 0;">-$0</h2><button id="btn-hacker-vid" class="modal-btn btn-green" onclick="resolveHacker(true)"></button><button id="btn-hacker-acc" class="modal-btn" style="background:transparent; border:none; color:#666; text-decoration:underline;" onclick="resolveHacker(false)"></button></div></div>
     <div id="museum-modal" class="overlay"><div class="popup" style="border-color:var(--gold);"><h2 style="color:var(--gold);">MUSEO</h2><div class="artifact-grid" id="artifact-list"></div><button class="modal-btn" style="background:#333; color:#fff;" onclick="closeModals()">CERRAR</button></div></div>
-    
     <div id="world-lock-modal" class="overlay"><div class="popup" style="border-color:var(--blue);"><div style="font-size:3rem;">🔒</div><h2 id="txt-world-title" style="color:var(--blue);">ZONA RESTRINGIDA</h2><div style="margin:20px 0; text-align:left;"><div style="display:flex; justify-content:space-between; font-size:0.8rem; color:#aaa;"><span id="txt-req-gems">Gemas (100)</span><span id="lock-gems-val">0/100</span></div><div class="bar-bg"><div class="bar-fill xp-fill" id="lock-bar-gems"></div></div><div style="display:flex; justify-content:space-between; font-size:0.8rem; color:#aaa; margin-top:10px;"><span id="txt-req-serv">Servidor (Nvl 1)</span><span id="lock-tech-val">NO</span></div><div class="bar-bg"><div class="bar-fill" style="background:var(--green)" id="lock-bar-tech"></div></div></div><button class="modal-btn" style="background:#333;" onclick="closeModals()">CERRAR</button></div></div>
 </div>
 
@@ -329,25 +325,40 @@
     let lang = 'es';
     let rouletteInterval = null; 
 
-    // --- DATA ---
+    // --- DATA EXPANDIDA ---
     const machinesDB = [ 
         {name: "Script", name_en: "Script", cost: 15, prod: 1, icon: "👶"}, 
         {name: "PC Gamer", name_en: "Gaming PC", cost: 250, prod: 10, icon: "💻"}, 
         {name: "Servidor", name_en: "Server", cost: 5000, prod: 80, icon: "🖥️"}, 
         {name: "Crypto Farm", name_en: "Crypto Farm", cost: 150000, prod: 400, icon: "🏭"}, 
-        {name: "IA God", name_en: "AI God", cost: 15000000, prod: 5000, icon: "🧠"} 
+        {name: "IA God", name_en: "AI God", cost: 15000000, prod: 5000, icon: "🧠"},
+        {name: "Quantum Rig", name_en: "Quantum Rig", cost: 500000000, prod: 20000, icon: "⚛️"} // NUEVA MAQUINA
     ];
-    // Defensas (Textos cortos)
+    
     const defDB = [ 
         {name: "Antivirus", name_en: "Antivirus", cost: 500, desc: "-10% Amenaza", desc_en: "-10% Threat", icon: "💊"}, 
         {name: "Firewall", name_en: "Firewall", cost: 5000, desc: "-25% Amenaza", desc_en: "-25% Threat", icon: "🔥"}, 
         {name: "Señuelo", name_en: "Decoy", cost: 50000, desc: "Gana BTC", desc_en: "Win BTC", icon: "💣"}, 
         {name: "Black ICE", name_en: "Black ICE", cost: 1000000, desc: "Roba $", desc_en: "Steal $", icon: "☠️"} 
     ];
-    const darkItemsDB = [ {id: 'bot', name: "Bot", name_en: "Bot", cost: 50, desc: "Auto-clic", desc_en: "Auto-click", icon: "🤖"}, {id: 'spy', name: "Spy", name_en: "Spy", cost: 100, desc: "Predice Precio", desc_en: "Predict Price", icon: "👁️"}, {id: 'over', name: "Overclock", name_en: "Overclock", cost: 500, desc: "+10% Prod", desc_en: "+10% Prod", icon: "⚡"} ];
+    
+    const darkItemsDB = [ 
+        {id: 'bot', name: "Bot", name_en: "Bot", cost: 50, desc: "Auto-clic", desc_en: "Auto-click", icon: "🤖"}, 
+        {id: 'spy', name: "Spy", name_en: "Spy", cost: 100, desc: "Predice Precio", desc_en: "Predict Price", icon: "👁️"}, 
+        {id: 'over', name: "Overclock", name_en: "Overclock", cost: 500, desc: "+10% Prod", desc_en: "+10% Prod", icon: "⚡"},
+        {id: 'virus', name: "Virus", name_en: "Virus", cost: 5000, desc: "+5% Prod", desc_en: "+5% Prod", icon: "🦠"} // NUEVO ITEM
+    ];
+    
     const gemItemsDB = [ {id: 'coffee', name: "Café", name_en: "Coffee", cost: 5, desc: "x2 Prod (1min)", icon: "☕"}, {id: 'shield', name: "Escudo", name_en: "Shield", cost: 15, desc: "Bloquea 1 ataque", desc_en: "Blocks 1 attack", icon: "🛡️"}, {id: 'warp', name: "Salto", name_en: "Warp", cost: 20, desc: "+2h Cash", desc_en: "+2h Cash", icon: "⏩"} ];
     const skinsDB = [ {id: "baby", icon: "👶", cost: 0, rarity: "common"}, {id: "cool", icon: "😎", cost: 50, rarity: "rare"}, {id: "hacker", icon: "😈", cost: 150, rarity: "rare"}, {id: "robot", icon: "🤖", cost: 300, rarity: "epic"}, {id: "alien", icon: "👽", cost: 500, rarity: "epic"}, {id: "king", icon: "👑", cost: 1000, rarity: "legendary"} ];
-    const missionsDB = [ {name: "Hack WiFi", name_en: "Hack WiFi", cost: 5000, reward: "+1 Gema/min", reward_en: "+1 Gem/min"}, {name: "Banco", name_en: "Bank Hack", cost: 500000, reward: "x2 Valor Dinero", reward_en: "x2 Cash Value"}, {name: "Matrix", name_en: "Matrix", cost: 1000000000, reward: "MODO DIOS", reward_en: "GOD MODE"} ];
+    
+    const missionsDB = [ 
+        {name: "Hack WiFi", name_en: "Hack WiFi", cost: 5000, reward: "+1 Gema/min", reward_en: "+1 Gem/min"}, 
+        {name: "Banco", name_en: "Bank Hack", cost: 500000, reward: "x2 Valor Dinero", reward_en: "x2 Cash Value"}, 
+        {name: "Matrix", name_en: "Matrix", cost: 1000000000, reward: "MODO DIOS", reward_en: "GOD MODE"},
+        {name: "Mars Colony", name_en: "Mars Colony", cost: 10000000000, reward: "x5 Clic", reward_en: "x5 Click"} // NUEVA MISION
+    ];
+    
     const artifactsDB = [ {id:'disk', icon:'💾', name:'Floppy Gold', desc:'-5% Costos'}, {id:'batt', icon:'🔋', name:'Quantum Batt', desc:'+10% Offline'}, {id:'dice', icon:'🎲', name:'Glitch Dice', desc:'+5% Crítico'} ];
     const wheelPrizes = [ {label: "10💎", val: 10, type: 'gem', color: '#9b59b6'}, {label: "50💎", val: 50, type: 'gem', color: '#8e44ad'}, {label: "$1k", val: 1000, type: 'money', color: '#2ecc71'}, {label: "0💎", val: 0, type: 'gem', color: '#333'}, {label: "$5k", val: 5000, type: 'money', color: '#27ae60'}, {label: "JACKPOT", val: 100, type: 'gem', color: '#f1c40f'} ];
 
@@ -356,18 +367,18 @@
         en: { offT: "WELCOME BACK!", offM: "Your machines worked hard.", offV: "🎬 VIDEO (x2)", offN: "Collect normal", boxT: "SUPPLIES", boxM: "Which package do you want?", boxV: "🎬 EPIC CRATE", boxN: "Common Crate", hackT: "HACKER DETECTED!", hackM: "Stealing 20% of funds.", hackV: "🛡️ SAVE MONEY", hackA: "Accept Loss", worldT: "RESTRICTED AREA", reqG: "Gems (100)", reqS: "Server (Lvl 1)", close: "CLOSE", prod: "Prod", def: "Def", cry: "Crypto", shop: "Shop", world: "World", lvl: "LEVEL", fever: "FEVER", mine: "MINE", sell: "SELL", wallet: "WALLET", broker: "⭐ ACTIVATE AI TRADER (3 MIN)", gT: "ℹ️ CRYPTO GUIDE:", dark: "BLACK MARKET", upg: "📦 UPGRADES", pack: "Gem Pack", vid: "VIDEO (+10)", miss: "GLOBAL MISSIONS", ready: "READY!", miss_ok: "Mission OK", bought: "BOUGHT!", wheelT: "LUCKY WHEEL", wheelB: "SPIN (10 💎)", loadingAd: "LOADING AD...", txt_wheel: "Lucky Wheel", txt_wheel_d: "Win Prizes", txt_pack: "Gem Pack", txt_pack_d: "+10 Gems", n1: "BITCOIN PRICE SKYROCKETS 🚀", n2: "EMOJI CORP BUYS THE MOON 🌙", n3: "HACKERS STEAL GRANDMA'S RECIPE 👵", n4: "AI DOMINATES CHESS WORLD ♟️", n5: "NEW VIRAL EMOJI DETECTED 🦠" }
     };
 
-    let game = { money: 0, gems: 20, btc: 0, machines: [0,0,0,0,0], security: [0,0,0,0], ownedSkins: ["baby"], currentSkin: "baby", missions: [0,0,0,0,0], artifacts: [], hasSpy:false, hasShield:false, overclock:0, lastLogin: Date.now(), worldUnlocked: false, level: 1, xp: 0, prestigeChips: 0 };
+    let game = { money: 0, gems: 20, btc: 0, machines: [0,0,0,0,0,0], security: [0,0,0,0], ownedSkins: ["baby"], currentSkin: "baby", missions: [0,0,0,0], artifacts: [], hasSpy:false, hasShield:false, overclock:0, lastLogin: Date.now(), worldUnlocked: false, level: 1, xp: 0, prestigeChips: 0 };
     let threat=0, btcPrice=20, nextPrice=25, pendingOffline=0, boostMult=1, brokerActive=false, fever=0, feverMode=false, nextUfoTime=Date.now()+120000;
 
-    // --- REPAIR DATA ON LOAD ---
-    if(localStorage.getItem('EmojiV79_Restored')) { 
+    // --- REPAIR DATA ON LOAD (EmojiV80_Complete) ---
+    if(localStorage.getItem('EmojiV80_Complete')) { 
         try { 
-            let saved = JSON.parse(localStorage.getItem('EmojiV79_Restored'));
+            let saved = JSON.parse(localStorage.getItem('EmojiV80_Complete'));
             game = {...game, ...saved};
             // AUTO-REPAIR ARRAYS
-            if(!game.machines || game.machines.length < 5) game.machines = [0,0,0,0,0];
-            if(!game.security || game.security.length < 4) game.security = [0,0,0,0];
-            if(!game.missions || game.missions.length < 5) game.missions = [0,0,0,0,0];
+            while(game.machines.length < 6) game.machines.push(0);
+            while(game.security.length < 4) game.security.push(0);
+            while(game.missions.length < 4) game.missions.push(0);
             if(!game.artifacts) game.artifacts = [];
         } catch(e) { console.log("Save corrupted, reset"); }
     }
@@ -379,8 +390,6 @@
         // ACTIVAR ANUNCIOS AL JUGAR
         document.getElementById('ad-wrapper').style.display='flex'; 
         updateUI(); updateNews(); checkOffline(); 
-        
-        // Start news cycle immediately
         setInterval(updateNews, 5000); 
     }
     function showLangSelector() { document.getElementById('btn-start-main').style.display = 'none'; document.getElementById('lang-select').style.display = 'flex'; }
@@ -556,12 +565,12 @@
         document.getElementById('txt-wheel-btn').innerText = t.txt_wheel;
         document.getElementById('txt-pack').innerText = t.txt_pack;
 
-        // RENDER LISTS SAFE & CORRECT LAYOUT
+        // RENDER LISTS SAFE
         let h=""; 
         for(let i=0; i<machinesDB.length; i++){
             let m=machinesDB[i]; let c=Math.floor(m.cost*Math.pow(1.15, game.machines[i]||0)); 
             let n=lang=='es'?m.name:m.name_en; let afford=game.money>=c?'affordable':'';
-            h+=`<div class="card"><div class="card-left"><div class="card-icon">${m.icon}</div><div class="card-info"><b>${n}</b><small style="color:var(--green)">+${fmt(m.prod)}/s</small></div></div><button class="btn-buy ${afford}" onclick="buyMachine(${i},${c})">$${fmt(c)}</button></div>`;
+            h+=`<div class="card"><div class="card-left"><div class="card-icon">${m.icon}</div><div class="card-info"><b>${n}</b><small style="color:var(--green)">+${fmt(m.prod)}/s</small><small style="color:#888; font-size:0.6rem">Propiedad: ${game.machines[i]||0}</small></div></div><button class="btn-buy ${afford}" onclick="buyMachine(${i},${c})">$${fmt(c)}</button></div>`;
         }
         document.getElementById('prod').innerHTML=h;
 
@@ -583,12 +592,24 @@
         h=""; artifactsDB.forEach(a=>{ let has = game.artifacts.includes(a.id); h+=`<div class="artifact ${has?'unlocked':''}"><div class="artifact-icon" style="font-size:2rem">${a.icon}</div><small style="color:#fff">${has?a.name:'???'}</small><br><span style="font-size:0.6rem; color:#888;">${has?a.desc:'LOCKED'}</span></div>`; }); document.getElementById('artifact-list').innerHTML=h;
     }
 
-    function getPPS() { return ((game.machines[0]||0)*1 + (game.machines[1]||0)*12 + (game.machines[2]||0)*90 + (game.machines[3]||0)*400 + (game.machines[4]||0)*5000) * (1 + (game.overclock||0)*0.1) * boostMult * (1+game.prestigeChips*0.1); }
+    function getPPS() { return ((game.machines[0]||0)*1 + (game.machines[1]||0)*10 + (game.machines[2]||0)*80 + (game.machines[3]||0)*400 + (game.machines[4]||0)*5000 + (game.machines[5]||0)*20000) * (1 + (game.overclock||0)*0.1) * boostMult * (1+game.prestigeChips*0.1); }
     function fmt(n) { if(n<1000)return Math.floor(n); let s=["","k","M","B","T","Qa"]; let e=Math.floor(Math.log10(n)/3); return (n/Math.pow(1000,e)).toFixed(1)+s[e]; }
     function tab(id, el) { document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active')); document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active')); document.getElementById(id).classList.add('active'); el.classList.add('active'); }
-    function showShopSection(id) { document.getElementById('items-view').style.display=id=='items'?'block':'none'; document.getElementById('skins-view').style.display=id=='skins'?'grid':'none'; }
+    function showShopSection(id) { document.getElementById('items-view').style.display=id=='items'?'block':'none'; document.getElementById('skins-view').style.display=id=='skins'?'grid':'none'; document.getElementById('btn-shop-items').classList.toggle('active', id=='items'); document.getElementById('btn-shop-skins').classList.toggle('active', id=='skins'); }
     
-    function buyMachine(i,c) { if(game.money>=c){ game.money-=c; game.machines[i]++; updateUI(); playSfx('coin'); notify("COMPRADO", 'success'); } }
+    function buyMachine(i,c) { 
+        if(game.money>=c){ 
+            game.money-=c; game.machines[i]++; 
+            updateUI(); playSfx('coin'); notify("COMPRADO", 'success'); 
+            
+            // PARTICULAS MINADO (RESTORED)
+            let rect = event.target.getBoundingClientRect(); 
+            let p = document.createElement('div'); p.className='particle'; p.innerText = "+1"; p.style.color='#0f0'; 
+            p.style.left = (rect.left+rect.width/2)+'px'; p.style.top = (rect.top)+'px'; 
+            document.body.appendChild(p); setTimeout(()=>p.remove(), 800);
+        } 
+    }
+    
     function buyDef(i) { if(game.money>=defDB[i].cost && !game.security[i]) { game.money-=defDB[i].cost; game.security[i]=1; updateUI(); notify(getText('bought'), 'success'); } }
     function buyGemItem(id,c) { if(game.gems>=c) { game.gems-=c; if(id=='coffee'){boostMult=2;setTimeout(()=>boostMult=1,60000);} if(id=='shield'){game.hasShield=true;} if(id=='warp'){game.money+=getPPS()*3600;} updateUI(); notify(getText('bought'), 'success'); } else notify(getText('noGem'), 'error'); }
     function buyDarkItem(id,c) { if(game.btc>=c){ game.btc-=c; if(id=='spy')game.hasSpy=true; if(id=='bot')game.hasBot=true; if(id=='over')game.overclock++; notify(getText('bought'), 'success'); updateUI(); } }
@@ -645,19 +666,6 @@
         }, 300);
         setTimeout(() => { clearInterval(interval); document.getElementById('matrix-overlay').style.display = 'none'; document.getElementById('matrix-ui').style.display = 'none'; }, 12000);
     }
-    
-    // UFO LOGIC (FIXED)
-    function spawnUFO_Logic() { 
-        if(Date.now()>nextUfoTime){ 
-            let d=document.createElement('div'); d.className='particle'; d.innerText='🛸'; 
-            d.style.fontSize='3rem'; d.style.position='absolute'; 
-            d.style.top='15%'; d.style.zIndex='150'; // Z-INDEX ALTO
-            d.style.animation='floatIcon 10s linear'; 
-            document.querySelector('.game-zone').appendChild(d); 
-            d.onclick=(e)=>{e.stopPropagation(); d.remove(); document.getElementById('box-modal').style.display='flex';}; 
-            setTimeout(()=>d.remove(), 10000); nextUfoTime=Date.now()+(Math.random()*120000+120000); 
-        } 
-    }
 
     setInterval(() => {
         if(document.getElementById('hacker-modal').style.display==='flex') return;
@@ -675,8 +683,8 @@
         updateNews(); 
     }, 4000);
     
-    setInterval(() => { game.lastLogin=Date.now(); localStorage.setItem('EmojiV79_Restored', JSON.stringify(game)); }, 5000);
-    setInterval(spawnUFO_Logic, 1000); 
+    setInterval(() => { game.lastLogin=Date.now(); localStorage.setItem('EmojiV80_Complete', JSON.stringify(game)); }, 5000);
+    setInterval(spawnUFO_Logic, 1000); function spawnUFO_Logic() { if(Date.now()>nextUfoTime){ let d=document.createElement('div'); d.className='particle'; d.innerText='🛸'; d.style.fontSize='3rem'; d.style.animation='floatIcon 10s linear'; d.style.top='15%'; document.querySelector('.game-zone').appendChild(d); d.onclick=(e)=>{d.remove(); document.getElementById('box-modal').style.display='flex';}; setTimeout(()=>d.remove(), 10000); nextUfoTime=Date.now()+(Math.random()*120000+120000); } }
     
     setInterval(() => { if(Math.random() < 0.05) startMatrixRain(); }, 60000);
 
