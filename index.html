@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Emoji Tycoon: v82 FIXED</title>
+    <title>Emoji Tycoon: v83 FINAL</title>
     <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700;800;900&display=swap" rel="stylesheet">
     
     <style>
@@ -47,7 +47,7 @@
         .toast.success { border-color: var(--green); background: #e8f5e9; color: #1b5e20; }
         .toast.error { border-color: var(--accent); background: #ffebee; color: #b71c1c; }
         .toast.premium { border-color: var(--purple); background: #f3e5f5; color: #4a148c; }
-        .toast.fever { border-color: var(--orange); background: #fff3e0; color: #e65100; } /* NUEVO ESTILO FIEBRE */
+        .toast.fever { border-color: var(--orange); background: #fff3e0; color: #e65100; }
         .toast.fade-out { animation: toastOut 0.4s forwards; }
         @keyframes toastIn { from { opacity:0; transform:translateY(-20px); } to { opacity:1; transform:translateY(0); } }
         @keyframes toastOut { to { opacity:0; transform:translateY(-20px); } }
@@ -208,7 +208,7 @@
     <div id="start-screen" style="position:fixed; top:0; left:0; width:100%; height:100%; background:#000; z-index:20000; display:flex; flex-direction:column; align-items:center; justify-content:center;">
         <div style="font-size: 6rem; animation: floatIcon 3s infinite;">💎</div>
         <h1 style="color:#fff; font-size:3rem; margin-bottom:5px;">EMOJI TYCOON</h1>
-        <p style="color:#666; letter-spacing:3px; margin-bottom:40px;">v82 PERFECT</p>
+        <p style="color:#666; letter-spacing:3px; margin-bottom:40px;">v83 FINAL</p>
         
         <button id="btn-start-main" onclick="showLangSelector()" style="background:var(--green); padding:15px 60px; border:none; border-radius:50px; font-weight:900; font-size:1.5rem; cursor:pointer; box-shadow: 0 0 25px rgba(0,255,136,0.4); animation: pulse 2s infinite;">PLAY</button>
         
@@ -273,7 +273,7 @@
         
         <div id="btc" class="panel">
              <div style="background:#08080a; padding:15px; border-radius:15px; text-align:center; border:1px solid #333; margin-bottom:15px;">
-                <div style="color:#888; font-size:0.75rem; letter-spacing:1px;">WALLET</div>
+                <div style="color:#888; font-size:0.75rem; letter-spacing:1px;" id="lbl-wallet">WALLET</div>
                 <div style="font-size:2.5rem; color:#f39c12; font-weight:bold; font-family:monospace;" id="btc-ui">0</div>
                 <div style="color:#aaa; font-size:0.9rem; margin-bottom:15px;">
                     1 BTC = <span id="btc-price-ui" style="font-weight:bold; color:#fff;">$50</span> <span id="btc-trend"></span>
@@ -341,21 +341,23 @@
     let sfxEnabled = true;
     let lang = 'es';
     let rouletteInterval = null; 
-    let isModalOpen = false; // SEMAFORO PARA EVENTOS
+    let isModalOpen = false; 
 
     // --- DATA ---
     const machinesDB = [ 
         {name: "Script", name_en: "Script", cost: 15, prod: 1, icon: "👶"}, 
         {name: "PC Gamer", name_en: "Gaming PC", cost: 250, prod: 10, icon: "💻"}, 
-        {name: "Servidor", name_en: "Server", cost: 5000, prod: 100, icon: "🖥️"}, // MEJORA DE LÓGICA (ANTES 80)
-        {name: "Cripto Fábrica", name_en: "Crypto Factory", cost: 12000, prod: 1400, icon: "🏭"}, // REBALANCEO MASIVO (MUY RENTABLE)
-        {name: "Granja Cuántica", name_en: "Quantum Farm", cost: 15000000, prod: 50000, icon: "🧠"} 
+        {name: "Servidor", name_en: "Server", cost: 5000, prod: 100, icon: "🖥️"}, 
+        {name: "Cripto Fábrica", name_en: "Crypto Factory", cost: 12000, prod: 1400, icon: "🏭"},
+        {name: "Granja Cuántica", name_en: "Quantum Farm", cost: 15000000, prod: 50000, icon: "🧠"},
+        {name: "Nexo Alienígena", name_en: "Alien Nexus", cost: 850000000, prod: 250000, icon: "👽"} // NUEVA MÁQUINA
     ];
+    // CORRECCIÓN DE DESCRIPCIONES DE DEFENSA
     const defDB = [ 
         {name: "Antivirus", name_en: "Antivirus", cost: 500, desc: "-10% Amenaza", desc_en: "-10% Threat", icon: "💊"}, 
         {name: "Firewall", name_en: "Firewall", cost: 5000, desc: "-25% Amenaza", desc_en: "-25% Threat", icon: "🔥"}, 
-        {name: "Señuelo", name_en: "Decoy", cost: 50000, desc: "Gana BTC", desc_en: "Win BTC", icon: "💣"}, 
-        {name: "Black ICE", name_en: "Black ICE", cost: 1000000, desc: "Roba $", desc_en: "Steal $", icon: "☠️"} 
+        {name: "Señuelo", name_en: "Decoy", cost: 50000, desc: "Convierte Ataque en BTC", desc_en: "Turn Attack to BTC", icon: "💣"}, 
+        {name: "Black ICE", name_en: "Black ICE", cost: 1000000, desc: "Roba $ al Hacker", desc_en: "Steal $ from Hacker", icon: "☠️"} 
     ];
     const darkItemsDB = [ {id: 'bot', name: "Bot", name_en: "Bot", cost: 50, desc: "Auto-clic", desc_en: "Auto-click", icon: "🤖"}, {id: 'spy', name: "Espía", name_en: "Spy", cost: 100, desc: "Predice Precio", desc_en: "Predict Price", icon: "👁️"}, {id: 'over', name: "Overclock", name_en: "Overclock", cost: 500, desc: "+10% Prod", desc_en: "+10% Prod", icon: "⚡"} ];
     const gemItemsDB = [ {id: 'coffee', name: "Café", name_en: "Coffee", cost: 5, desc: "x2 Prod (1min)", icon: "☕"}, {id: 'shield', name: "Escudo", name_en: "Shield", cost: 15, desc: "Bloquea 1 ataque", desc_en: "Blocks 1 attack", icon: "🛡️"}, {id: 'warp', name: "Salto", name_en: "Warp", cost: 20, desc: "+2h Dinero", desc_en: "+2h Cash", icon: "⏩"} ];
@@ -371,17 +373,16 @@
             hackT: "¡HACKER DETECTADO!", hackM: "Van a robar el 20% de tus fondos.", hackV: "🛡️ SALVAR ($)", hackA: "Aceptar pérdida", 
             worldT: "ZONA RESTRINGIDA", reqG: "Gemas (100)", reqS: "Servidor (Nvl 1)", 
             close: "CERRAR", prod: "Prod", def: "Def", cry: "Crypto", shop: "Tienda", world: "Mundo", 
-            lvl: "NIVEL", fever: "🔥 ¡FIEBRE DE CRIPTO! x2", // ARREGLADO (SIN X ROJA)
+            lvl: "NIVEL", fever: "🔥 ¡FIEBRE DE CRIPTO! x2", 
             mine: "MINAR", sell: "VENDER", wallet: "CARTERA", broker: "⭐ ACTIVAR IA TRADER (3 MIN)", 
             gT: "ℹ️ GUÍA CRIPTO:", dark: "MERCADO NEGRO", upg: "📦 MEJORAS", 
             pack: "Pack Gemas", vid: "VIDEO (+10)", miss: "MISIONES GLOBALES", ready: "¡LISTO!", 
             miss_ok: "Misión OK", bought: "¡COMPRADO!", 
             wheelT: "RULETA SUERTE", wheelB: "GIRAR (10 💎)", loadingAd: "CARGANDO ANUNCIO...", 
             txt_wheel: "Ruleta", txt_wheel_d: "Gana premios", txt_pack: "Pack Gemas", txt_pack_d: "+10 Gemas", 
-            n1: "EL PRECIO DEL BITCOIN SE DISPARA 🚀", n2: "EMOJI CORP COMPRA LA LUNA 🌙", n3: "HACKERS ROBAN RECETA DE LA ABUELA 👵", n4: "IA DOMINA EL MUNDO... DEL AJEDREZ ♟️", n5: "NUEVO EMOJI VIRAL DETECTADO 🦠", 
             prop: "Propiedad: ",
-            noGem: "💎 Gemas insuficientes", // ARREGLADO
-            noCash: "⛔ Dinero insuficiente" // ARREGLADO
+            noGem: "💎 Gemas insuficientes",
+            noCash: "⛔ Dinero insuficiente"
         },
         en: { 
             offT: "WELCOME BACK!", offM: "Your machines worked hard.", offV: "🎬 VIDEO (x2)", offN: "Collect normal", 
@@ -389,29 +390,34 @@
             hackT: "HACKER DETECTED!", hackM: "Stealing 20% of funds.", hackV: "🛡️ SAVE MONEY", hackA: "Accept Loss", 
             worldT: "RESTRICTED AREA", reqG: "Gems (100)", reqS: "Server (Lvl 1)", 
             close: "CLOSE", prod: "Prod", def: "Def", cry: "Crypto", shop: "Shop", world: "World", 
-            lvl: "LEVEL", fever: "🔥 CRYPTO FEVER! x2", // ARREGLADO
+            lvl: "LEVEL", fever: "🔥 CRYPTO FEVER! x2", 
             mine: "MINE", sell: "SELL", wallet: "WALLET", broker: "⭐ ACTIVATE AI TRADER (3 MIN)", 
             gT: "ℹ️ CRYPTO GUIDE:", dark: "BLACK MARKET", upg: "📦 UPGRADES", 
             pack: "Gem Pack", vid: "VIDEO (+10)", miss: "GLOBAL MISSIONS", ready: "READY!", 
             miss_ok: "Mission OK", bought: "BOUGHT!", 
             wheelT: "LUCKY WHEEL", wheelB: "SPIN (10 💎)", loadingAd: "LOADING AD...", 
             txt_wheel: "Lucky Wheel", txt_wheel_d: "Win Prizes", txt_pack: "Gem Pack", txt_pack_d: "+10 Gems", 
-            n1: "BITCOIN PRICE SKYROCKETS 🚀", n2: "EMOJI CORP BUYS THE MOON 🌙", n3: "HACKERS STEAL GRANDMA'S RECIPE 👵", n4: "AI DOMINATES CHESS WORLD ♟️", n5: "NEW VIRAL EMOJI DETECTED 🦠", 
             prop: "Owned: ",
-            noGem: "💎 Insufficient Gems", // ARREGLADO
-            noCash: "⛔ Insufficient Funds" // ARREGLADO
+            noGem: "💎 Insufficient Gems", 
+            noCash: "⛔ Insufficient Funds" 
         }
     };
 
-    let game = { money: 0, gems: 20, btc: 0, machines: [0,0,0,0,0], security: [0,0,0,0], ownedSkins: ["baby"], currentSkin: "baby", missions: [0,0,0,0,0], artifacts: [], hasSpy:false, hasShield:false, overclock:0, lastLogin: Date.now(), worldUnlocked: false, level: 1, xp: 0, prestigeChips: 0 };
+    let game = { money: 0, gems: 20, btc: 0, machines: [0,0,0,0,0,0], security: [0,0,0,0], ownedSkins: ["baby"], currentSkin: "baby", missions: [0,0,0,0,0], artifacts: [], hasSpy:false, hasShield:false, overclock:0, lastLogin: Date.now(), worldUnlocked: false, level: 1, xp: 0, prestigeChips: 0 };
     let threat=0, btcPrice=20, nextPrice=25, pendingOffline=0, boostMult=1, brokerActive=false, fever=0, feverMode=false, nextUfoTime=Date.now()+120000;
 
-    // --- REPAIR DATA ON LOAD (EmojiV82_Perfect) ---
-    if(localStorage.getItem('EmojiV82_Perfect')) { 
+    // --- REPAIR DATA ON LOAD (EmojiV83_Final) ---
+    if(localStorage.getItem('EmojiV83_Final')) { 
         try { 
-            let saved = JSON.parse(localStorage.getItem('EmojiV82_Perfect'));
+            let saved = JSON.parse(localStorage.getItem('EmojiV83_Final'));
             game = {...game, ...saved};
-            if(!game.machines || game.machines.length < 5) game.machines = [0,0,0,0,0];
+            // Asegurar compatibilidad con la nueva maquina (indice 5)
+            if(!game.machines || game.machines.length < 6) { 
+                // Migrar datos viejos
+                let old = game.machines || [0,0,0,0,0];
+                while(old.length < 6) old.push(0);
+                game.machines = old;
+            }
             if(!game.security || game.security.length < 4) game.security = [0,0,0,0];
             if(!game.missions || game.missions.length < 5) game.missions = [0,0,0,0,0];
             if(!game.artifacts) game.artifacts = [];
@@ -421,6 +427,9 @@
     function getText(key) { return dict[lang][key] || key; }
     function setLang(l) { 
         lang = l; 
+        // CORRECCIÓN AUDIO: Activar AudioContext al iniciar el juego (para navegadores moviles)
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+
         document.getElementById('start-screen').style.display='none'; 
         document.getElementById('ad-wrapper').style.display='flex'; 
         updateUI(); updateNews(); checkOffline(); 
@@ -428,15 +437,34 @@
     }
     function showLangSelector() { document.getElementById('btn-start-main').style.display = 'none'; document.getElementById('lang-select').style.display = 'flex'; }
     
-    // SISTEMA NOTIFICACIONES MEJORADO
+    // FUNCION DE NOTICIAS QUE FALTABA
+    function updateNews() {
+        const newsList = [
+            {es: "EL BITCOIN SUBE COMO LA ESPUMA 🚀", en: "BITCOIN SKYROCKETING 🚀"},
+            {es: "HACKERS INTENTAN ROBAR LA LUNA 🌑", en: "HACKERS TRY TO STEAL MOON 🌑"},
+            {es: "TU IMPERIO CRECE SIN PARAR 💰", en: "YOUR EMPIRE GROWS FAST 💰"},
+            {es: "NUEVO CHIP NEURONAL A LA VENTA 🧠", en: "NEW NEURAL CHIP FOR SALE 🧠"},
+            {es: "LA BOLSA CAE, EL CRIPTO SUBE 📈", en: "STOCKS CRASH, CRYPTO UP 📈"},
+            {es: "DETECTADA SEÑAL ALIENÍGENA 👽", en: "ALIEN SIGNAL DETECTED 👽"}
+        ];
+        let item = newsList[Math.floor(Math.random() * newsList.length)];
+        let txt = lang === 'es' ? item.es : item.en;
+        document.getElementById('news-text').innerText = txt;
+        // Reiniciar animación css para que se note el cambio
+        let el = document.getElementById('news-text');
+        el.style.animation = 'none';
+        el.offsetHeight; /* trigger reflow */
+        el.style.animation = 'scrollText 25s linear infinite';
+    }
+
     function notify(m, type='success') { 
         const t = document.createElement('div'); 
         t.className = `toast ${type}`; 
         let icon='🔔'; 
         if(type=='success')icon='✅'; 
-        if(type=='error')icon='⛔'; // Icono error más claro
+        if(type=='error')icon='⛔'; 
         if(type=='premium')icon='💎'; 
-        if(type=='fever')icon='🔥'; // Icono especial para fiebre
+        if(type=='fever')icon='🔥'; 
         t.innerHTML = `<span>${icon}</span> ${m}`; 
         document.getElementById('toast-area').appendChild(t); 
         setTimeout(() => { t.classList.add('fade-out'); setTimeout(() => t.remove(), 400); }, 2000); 
@@ -463,7 +491,7 @@
     }
 
     function openSettings() { 
-        isModalOpen = true; // SEMAFORO ACTIVADO
+        isModalOpen = true; 
         let chips = Math.floor(Math.sqrt(game.money / 100000));
         let msg = lang == 'es' ? "Ganarás: " : "Gain: ";
         document.getElementById('prestige-info').innerText = msg + chips + " Chips";
@@ -474,7 +502,7 @@
     
     function closeModals() { 
         document.querySelectorAll('.overlay').forEach(o => o.style.display = 'none'); 
-        isModalOpen = false; // SEMAFORO DESACTIVADO
+        isModalOpen = false; 
         if(rouletteInterval) { clearInterval(rouletteInterval); rouletteInterval = null; }
     }
 
@@ -509,7 +537,7 @@
 
     function activateFever() {
         feverMode=true; 
-        notify(getText('fever'), 'fever'); // USA TIPO FEVER (SIN X)
+        notify(getText('fever'), 'fever'); 
         document.getElementById('fever-text').style.opacity=1;
         let i = setInterval(()=>{
             fever-=1; document.getElementById('fever-bar').style.width=fever+"%";
@@ -520,7 +548,7 @@
     function clickWorld(el) {
         if(game.worldUnlocked) tab('world', el);
         else {
-            isModalOpen = true; // SEMAFORO ACTIVADO
+            isModalOpen = true; 
             let gp = Math.min((game.gems/100)*100, 100);
             let tp = (game.machines[2] || 0) > 0 ? 100 : 0; 
             document.getElementById('lock-gems-val').innerText = game.gems + "/100";
@@ -539,13 +567,13 @@
                 document.getElementById('tab-world-btn').classList.remove('tab-locked');
                 document.getElementById('world-lock-icon').style.display='none';
                 tab('world', el);
-                isModalOpen = false; // DESACTIVAR
+                isModalOpen = false; 
             } else { document.getElementById('world-lock-modal').style.display = 'flex'; }
         }
     }
 
     function spinWheel() {
-        if(game.gems < 10) { notify(getText('noGem'), 'error'); return; } // MENSAJE CORREGIDO
+        if(game.gems < 10) { notify(getText('noGem'), 'error'); return; } 
         game.gems -= 10; document.getElementById('btn-spin').disabled = true;
         const canvas = document.getElementById('wheel-canvas');
         canvas.style.transition = 'transform 4s cubic-bezier(0.1, 0, 0.1, 1)';
@@ -607,6 +635,10 @@
         document.getElementById('lbl-dark').innerText = t.dark;
         document.getElementById('txt-wheel-btn').innerText = t.txt_wheel;
         document.getElementById('txt-pack').innerText = t.txt_pack;
+        // Traducción Crypto
+        document.getElementById('lbl-wallet').innerText = t.wallet;
+        document.getElementById('btn-mine').innerText = t.mine;
+        document.getElementById('btn-sell').innerText = t.sell;
 
         let h=""; 
         for(let i=0; i<machinesDB.length; i++){
@@ -634,7 +666,7 @@
         h=""; artifactsDB.forEach(a=>{ let has = game.artifacts.includes(a.id); h+=`<div class="artifact ${has?'unlocked':''}"><div class="artifact-icon" style="font-size:2rem">${a.icon}</div><small style="color:#fff">${has?a.name:'???'}</small><br><span style="font-size:0.6rem; color:#888;">${has?a.desc:'LOCKED'}</span></div>`; }); document.getElementById('artifact-list').innerHTML=h;
     }
 
-    function getPPS() { return ((game.machines[0]||0)*1 + (game.machines[1]||0)*10 + (game.machines[2]||0)*100 + (game.machines[3]||0)*1400 + (game.machines[4]||0)*50000) * (1 + (game.overclock||0)*0.1) * boostMult * (1+game.prestigeChips*0.1); }
+    function getPPS() { return ((game.machines[0]||0)*1 + (game.machines[1]||0)*10 + (game.machines[2]||0)*100 + (game.machines[3]||0)*1400 + (game.machines[4]||0)*50000 + (game.machines[5]||0)*250000) * (1 + (game.overclock||0)*0.1) * boostMult * (1+game.prestigeChips*0.1); }
     function fmt(n) { if(n<1000)return Math.floor(n); let s=["","k","M","B","T","Qa"]; let e=Math.floor(Math.log10(n)/3); return (n/Math.pow(1000,e)).toFixed(1)+s[e]; }
     function tab(id, el) { document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active')); document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active')); document.getElementById(id).classList.add('active'); el.classList.add('active'); }
     function showShopSection(id) { document.getElementById('items-view').style.display=id=='items'?'block':'none'; document.getElementById('skins-view').style.display=id=='skins'?'grid':'none'; }
@@ -644,13 +676,13 @@
             game.money-=c; game.machines[i]++; 
             updateUI(); playSfx('coin'); notify(getText('bought'), 'success'); 
             
-            // PARTICULAS MINADO (RESTORED)
+            // PARTICULAS MINADO
             let rect = event.target.getBoundingClientRect(); 
             let p = document.createElement('div'); p.className='particle'; p.innerText = "+1"; p.style.color='#0f0'; 
             p.style.left = (rect.left+rect.width/2)+'px'; p.style.top = (rect.top)+'px'; 
             document.body.appendChild(p); setTimeout(()=>p.remove(), 800);
         } else {
-             notify(getText('noCash'), 'error'); // ERROR DE DINERO CORREGIDO
+             notify(getText('noCash'), 'error'); 
         }
     }
     
@@ -683,7 +715,7 @@
     function sellBTC() { if(game.btc>0){ game.money+=game.btc*btcPrice; game.btc=0; updateUI(); } }
     function activateBroker() { watchAd(()=>{ brokerActive=true; notify("BROKER ON", 'success'); setTimeout(()=>brokerActive=false, 180000); }); }
     function openWheel() { isModalOpen=true; document.getElementById('wheel-modal').style.display='flex'; drawWheel(); }
-    function doPrestige() { let c=Math.floor(Math.sqrt(game.money/100000)); if(c<1) { notify("NEED $100k+", 'error'); return; } if(confirm("RESET?")) { game.money=0; game.machines=[0,0,0,0,0]; game.xp=0; game.level=1; game.prestigeChips+=c; updateUI(); closeModals(); } }
+    function doPrestige() { let c=Math.floor(Math.sqrt(game.money/100000)); if(c<1) { notify("NEED $100k+", 'error'); return; } if(confirm("RESET?")) { game.money=0; game.machines=[0,0,0,0,0,0]; game.xp=0; game.level=1; game.prestigeChips+=c; updateUI(); closeModals(); } }
     
     function resolveHacker(watch) { 
         if(watch){ watchAd(()=>{ threat=0; document.getElementById('threat-bar').style.width="0%"; closeModals(); notify("SALVADO!", 'success'); }); } 
@@ -694,7 +726,7 @@
     function closeModals() { document.querySelectorAll('.overlay').forEach(o => o.style.display = 'none'); isModalOpen=false; if(rouletteInterval) { clearInterval(rouletteInterval); rouletteInterval = null; } }
 
     function startMatrixRain() {
-        if(isModalOpen || document.querySelector('.overlay[style*="display: flex"]')) return; // SEMAFORO
+        if(isModalOpen || document.querySelector('.overlay[style*="display: flex"]')) return; 
 
         document.getElementById('matrix-overlay').style.display = 'block'; document.getElementById('matrix-ui').style.display = 'block';
         let items = [{t:'💾', type:'artifact', id:'disk', prob:0.02}, {t:'🔋', type:'artifact', id:'batt', prob:0.02}, {t:'🎲', type:'artifact', id:'dice', prob:0.02}, {t:'₿', type:'btc', val:3, prob:0.1}, {t:'💰', type:'cash', val:50, prob:0.3}, {t:'0', type:'junk', val:1, prob:0.5}, {t:'1', type:'junk', val:1, prob:0.5}]; 
@@ -735,12 +767,18 @@
         threat+=0.08*red; document.getElementById('threat-bar').style.width=threat+"%";
         if(threat>=100){ 
             threat=0; 
-            if(game.security[2]){ game.btc+=5; notify("SEÑUELO! +5 BTC", 'success'); } 
-            else if(game.hasShield){ game.hasShield=false; notify("ESCUDO USADO", 'error'); } 
-            else { 
+            if(game.security[2]){ 
+                game.btc+=5; notify("SEÑUELO! +5 BTC", 'success'); 
+            } else if(game.security[3]) { // Lógica para Black ICE añadida
+                let stolen = game.money*0.05; 
+                game.money+=stolen; 
+                notify("BLACK ICE: +$"+fmt(stolen), 'premium');
+            } else if(game.hasShield){ 
+                game.hasShield=false; notify("ESCUDO USADO", 'error'); 
+            } else { 
                 let l=Math.floor(game.money*0.2); 
                 document.getElementById('hacker-loss').innerText="-$"+fmt(l); 
-                isModalOpen=true; // SEMAFORO ON
+                isModalOpen=true; 
                 document.getElementById('hacker-modal').style.display='flex'; 
             } 
         }
@@ -751,10 +789,9 @@
     setInterval(() => { 
         oldPrice=btcPrice; btcPrice=nextPrice; nextPrice=Math.floor(Math.random()*55)+5; 
         if(brokerActive){ if(btcPrice<15&&game.money>=1000){game.money-=btcPrice; game.btc++; notify("🤖 COMPRA", 'success');} if(btcPrice>45&&game.btc>0){game.money+=btcPrice; game.btc--; notify("🤖 VENTA", 'success');} } 
-        updateNews(); 
     }, 4000);
     
-    setInterval(() => { game.lastLogin=Date.now(); localStorage.setItem('EmojiV82_Perfect', JSON.stringify(game)); }, 5000);
+    setInterval(() => { game.lastLogin=Date.now(); localStorage.setItem('EmojiV83_Final', JSON.stringify(game)); }, 5000);
     setInterval(spawnUFO_Logic, 1000); 
     
     setInterval(() => { if(Math.random() < 0.05) startMatrixRain(); }, 60000);
