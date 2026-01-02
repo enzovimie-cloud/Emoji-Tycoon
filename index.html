@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Emoji Tycoon: v86 FIXED</title>
+    <title>Emoji Tycoon: v88 POLISHED</title>
     <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700;800;900&display=swap" rel="stylesheet">
     
     <style>
@@ -62,38 +62,27 @@
         .money { color: var(--green); font-weight: 900; font-size: 1.6rem; letter-spacing: 1px; text-shadow: 0 0 15px rgba(0, 230, 118, 0.25); }
         .gems-pill { background: rgba(255, 215, 0, 0.1); border: 1px solid rgba(255, 215, 0, 0.4); color: var(--gold); padding: 4px 12px; border-radius: 20px; font-weight: 800; display: flex; align-items: center; gap: 5px; }
         
-        /* --- NOTICIAS CORREGIDAS --- */
+        /* --- NOTICIAS --- */
         .news-bar { 
-            background: #050505; 
-            border-bottom: 1px solid #222; 
-            height: 26px; 
-            width: 100%; 
-            overflow: hidden; 
-            white-space: nowrap; 
-            position: relative;
-            z-index: 15; 
-            flex-shrink: 0; 
-            box-sizing: border-box;
+            background: #050505; border-bottom: 1px solid #222; height: 26px; width: 100%; 
+            overflow: hidden; white-space: nowrap; position: relative; z-index: 15; flex-shrink: 0; box-sizing: border-box;
         }
         .news-text { 
-            display: inline-block;
-            padding-left: 100%; /* Empieza fuera a la derecha */
-            animation: scrollText 18s linear infinite; /* 18 Segundos de duración */
-            
-            font-size: 0.7rem; 
-            color: #aaa; 
-            font-weight: 700; 
-            text-transform: uppercase; 
-            line-height: 26px;
+            display: inline-block; padding-left: 100%; animation: scrollText 18s linear infinite; 
+            font-size: 0.7rem; color: #aaa; font-weight: 700; text-transform: uppercase; line-height: 26px;
         }
-        
         @keyframes scrollText { 
             0% { transform: translate3d(0, 0, 0); } 
             100% { transform: translate3d(-100%, 0, 0); } 
         }
 
         /* --- GAME ZONE --- */
-        .game-zone { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; overflow: hidden; min-height: 200px; }
+        .game-zone { 
+            flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; 
+            position: relative; overflow: hidden; min-height: 200px; 
+            /* Importante para que el UFO no se salga de aquí */
+            z-index: 5;
+        }
         #main-emoji { font-size: 13vh; cursor: pointer; z-index: 5; transition: transform 0.1s; filter: drop-shadow(0 0 40px rgba(255,255,255,0.08)); margin-bottom: 10px; }
         .emoji-clicked { transform: scale(0.90) rotate(3deg) !important; }
         
@@ -141,14 +130,8 @@
             gap: 10px;
         }
         .card:active { transform: scale(0.99); }
-        
-        .card-left { 
-            display: flex; align-items: center; gap: 12px; 
-            flex-grow: 1; min-width: 0; 
-        }
-        
+        .card-left { display: flex; align-items: center; gap: 12px; flex-grow: 1; min-width: 0; }
         .card-icon { font-size: 1.6rem; width: 45px; height: 45px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.03); border-radius: 10px; border: 1px solid rgba(255,255,255,0.08); }
-        
         .card-info { display: flex; flex-direction: column; overflow: hidden; }
         .card-info b { display: block; color: #eee; font-size: 0.95rem; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; }
         .card-info small { color: #888; font-size: 0.7rem; font-weight: 600; white-space: nowrap; }
@@ -195,9 +178,19 @@
         .particle { position: absolute; font-weight: 900; pointer-events: none; animation: floatUp 0.8s forwards; font-size: 1.3rem; z-index: 10; text-shadow: 0 0 5px currentColor; }
         @keyframes floatUp { to { transform: translateY(-100px) rotate(20deg); opacity: 0; } }
 
-        /* UFO ANIMATION */
-        .ufo-fly { position: fixed; top: 15%; z-index: 12000; font-size: 3.5rem; animation: flyAcross 12s linear forwards; cursor: pointer; filter: drop-shadow(0 0 10px #0f0); pointer-events: auto; }
-        @keyframes flyAcross { 0% { left: -100px; transform: rotate(-5deg); } 100% { left: 110vw; transform: rotate(5deg); } }
+        /* UFO ANIMATION: Modificado para ser absoluto al contenedor, no fixed */
+        .ufo-fly { 
+            position: absolute; /* Cambiado de fixed a absolute */
+            top: 15%; 
+            z-index: 12; 
+            font-size: 3.5rem; 
+            animation: flyAcross 12s linear forwards; 
+            cursor: pointer; 
+            filter: drop-shadow(0 0 10px #0f0); 
+            pointer-events: auto; 
+        }
+        /* La animación ahora usa % del contenedor padre (game-zone) */
+        @keyframes flyAcross { 0% { left: -20%; transform: rotate(-5deg); } 100% { left: 120%; transform: rotate(5deg); } }
         
         /* POINTER DE RULETA */
         #pointer { 
@@ -207,37 +200,79 @@
             z-index: 10; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
         }
 
-        /* MATRIX */
+        /* MATRIX: Ahora contenido dentro de game-zone */
         #matrix-overlay { position: absolute; top:0; left:0; width:100%; height:100%; background:rgba(0,20,0,0.92); z-index:100; display:none; }
         #matrix-ui { position: absolute; top:20px; width:100%; text-align:center; z-index:102; display:none; pointer-events:none; }
         .matrix-title { color:#0f0; font-size:1.8rem; text-shadow:0 0 15px #0f0; font-weight:900; animation:blink 1s infinite; }
+        /* Falling item ahora absoluto al contenedor padre */
         .falling-item { position:absolute; font-weight:900; cursor:pointer; z-index:101; pointer-events:auto; animation:glowItem 0.5s infinite alternate; user-select:none; }
         @keyframes blink { 50% { opacity:0.5; } }
         @keyframes glowItem { from{text-shadow:0 0 5px currentColor;} to{text-shadow:0 0 15px currentColor;} }
 
         /* REAL AD BANNER */
         #ad-wrapper { width: 100%; height: 50px; background: #000; border-top: 1px solid #222; display: none; justify-content: center; align-items: center; flex-shrink: 0; z-index: 25; }
-        
-        /* Highlight oferta */
         .highlight-card { border: 2px solid var(--gold); box-shadow: 0 0 15px rgba(255,215,0,0.2); animation: pulseBorder 2s infinite; }
         @keyframes pulseBorder { 50% { border-color: #fff; box-shadow: 0 0 25px rgba(255,215,0,0.4); } }
+
+        /* =========================================
+           RESPONSIVE PC / TABLET MODE
+           ========================================= */
+        @media (min-width: 800px) {
+            body {
+                background-color: #050505;
+                background-image: linear-gradient(rgba(0, 255, 136, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 255, 136, 0.05) 1px, transparent 1px);
+                background-size: 50px 50px;
+            }
+            #game-app {
+                max-width: 1100px;
+                height: 90vh;
+                border-radius: 20px;
+                border: 2px solid #333;
+                box-shadow: 0 0 100px rgba(0, 255, 136, 0.1);
+                display: grid;
+                grid-template-columns: 350px 1fr;
+                grid-template-rows: auto auto 1fr auto;
+                grid-template-areas: "header header" "news news" "clicker panels" "clicker tabs";
+            }
+            .header { grid-area: header; border-bottom: 2px solid #333; }
+            .news-bar { grid-area: news; }
+            .game-zone { 
+                grid-area: clicker; 
+                border-right: 2px solid #333; 
+                background: radial-gradient(circle at center, #1a1a2e 0%, #08080a 100%);
+                /* Importante: para que el UFO/Matrix se corten en el borde */
+                overflow: hidden; 
+            }
+            .panel-container { grid-area: panels; height: 100%; padding-bottom: 20px; background: #0f0f13; }
+            .tabs { grid-area: tabs; border-top: 2px solid #333; border-left: 2px solid #333; }
+            #main-emoji { font-size: 18vh; transition: 0.1s; }
+            #main-emoji:hover { transform: scale(1.1); cursor: pointer; }
+            #main-emoji:active { transform: scale(0.95); }
+            .panel-container::-webkit-scrollbar { width: 10px; }
+            .panel-container::-webkit-scrollbar-track { background: #111; }
+            .panel-container::-webkit-scrollbar-thumb { background: #333; border-radius: 5px; border: 1px solid #000; }
+            .panel-container::-webkit-scrollbar-thumb:hover { background: var(--green); }
+            
+            /* Ajuste de rejilla para PC (2 columnas) */
+            #prod.active, #def-list, #dark-list, #gem-list, #mission-list { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+            #def-list { margin-top:0; }
+            
+            #ad-wrapper { position: absolute; bottom: 0; left: 0; width: 350px; z-index: 50; }
+        }
     </style>
 </head>
 <body>
 
 <div id="game-app">
     <div class="cyber-bg"></div>
-    <div id="matrix-overlay"></div>
-    <div id="matrix-ui"><div class="matrix-title">DIGITAL STORM DETECTED</div></div>
+    
     <div id="toast-area"></div>
 
     <div id="start-screen" style="position:fixed; top:0; left:0; width:100%; height:100%; background:#000; z-index:20000; display:flex; flex-direction:column; align-items:center; justify-content:center;">
         <div style="font-size: 6rem; animation: floatIcon 3s infinite;">💎</div>
         <h1 style="color:#fff; font-size:3rem; margin-bottom:5px;">EMOJI TYCOON</h1>
-        <p style="color:#666; letter-spacing:3px; margin-bottom:40px;">v86 FIXED</p>
-        
+        <p style="color:#666; letter-spacing:3px; margin-bottom:40px;">v88 POLISHED</p>
         <button id="btn-start-main" onclick="showLangSelector()" style="background:var(--green); padding:15px 60px; border:none; border-radius:50px; font-weight:900; font-size:1.5rem; cursor:pointer; box-shadow: 0 0 25px rgba(0,255,136,0.4); animation: pulse 2s infinite;">PLAY</button>
-        
         <div id="lang-select" style="display:none; flex-direction:column; align-items:center;">
             <h3 style="color:#fff; margin-bottom:15px;">SELECT LANGUAGE</h3>
             <div id="lang-container">
@@ -266,6 +301,9 @@
     <div class="news-bar"><div class="news-text" id="news-text">...</div></div>
 
     <div class="game-zone">
+        <div id="matrix-overlay"></div>
+        <div id="matrix-ui"><div class="matrix-title">DIGITAL STORM DETECTED</div></div>
+        
         <div id="main-emoji-container" style="position:relative; z-index:5;">
             <div id="shield-visual"></div>
             <div id="main-emoji" onclick="doClick(event)">👶</div>
@@ -376,9 +414,8 @@
         {name: "Servidor", name_en: "Server", cost: 5000, prod: 100, icon: "🖥️"}, 
         {name: "Cripto Fábrica", name_en: "Crypto Factory", cost: 12000, prod: 1400, icon: "🏭"},
         {name: "Granja Cuántica", name_en: "Quantum Farm", cost: 15000000, prod: 50000, icon: "🧠"},
-        {name: "Nexo Alienígena", name_en: "Alien Nexus", cost: 850000000, prod: 250000, icon: "👽"} // NUEVA MÁQUINA
+        {name: "Nexo Alienígena", name_en: "Alien Nexus", cost: 850000000, prod: 250000, icon: "👽"}
     ];
-    // CORRECCIÓN DE DESCRIPCIONES DE DEFENSA
     const defDB = [ 
         {name: "Antivirus", name_en: "Antivirus", cost: 500, desc: "-10% Amenaza", desc_en: "-10% Threat", icon: "💊"}, 
         {name: "Firewall", name_en: "Firewall", cost: 5000, desc: "-25% Amenaza", desc_en: "-25% Threat", icon: "🔥"}, 
@@ -406,9 +443,7 @@
             miss_ok: "Misión OK", bought: "¡COMPRADO!", 
             wheelT: "RULETA SUERTE", wheelB: "GIRAR (10 💎)", loadingAd: "CARGANDO ANUNCIO...", 
             txt_wheel: "Ruleta", txt_wheel_d: "Gana premios", txt_pack: "Pack Gemas", txt_pack_d: "+10 Gemas", 
-            prop: "Propiedad: ",
-            noGem: "💎 Gemas insuficientes",
-            noCash: "⛔ Dinero insuficiente"
+            prop: "Propiedad: ", noGem: "💎 Gemas insuficientes", noCash: "⛔ Dinero insuficiente"
         },
         en: { 
             offT: "WELCOME BACK!", offM: "Your machines worked hard.", offV: "🎬 VIDEO (x2)", offN: "Collect normal", 
@@ -423,9 +458,7 @@
             miss_ok: "Mission OK", bought: "BOUGHT!", 
             wheelT: "LUCKY WHEEL", wheelB: "SPIN (10 💎)", loadingAd: "LOADING AD...", 
             txt_wheel: "Lucky Wheel", txt_wheel_d: "Win Prizes", txt_pack: "Gem Pack", txt_pack_d: "+10 Gems", 
-            prop: "Owned: ",
-            noGem: "💎 Insufficient Gems", 
-            noCash: "⛔ Insufficient Funds" 
+            prop: "Owned: ", noGem: "💎 Insufficient Gems", noCash: "⛔ Insufficient Funds" 
         }
     };
 
@@ -437,9 +470,7 @@
         try { 
             let saved = JSON.parse(localStorage.getItem('EmojiV86_Final'));
             game = {...game, ...saved};
-            // Asegurar compatibilidad con la nueva maquina (indice 5)
             if(!game.machines || game.machines.length < 6) { 
-                // Migrar datos viejos
                 let old = game.machines || [0,0,0,0,0];
                 while(old.length < 6) old.push(0);
                 game.machines = old;
@@ -453,19 +484,14 @@
     function getText(key) { return dict[lang][key] || key; }
     function setLang(l) { 
         lang = l; 
-        // CORRECCIÓN AUDIO: Activar AudioContext al iniciar el juego
         if (audioCtx.state === 'suspended') audioCtx.resume();
-
         document.getElementById('start-screen').style.display='none'; 
         document.getElementById('ad-wrapper').style.display='flex'; 
         updateUI(); updateNews(); checkOffline(); 
-        
-        // CORRECCIÓN DEL TIEMPO DE NOTICIAS: 18000ms para coincidir con CSS
         setInterval(updateNews, 18000); 
     }
     function showLangSelector() { document.getElementById('btn-start-main').style.display = 'none'; document.getElementById('lang-select').style.display = 'flex'; }
     
-    // FUNCION DE NOTICIAS
     function updateNews() {
         const newsList = [
             {es: "EL BITCOIN SUBE COMO LA ESPUMA 🚀", en: "BITCOIN SKYROCKETING 🚀"},
@@ -477,11 +503,8 @@
         ];
         let item = newsList[Math.floor(Math.random() * newsList.length)];
         let txt = lang === 'es' ? item.es : item.en;
-        
         let el = document.getElementById('news-text');
         el.innerText = txt;
-        
-        // Reinicio "fuerte" de la animación para asegurar que arranque desde la derecha
         el.style.animation = 'none';
         el.offsetHeight; /* trigger reflow */
         el.style.animation = 'scrollText 18s linear infinite';
@@ -491,10 +514,7 @@
         const t = document.createElement('div'); 
         t.className = `toast ${type}`; 
         let icon='🔔'; 
-        if(type=='success')icon='✅'; 
-        if(type=='error')icon='⛔'; 
-        if(type=='premium')icon='💎'; 
-        if(type=='fever')icon='🔥'; 
+        if(type=='success')icon='✅'; if(type=='error')icon='⛔'; if(type=='premium')icon='💎'; if(type=='fever')icon='🔥'; 
         t.innerHTML = `<span>${icon}</span> ${m}`; 
         document.getElementById('toast-area').appendChild(t); 
         setTimeout(() => { t.classList.add('fade-out'); setTimeout(() => t.remove(), 400); }, 2000); 
@@ -503,11 +523,7 @@
     function toggleSfx() { 
         sfxEnabled = !sfxEnabled; 
         const btn = document.getElementById('btn-toggle-sfx');
-        if(sfxEnabled) { 
-            btn.innerText = "ON (ENCENDER)"; btn.className = "modal-btn btn-green"; 
-        } else { 
-            btn.innerText = "OFF (APAGAR)"; btn.className = "modal-btn btn-red"; 
-        } 
+        if(sfxEnabled) { btn.innerText = "ON (ENCENDER)"; btn.className = "modal-btn btn-green"; } else { btn.innerText = "OFF (APAGAR)"; btn.className = "modal-btn btn-red"; } 
     }
     
     function playSfx(type, pitch=1) {
@@ -530,49 +546,32 @@
         setTimeout(()=>document.getElementById('btn-settings-icon').classList.remove('spinning'), 500);
     }
     
-    function closeModals() { 
-        document.querySelectorAll('.overlay').forEach(o => o.style.display = 'none'); 
-        isModalOpen = false; 
-        if(rouletteInterval) { clearInterval(rouletteInterval); rouletteInterval = null; }
-    }
+    function closeModals() { document.querySelectorAll('.overlay').forEach(o => o.style.display = 'none'); isModalOpen = false; if(rouletteInterval) { clearInterval(rouletteInterval); rouletteInterval = null; } }
 
     function doClick(e) {
         let emoji = document.getElementById('main-emoji');
         emoji.classList.remove('emoji-clicked'); void emoji.offsetWidth; emoji.classList.add('emoji-clicked');
         setTimeout(()=>emoji.classList.remove('emoji-clicked'), 100);
-
         let fMult = feverMode ? 5 : 1;
         let val = (1 + (getPPS() * 0.02)) * fMult;
-        
         if(game.artifacts.includes('dice') && Math.random()<0.05) { val *= 5; notify("CRIT!", 'premium'); }
-
         game.money += val; game.xp += val;
-        
         let req = game.level * 2000;
         if(game.xp >= req) { game.level++; game.xp=0; game.gems+=2; notify("NIVEL UP!", 'success'); }
-        
         document.getElementById('xp-bar').style.width = Math.min((game.xp/req)*100, 100) + "%";
         document.getElementById('xp-text').innerText = Math.floor(game.xp) + " / " + req + " XP";
         document.getElementById('lbl-lvl').innerText = getText('lvl') + " " + game.level;
-        
         playSfx('coin', 1.2);
-        
         let p = document.createElement('div'); p.className='particle'; p.innerText = "+$"+fmt(val);
         p.style.left = e.clientX+'px'; p.style.top = e.clientY+'px'; p.style.color = 'var(--green)';
         document.body.appendChild(p); setTimeout(()=>p.remove(), 800);
-
         if(!feverMode) { fever+=5; if(fever>=100){fever=100;activateFever();} document.getElementById('fever-bar').style.width=fever+"%"; }
         updateUI();
     }
 
     function activateFever() {
-        feverMode=true; 
-        notify(getText('fever'), 'fever'); 
-        document.getElementById('fever-text').style.opacity=1;
-        let i = setInterval(()=>{
-            fever-=1; document.getElementById('fever-bar').style.width=fever+"%";
-            if(fever<=0){ clearInterval(i); feverMode=false; document.getElementById('fever-text').style.opacity=0; }
-        }, 100);
+        feverMode=true; notify(getText('fever'), 'fever'); document.getElementById('fever-text').style.opacity=1;
+        let i = setInterval(()=>{ fever-=1; document.getElementById('fever-bar').style.width=fever+"%"; if(fever<=0){ clearInterval(i); feverMode=false; document.getElementById('fever-text').style.opacity=0; } }, 100);
     }
 
     function clickWorld(el) {
@@ -583,15 +582,12 @@
             let tp = (game.machines[2] || 0) > 0 ? 100 : 0; 
             document.getElementById('lock-gems-val').innerText = game.gems + "/100";
             document.getElementById('lock-bar-gems').style.width = gp + "%";
-            
             let tpText = tp === 100 ? (lang==='es'?'¡LISTO!':'READY!') : "NO";
             document.getElementById('lock-tech-val').innerText = tpText;
             document.getElementById('lock-bar-tech').style.width = tp + "%";
-            
             document.getElementById('txt-world-title').innerText = getText('worldT');
             document.getElementById('txt-req-gems').innerText = getText('reqG');
             document.getElementById('txt-req-serv').innerText = getText('reqS');
-
             if(gp===100 && tp===100) {
                 game.worldUnlocked = true; notify("WORLD UNLOCKED!", 'success');
                 document.getElementById('tab-world-btn').classList.remove('tab-locked');
@@ -610,7 +606,6 @@
         canvas.style.transform = `rotate(${Math.floor(Math.random()*360)+3600}deg)`;
         let d = 50; const tick = () => { playSfx('tick'); d*=1.1; if(d<500) rouletteInterval = setTimeout(tick,d); };
         tick();
-
         setTimeout(() => {
             document.getElementById('btn-spin').disabled = false;
             const p = wheelPrizes[Math.floor(Math.random()*6)];
@@ -649,7 +644,6 @@
 
         let shieldEl = document.getElementById('shield-visual');
         if(game.hasShield) shieldEl.classList.add('shield-active'); else shieldEl.classList.remove('shield-active');
-
         let trendEl = document.getElementById('btc-trend');
         if(game.hasSpy) { trendEl.innerText = nextPrice > btcPrice ? " 🔼" : " 🔽"; trendEl.style.color = nextPrice > btcPrice ? "var(--green)" : "var(--accent)"; } else { trendEl.innerText = ""; }
 
@@ -702,17 +696,12 @@
     
     function buyMachine(i,c) { 
         if(game.money>=c){ 
-            game.money-=c; game.machines[i]++; 
-            updateUI(); playSfx('coin'); notify(getText('bought'), 'success'); 
-            
-            // PARTICULAS MINADO
+            game.money-=c; game.machines[i]++; updateUI(); playSfx('coin'); notify(getText('bought'), 'success'); 
             let rect = event.target.getBoundingClientRect(); 
             let p = document.createElement('div'); p.className='particle'; p.innerText = "+1"; p.style.color='#0f0'; 
             p.style.left = (rect.left+rect.width/2)+'px'; p.style.top = (rect.top)+'px'; 
             document.body.appendChild(p); setTimeout(()=>p.remove(), 800);
-        } else {
-             notify(getText('noCash'), 'error'); 
-        }
+        } else { notify(getText('noCash'), 'error'); }
     }
     
     function buyDef(i) { if(game.money>=defDB[i].cost && !game.security[i]) { game.money-=defDB[i].cost; game.security[i]=1; updateUI(); notify(getText('bought'), 'success'); } else { notify(getText('noCash'), 'error'); } }
@@ -725,13 +714,7 @@
     function claimOffline(x2) { if(x2) watchAd(()=>{game.money+=pendingOffline*2; closeModals(); updateUI();}); else {game.money+=pendingOffline; closeModals(); updateUI();} }
     function watchAdForGems() { watchAd(()=>{ game.gems+=10; notify("+10 GEMAS", 'success'); updateUI(); }); }
     
-    // --- REAL AD LINK INTEGRATION ---
-    function watchAd(cb) { 
-        notify(getText('loadingAd'), 'warn'); 
-        const url="https://www.effectivegatecpm.com/ttwcdab5?key=8d51779f7c6cbf2f752d275eb491f8dc"; 
-        window.open(url, '_blank'); 
-        setTimeout(()=>{ if(cb) cb(); }, 4000); 
-    }
+    function watchAd(cb) { notify(getText('loadingAd'), 'warn'); const url="https://www.effectivegatecpm.com/ttwcdab5?key=8d51779f7c6cbf2f752d275eb491f8dc"; window.open(url, '_blank'); setTimeout(()=>{ if(cb) cb(); }, 4000); }
     
     function mineBTC(e) { 
         game.btc++; updateUI(); 
@@ -746,44 +729,68 @@
     function openWheel() { isModalOpen=true; document.getElementById('wheel-modal').style.display='flex'; drawWheel(); }
     function doPrestige() { let c=Math.floor(Math.sqrt(game.money/100000)); if(c<1) { notify("NEED $100k+", 'error'); return; } if(confirm("RESET?")) { game.money=0; game.machines=[0,0,0,0,0,0]; game.xp=0; game.level=1; game.prestigeChips+=c; updateUI(); closeModals(); } }
     
-    function resolveHacker(watch) { 
-        if(watch){ watchAd(()=>{ threat=0; document.getElementById('threat-bar').style.width="0%"; closeModals(); notify("SALVADO!", 'success'); }); } 
-        else { game.money*=0.8; threat=0; document.getElementById('threat-bar').style.width="0%"; closeModals(); notify("FONDOS PERDIDOS", 'error'); } 
-    }
+    function resolveHacker(watch) { if(watch){ watchAd(()=>{ threat=0; document.getElementById('threat-bar').style.width="0%"; closeModals(); notify("SALVADO!", 'success'); }); } else { game.money*=0.8; threat=0; document.getElementById('threat-bar').style.width="0%"; closeModals(); notify("FONDOS PERDIDOS", 'error'); } }
     function openBox(watch) { closeModals(); if(watch) watchAd(()=>{ let m = getPPS()*500 + 1000; game.money += m; notify("+$"+fmt(m), 'success'); }); else { let m = getPPS()*50; game.money += m; notify("+$"+fmt(m), 'success'); } updateUI(); }
     function openMuseum() { isModalOpen=true; updateUI(); document.getElementById('museum-modal').style.display='flex'; }
-    function closeModals() { document.querySelectorAll('.overlay').forEach(o => o.style.display = 'none'); isModalOpen=false; if(rouletteInterval) { clearInterval(rouletteInterval); rouletteInterval = null; } }
 
+    // --- MATRIX LOGIC ACTUALIZADA: Solo en .game-zone ---
     function startMatrixRain() {
         if(isModalOpen || document.querySelector('.overlay[style*="display: flex"]')) return; 
-
-        document.getElementById('matrix-overlay').style.display = 'block'; document.getElementById('matrix-ui').style.display = 'block';
+        
+        // Ahora seleccionamos el contenedor de la lluvia dentro de game-zone
+        const zone = document.querySelector('.game-zone');
+        const overlay = document.getElementById('matrix-overlay');
+        const ui = document.getElementById('matrix-ui');
+        
+        // Movemos overlay/ui visualmente si es necesario (ya están en HTML dentro)
+        overlay.style.display = 'block'; 
+        ui.style.display = 'block';
+        
         let items = [{t:'💾', type:'artifact', id:'disk', prob:0.02}, {t:'🔋', type:'artifact', id:'batt', prob:0.02}, {t:'🎲', type:'artifact', id:'dice', prob:0.02}, {t:'₿', type:'btc', val:3, prob:0.1}, {t:'💰', type:'cash', val:50, prob:0.3}, {t:'0', type:'junk', val:1, prob:0.5}, {t:'1', type:'junk', val:1, prob:0.5}]; 
+        
         let interval = setInterval(() => {
-            let x = Math.random() * window.innerWidth;
+            // Calculamos X basado en el ancho de la zona, no de la ventana entera
+            let x = Math.random() * zone.offsetWidth;
+            
             let r = Math.random(), accumulated = 0, chosen = items[5];
             for(let i of items) { accumulated += i.prob; if(r <= accumulated) { chosen = i; break; } }
-            let div = document.createElement('div'); div.className = 'falling-item'; div.innerText = chosen.t; div.style.left = x + 'px'; div.style.top = '-30px'; div.style.fontSize = (chosen.type==='junk' ? '1.5rem' : '2.5rem'); div.style.color = (chosen.type==='artifact' ? '#ffd700' : (chosen.type==='btc' ? '#f39c12' : '#0f0'));
+            
+            let div = document.createElement('div'); 
+            div.className = 'falling-item'; 
+            div.innerText = chosen.t; 
+            div.style.left = x + 'px'; 
+            div.style.top = '-30px'; 
+            div.style.fontSize = (chosen.type==='junk' ? '1.5rem' : '2.5rem'); 
+            div.style.color = (chosen.type==='artifact' ? '#ffd700' : (chosen.type==='btc' ? '#f39c12' : '#0f0'));
+            
             const collect = (e) => { e.preventDefault(); e.stopPropagation(); div.remove(); playSfx('tick');
                 if(chosen.type === 'artifact' && !game.artifacts.includes(chosen.id)) { game.artifacts.push(chosen.id); notify("NEW ARTIFACT!", 'premium'); }
                 else if(chosen.type === 'btc') { game.btc += chosen.val; notify("+"+chosen.val+" BTC", 'success'); updateUI(); }
                 else if(chosen.type === 'cash') { let m = getPPS()*chosen.val; game.money += m; notify("+$"+fmt(m), 'success'); }
                 else { game.money += getPPS(); } 
             };
-            div.addEventListener('mousedown', collect); div.addEventListener('touchstart', collect); document.body.appendChild(div);
+            
+            div.addEventListener('mousedown', collect); div.addEventListener('touchstart', collect); 
+            // Append a la zona, no al body
+            zone.appendChild(div);
+            
             let pos = -30, speed = Math.random() * 3 + 2;
-            let fall = setInterval(() => { pos += speed; div.style.top = pos + 'px'; if(pos > window.innerHeight) { clearInterval(fall); div.remove(); } }, 16);
+            let fall = setInterval(() => { 
+                pos += speed; div.style.top = pos + 'px'; 
+                if(pos > zone.offsetHeight) { clearInterval(fall); div.remove(); } 
+            }, 16);
         }, 300);
-        setTimeout(() => { clearInterval(interval); document.getElementById('matrix-overlay').style.display = 'none'; document.getElementById('matrix-ui').style.display = 'none'; }, 12000);
+        
+        setTimeout(() => { clearInterval(interval); overlay.style.display = 'none'; ui.style.display = 'none'; }, 12000);
     }
     
-    // UFO FIX (CROSS SCREEN + SEMAFORO)
+    // --- UFO LOGIC ACTUALIZADA: Solo en .game-zone ---
     function spawnUFO_Logic() { 
-        if(isModalOpen || document.querySelector('.overlay[style*="display: flex"]')) return; // NO SALIR SI HAY POPUP
-
+        if(isModalOpen || document.querySelector('.overlay[style*="display: flex"]')) return; 
         if(Date.now()>nextUfoTime){ 
             let d=document.createElement('div'); d.className='ufo-fly'; d.innerText='🛸'; 
-            document.body.appendChild(d); 
+            // Append a la zona, no al body
+            document.querySelector('.game-zone').appendChild(d); 
             d.onclick=(e)=>{e.stopPropagation(); d.remove(); isModalOpen=true; document.getElementById('box-modal').style.display='flex';}; 
             setTimeout(()=>d.remove(), 12000); nextUfoTime=Date.now()+(Math.random()*120000+120000); 
         } 
@@ -796,33 +803,18 @@
         threat+=0.08*red; document.getElementById('threat-bar').style.width=threat+"%";
         if(threat>=100){ 
             threat=0; 
-            if(game.security[2]){ 
-                game.btc+=5; notify("SEÑUELO! +5 BTC", 'success'); 
-            } else if(game.security[3]) { // Lógica para Black ICE añadida
-                let stolen = game.money*0.05; 
-                game.money+=stolen; 
-                notify("BLACK ICE: +$"+fmt(stolen), 'premium');
-            } else if(game.hasShield){ 
-                game.hasShield=false; notify("ESCUDO USADO", 'error'); 
-            } else { 
-                let l=Math.floor(game.money*0.2); 
-                document.getElementById('hacker-loss').innerText="-$"+fmt(l); 
-                isModalOpen=true; 
-                document.getElementById('hacker-modal').style.display='flex'; 
-            } 
+            if(game.security[2]){ game.btc+=5; notify("SEÑUELO! +5 BTC", 'success'); } 
+            else if(game.security[3]) { let stolen = game.money*0.05; game.money+=stolen; notify("BLACK ICE: +$"+fmt(stolen), 'premium'); } 
+            else if(game.hasShield){ game.hasShield=false; notify("ESCUDO USADO", 'error'); } 
+            else { let l=Math.floor(game.money*0.2); document.getElementById('hacker-loss').innerText="-$"+fmt(l); isModalOpen=true; document.getElementById('hacker-modal').style.display='flex'; } 
         }
         if(game.hasBot && Math.random()<0.1) doClick({clientX:window.innerWidth/2, clientY:window.innerHeight/3});
         updateUI();
     }, 100);
 
-    setInterval(() => { 
-        oldPrice=btcPrice; btcPrice=nextPrice; nextPrice=Math.floor(Math.random()*55)+5; 
-        if(brokerActive){ if(btcPrice<15&&game.money>=1000){game.money-=btcPrice; game.btc++; notify("🤖 COMPRA", 'success');} if(btcPrice>45&&game.btc>0){game.money+=btcPrice; game.btc--; notify("🤖 VENTA", 'success');} } 
-    }, 4000);
-    
+    setInterval(() => { oldPrice=btcPrice; btcPrice=nextPrice; nextPrice=Math.floor(Math.random()*55)+5; if(brokerActive){ if(btcPrice<15&&game.money>=1000){game.money-=btcPrice; game.btc++; notify("🤖 COMPRA", 'success');} if(btcPrice>45&&game.btc>0){game.money+=btcPrice; game.btc--; notify("🤖 VENTA", 'success');} } }, 4000);
     setInterval(() => { game.lastLogin=Date.now(); localStorage.setItem('EmojiV86_Final', JSON.stringify(game)); }, 5000);
     setInterval(spawnUFO_Logic, 1000); 
-    
     setInterval(() => { if(Math.random() < 0.05) startMatrixRain(); }, 60000);
 
     toggleSfx(); toggleSfx(); 
