@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Emoji Tycoon: v77 DEFINITIVE</title>
+    <title>Emoji Tycoon: v79 RESTORED</title>
     <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700;800;900&display=swap" rel="stylesheet">
     
     <style>
         /* --- CORE --- */
         :root { 
-            --bg: #050505; --panel: #101015; --card: #181820; 
+            --bg: #050505; --panel: #101015; --card: #191920; 
             --accent: #ff0055; --gold: #ffd700; --text: #ffffff; 
-            --green: #00e676; --blue: #2979ff; --purple: #d500f9; --orange: #ff9100;
+            --green: #2ecc71; --blue: #00ccff; --purple: #9b59b6; --orange: #ff9900;
         }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; user-select: none; outline: none; }
         ::-webkit-scrollbar { width: 0px; background: transparent; }
@@ -26,20 +26,20 @@
             width: 100%; max-width: 480px; height: 100%; 
             background: radial-gradient(circle at center, #1a1a2e 0%, #000 120%); 
             position: relative; display: flex; flex-direction: column; 
-            box-shadow: 0 0 80px #000; overflow: hidden; z-index: 1;
+            box-shadow: 0 0 60px #000; overflow: hidden; z-index: 1;
         }
 
         /* --- VISUALS --- */
         .cyber-bg { 
             position: absolute; top:0; left:0; width:100%; height:100%; 
-            background: repeating-linear-gradient(0deg, transparent 0, transparent 1px, rgba(255,255,255,0.03) 1px, rgba(255,255,255,0.03) 2px); 
+            background: repeating-linear-gradient(0deg, transparent 0, transparent 1px, rgba(255,255,255,0.02) 1px, rgba(255,255,255,0.02) 2px); 
             z-index:0; pointer-events:none; 
         }
 
         /* --- TOASTS --- */
         #toast-area { position: absolute; top: 110px; left: 50%; transform: translateX(-50%); width: 90%; z-index: 20000; pointer-events: none; display: flex; flex-direction: column; align-items: center; gap: 8px; }
         .toast { 
-            background: #fff; color: #000; padding: 10px 20px; border-radius: 50px; 
+            background: #fff; color: #000; padding: 8px 20px; border-radius: 50px; 
             font-weight: 800; font-size: 0.85rem; box-shadow: 0 10px 30px rgba(0,0,0,0.5); 
             display: flex; align-items: center; gap: 8px; border-left: 5px solid #333;
             animation: toastIn 0.3s forwards;
@@ -54,7 +54,11 @@
         /* --- HEADER --- */
         .header { background: rgba(15, 15, 22, 0.98); padding: 10px 15px; border-bottom: 1px solid #333; z-index: 20; flex-shrink: 0; backdrop-filter: blur(10px); }
         .top-row { display: flex; justify-content: space-between; align-items: center; width: 100%; }
+        
         .settings-btn { background: none; border: none; font-size: 1.5rem; cursor: pointer; padding: 0; margin-right: 10px; color: #888; transition:0.3s; }
+        .settings-btn.spinning { animation: spinGear 0.5s ease-out; color: #fff; }
+        @keyframes spinGear { 100% { transform: rotate(180deg); } }
+        
         .money { color: var(--green); font-weight: 900; font-size: 1.6rem; letter-spacing: 1px; text-shadow: 0 0 15px rgba(0, 230, 118, 0.25); }
         .gems-pill { background: rgba(255, 215, 0, 0.1); border: 1px solid rgba(255, 215, 0, 0.4); color: var(--gold); padding: 4px 12px; border-radius: 20px; font-weight: 800; display: flex; align-items: center; gap: 5px; }
         
@@ -66,17 +70,20 @@
         .game-zone { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; overflow: hidden; min-height: 200px; }
         #main-emoji { font-size: 13vh; cursor: pointer; z-index: 5; transition: transform 0.1s; filter: drop-shadow(0 0 40px rgba(255,255,255,0.08)); margin-bottom: 10px; }
         .emoji-clicked { transform: scale(0.90) rotate(3deg) !important; }
+        
+        #shield-visual { position: absolute; top: -10%; left: -10%; width: 120%; height: 120%; border: 2px solid var(--blue); border-radius: 50%; opacity: 0; pointer-events: none; transition: opacity 0.5s; animation: spin 8s linear infinite; }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+        .shield-active { opacity: 0.6 !important; }
+
         .status-container { width: 85%; text-align: center; z-index: 5; }
+        .bar-wrapper { position: relative; margin-bottom: 6px; }
         .bar-bg { width: 100%; height: 14px; background: #111; border-radius: 8px; overflow: hidden; border: 1px solid #333; margin-bottom: 6px; position:relative; }
         .bar-fill { height: 100%; width: 0%; transition: width 0.3s; }
         .xp-fill { background: linear-gradient(90deg, #0055ff, var(--blue)); }
         .fever-fill { background: linear-gradient(90deg, #ff8800, #ff0055); }
         .status-label { font-size: 0.65rem; color: #888; font-weight: 800; display: flex; justify-content: space-between; margin-bottom: 2px; }
-        
-        /* AD WRAPPER */
-        #ad-wrapper { width: 100%; height: 50px; background: #000; border-top: 1px solid #222; display: none; justify-content: center; align-items: center; flex-shrink: 0; z-index: 25; }
 
-        /* --- TABS (MENU RESTAURADO v58 STYLE) --- */
+        /* --- TABS (MENU ESTILO v58 - CON GLOW Y LINEAS) --- */
         .tabs { display: flex; background: #080808; border-top: 1px solid #222; height: 75px; z-index: 30; padding-bottom: env(safe-area-inset-bottom); flex-shrink: 0; }
         .tab { 
             flex: 1; background: none; border: none; color: #555; 
@@ -86,33 +93,25 @@
         }
         .tab span { font-size: 1.6rem; filter: grayscale(1) opacity(0.5); margin-bottom: 3px; transition: 0.2s; position: relative; z-index: 2; }
         
-        /* LA LINEA SUPERIOR (COLOR LINE) */
+        /* LINEA SUPERIOR & GLOW TRASERO */
         .tab.active { background: radial-gradient(circle at bottom, rgba(255,255,255,0.05), transparent 70%); }
-        .tab.active span { filter: grayscale(0) opacity(1); transform: scale(1.15) translateY(-3px); }
-        
-        /* LA LUZ NEON DETRAS DEL ICONO (GLOW) */
+        .tab.active::after {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 3px;
+            background: currentColor; box-shadow: 0 2px 10px currentColor;
+        }
         .tab.active::before {
             content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
             width: 45px; height: 45px; border-radius: 50%; 
-            filter: blur(15px); opacity: 0.6; z-index: 1;
+            filter: blur(15px); opacity: 0.5; z-index: 1; background: currentColor;
         }
+        .tab.active span { filter: grayscale(0) opacity(1); transform: scale(1.15) translateY(-3px); text-shadow: 0 0 10px currentColor; }
         
-        /* COLORES ESPECIFICOS POR SECCION */
-        /* Prod: Verde */
-        .tab:nth-child(1).active { color: var(--green); border-top: 3px solid var(--green); } 
-        .tab:nth-child(1).active::before { background: var(--green); }
-        /* Def: Azul */
-        .tab:nth-child(2).active { color: var(--blue); border-top: 3px solid var(--blue); } 
-        .tab:nth-child(2).active::before { background: var(--blue); }
-        /* Crypto: Naranja */
-        .tab:nth-child(3).active { color: var(--orange); border-top: 3px solid var(--orange); } 
-        .tab:nth-child(3).active::before { background: var(--orange); }
-        /* Shop: Purpura */
-        .tab:nth-child(4).active { color: var(--purple); border-top: 3px solid var(--purple); } 
-        .tab:nth-child(4).active::before { background: var(--purple); }
-        /* Mundo: Blanco/Gris */
-        .tab:nth-child(5).active { color: #fff; border-top: 3px solid #fff; } 
-        .tab:nth-child(5).active::before { background: #fff; }
+        /* COLORES */
+        .tab:nth-child(1).active { color: var(--green); } 
+        .tab:nth-child(2).active { color: var(--blue); } 
+        .tab:nth-child(3).active { color: var(--orange); } 
+        .tab:nth-child(4).active { color: var(--purple); } 
+        .tab:nth-child(5).active { color: #fff; } 
 
         .tab-locked { opacity: 0.4; }
         .lock-icon { position: absolute; top: 10px; right: 18px; font-size: 0.6rem; background: #000; border-radius: 50%; padding: 2px; border: 1px solid #444; color: #fff; z-index: 5; }
@@ -123,28 +122,33 @@
         .panel.active { display: block; }
         @keyframes fadeIn { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
 
-        /* --- CARDS (GRID + STABLE) --- */
+        /* --- CARDS (CORREGIDO: LAYOUT FLEX ROBUSTO) --- */
         .card { 
             background: var(--card); padding: 10px; margin-bottom: 8px; border-radius: 10px; 
             border: 1px solid #2a2a35; box-shadow: 0 4px 6px rgba(0,0,0,0.2); 
-            display: grid; grid-template-columns: 50px 1fr auto; align-items: center; gap: 10px;
+            display: flex; align-items: center; justify-content: space-between; gap: 10px;
         }
         .card:active { transform: scale(0.99); }
-        .card-icon { font-size: 1.6rem; width: 45px; height: 45px; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.03); border-radius: 10px; border: 1px solid rgba(255,255,255,0.08); }
+        
+        /* ESTO ARREGLA EL TEXTO CORTADO */
+        .card-left { display: flex; align-items: center; gap: 12px; flex: 1; min-width: 0; }
+        .card-icon { font-size: 1.6rem; width: 45px; height: 45px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.03); border-radius: 10px; border: 1px solid rgba(255,255,255,0.08); }
         .card-info { display: flex; flex-direction: column; overflow: hidden; }
         .card-info b { display: block; color: #eee; font-size: 0.95rem; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; }
         .card-info small { color: #888; font-size: 0.7rem; font-weight: 600; white-space: nowrap; }
         
+        /* BOTONES DE COMPRA AJUSTADOS */
         .btn-buy { 
             background: linear-gradient(180deg, #3a3a40, #2a2a30); color: #777; border: 1px solid #444; 
-            padding: 8px 12px; border-radius: 8px; font-weight: 800; cursor: pointer; min-width: 75px; 
-            font-family: 'Rajdhani', sans-serif; font-size: 0.85rem; box-shadow: 0 3px 0 #1a1a20; transition: 0.1s; 
+            padding: 8px 10px; border-radius: 8px; font-weight: 800; cursor: pointer; 
+            min-width: 80px; max-width: 90px; flex-shrink: 0;
+            font-family: 'Rajdhani', sans-serif; font-size: 0.8rem; box-shadow: 0 3px 0 #1a1a20; transition: 0.1s; 
         }
         .btn-buy.affordable { background: linear-gradient(180deg, #2ecc71, #27ae60); color: #fff; border-color: #2ecc71; box-shadow: 0 3px 0 #1e8449; text-shadow: 0 1px 2px rgba(0,0,0,0.3); }
         .btn-buy.hacker-btn { background: linear-gradient(180deg, #9b59b6, #8e44ad); color: #fff; border-color: #8e44ad; box-shadow: 0 3px 0 #6c3483; }
         .btn-buy:active { top: 3px; box-shadow: none; }
         .btn-buy:disabled { opacity: 0.5; cursor: not-allowed; }
-        
+
         .btn-mega { width: 100%; padding: 14px; border-radius: 10px; margin-top: 8px; font-size: 1rem; font-weight: 900; text-transform: uppercase; background: linear-gradient(45deg, #f1c40f, #f39c12); color: #000; border: 2px solid rgba(255,255,255,0.5); box-shadow: 0 0 15px rgba(241, 196, 15, 0.3); animation: pulseOffer 2s infinite; cursor: pointer; }
         @keyframes pulseOffer { 0% { transform: scale(1); } 50% { transform: scale(1.02); } 100% { transform: scale(1); } }
 
@@ -164,10 +168,11 @@
         .skin-item { background: rgba(255,255,255,0.05); padding: 10px; border-radius: 10px; border: 1px solid #333; text-align: center; cursor: pointer; position:relative; }
         .skin-item.active { border-color: var(--green); background: rgba(0,255,136,0.15); }
         
-        #wheel-canvas { width: 250px; height: 250px; margin: 0 auto; display: block; transition: transform 4s cubic-bezier(0.1, 0, 0.1, 1); border-radius:50%; }
+        #wheel-canvas { width: 250px; height: 250px; margin: 0 auto; display: block; border-radius:50%; }
         #lang-container { display: flex; gap: 15px; justify-content: center; margin-top: 30px; }
         .lang-card { background: rgba(255,255,255,0.1); border: 2px solid #444; padding: 15px; border-radius: 15px; cursor: pointer; transition: 0.2s; text-align: center; width: 100px; }
-        
+        .lang-card:hover { border-color: var(--green); background: rgba(0,255,136,0.1); transform: scale(1.05); }
+
         .artifact-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 15px; }
         .artifact { background: #000; border: 1px solid #333; border-radius: 8px; padding: 10px; opacity: 0.5; filter: grayscale(1); transition: 0.3s; text-align:center; }
         .artifact.unlocked { opacity: 1; filter: grayscale(0); border-color: var(--gold); box-shadow: 0 0 10px rgba(255,215,0,0.2); }
@@ -175,13 +180,16 @@
         .particle { position: absolute; font-weight: 900; pointer-events: none; animation: floatUp 0.8s forwards; font-size: 1.3rem; z-index: 10; text-shadow: 0 0 5px currentColor; }
         @keyframes floatUp { to { transform: translateY(-100px) rotate(20deg); opacity: 0; } }
         
-        /* MATRIX STUFF */
+        /* MATRIX & UFO */
         #matrix-overlay { position: absolute; top:0; left:0; width:100%; height:100%; background:rgba(0,20,0,0.92); z-index:100; display:none; }
         #matrix-ui { position: absolute; top:20px; width:100%; text-align:center; z-index:102; display:none; pointer-events:none; }
         .matrix-title { color:#0f0; font-size:1.8rem; text-shadow:0 0 15px #0f0; font-weight:900; animation:blink 1s infinite; }
         .falling-item { position:absolute; font-weight:900; cursor:pointer; z-index:101; pointer-events:auto; animation:glowItem 0.5s infinite alternate; user-select:none; }
         @keyframes blink { 50% { opacity:0.5; } }
         @keyframes glowItem { from{text-shadow:0 0 5px currentColor;} to{text-shadow:0 0 15px currentColor;} }
+
+        /* REAL AD BANNER (Fijo abajo, no molesta) */
+        #ad-wrapper { width: 100%; height: 50px; background: #000; border-top: 1px solid #222; display: none; justify-content: center; align-items: center; flex-shrink: 0; z-index: 25; }
     </style>
 </head>
 <body>
@@ -189,13 +197,13 @@
 <div id="game-app">
     <div class="cyber-bg"></div>
     <div id="matrix-overlay"></div>
-    <div id="matrix-ui"><div class="matrix-title">DIGITAL STORM</div></div>
+    <div id="matrix-ui"><div class="matrix-title">DIGITAL STORM DETECTED</div></div>
     <div id="toast-area"></div>
 
     <div id="start-screen" style="position:fixed; top:0; left:0; width:100%; height:100%; background:#000; z-index:20000; display:flex; flex-direction:column; align-items:center; justify-content:center;">
         <div style="font-size: 6rem; animation: floatIcon 3s infinite;">💎</div>
         <h1 style="color:#fff; font-size:3rem; margin-bottom:5px;">EMOJI TYCOON</h1>
-        <p style="color:#666; letter-spacing:3px; margin-bottom:40px;">v77 FINAL</p>
+        <p style="color:#666; letter-spacing:3px; margin-bottom:40px;">v79 RESTORED</p>
         
         <button id="btn-start-main" onclick="showLangSelector()" style="background:var(--green); padding:15px 60px; border:none; border-radius:50px; font-weight:900; font-size:1.5rem; cursor:pointer; box-shadow: 0 0 25px rgba(0,255,136,0.4); animation: pulse 2s infinite;">PLAY</button>
         
@@ -212,7 +220,7 @@
     <div class="header">
         <div class="top-row">
             <div style="display:flex; align-items:center;">
-                <button class="settings-btn" onclick="openSettings()">⚙️</button>
+                <button class="settings-btn" id="btn-settings-icon" onclick="openSettings()">⚙️</button>
                 <div style="font-weight:900; font-size:1.1rem; letter-spacing:1px;">EMOJI TYCOON</div>
             </div>
             <div class="gems-pill">💎 <span id="ui-gems">0</span></div>
@@ -221,10 +229,10 @@
             <div class="money" id="ui-money">$0</div>
             <div style="font-size:0.8rem; color:#888; font-weight:bold;">+<span id="ui-pps">0</span>/s <span id="ui-chip-boost" style="color:var(--purple); font-weight:800;"></span></div>
         </div>
-        <div style="width:100%; height:4px; background:#222; margin-top:8px; border-radius:2px; overflow:hidden;"><div id="threat-bar" style="height:100%; width:0%; background:var(--accent); transition:width 0.5s;"></div></div>
+        <div style="width:100%; height:4px; background:#222; margin-top:8px; border-radius:2px; overflow:hidden;"><div id="threat-bar" style="height:100%; width:0%; background:var(--accent); transition:width 0.5s; box-shadow:0 0 10px var(--accent);"></div></div>
     </div>
 
-    <div class="news-bar"><div class="news-text" id="news-text">...</div></div>
+    <div class="news-bar"><div class="news-text" id="news-text">EL PRECIO DEL BITCOIN SE DISPARA 🚀</div></div>
 
     <div class="game-zone">
         <div id="main-emoji-container" style="position:relative; z-index:5;">
@@ -239,7 +247,7 @@
         </div>
     </div>
 
-    <div id="ad-wrapper" style="display:none; width:100%; height:50px; background:#000; border-top:1px solid #222; justify-content:center; align-items:center; flex-shrink:0; z-index:25;">
+    <div id="ad-wrapper">
         <script type="text/javascript">
             atOptions = { 'key' : '92cf9b7506a2347b830d7ec0e9445744', 'format' : 'iframe', 'height' : 50, 'width' : 320, 'params' : {} };
         </script>
@@ -272,7 +280,6 @@
                 <button id="btn-broker" class="btn-mega" onclick="activateBroker()">⭐ ACTIVAR IA TRADER</button>
             </div>
             <div style="font-weight:bold; color:var(--purple); border-bottom:1px solid #333; padding-bottom:5px;" id="lbl-dark">MERCADO NEGRO</div>
-            <button class="modal-btn" style="background:linear-gradient(45deg, #333, #000); border:1px solid #0f0; color:#0f0; margin-top:10px;" onclick="startMatrixRain()">💻 INICIAR HACK (TORMENTA)</button>
             <div id="dark-list"></div>
         </div>
 
@@ -303,24 +310,16 @@
         </div>
     </div>
 
-    <div id="settings-modal" class="overlay"><div class="popup" style="border-color:#666;"><h2 style="color:#fff;">AJUSTES</h2><div style="margin:20px 0;"><button id="btn-toggle-sfx" class="modal-btn" onclick="toggleSfx()">SONIDO: ON</button></div><div style="border-top:1px solid #333; padding-top:15px;"><p id="prestige-info" style="font-size:0.8rem; color:#aaa; margin-bottom:10px;">...</p><button class="modal-btn" style="background:var(--purple); color:#fff;" onclick="doPrestige()">ASCENDER</button></div><button class="modal-btn" style="background:transparent; color:#888;" onclick="closeModals()">CERRAR</button></div></div>
+    <div id="settings-modal" class="overlay"><div class="popup" style="border-color:#666;"><h2 style="color:#fff;">AJUSTES</h2><div style="margin:20px 0;"><button id="btn-toggle-sfx" class="modal-btn" onclick="toggleSfx()">SONIDO</button></div><div style="border-top:1px solid #333; padding-top:15px;"><p id="prestige-info" style="font-size:0.8rem; color:#aaa; margin-bottom:10px;">...</p><button class="modal-btn" style="background:var(--purple); color:#fff;" onclick="doPrestige()">ASCENDER</button></div><button class="modal-btn" style="background:transparent; color:#888;" onclick="closeModals()">CERRAR</button></div></div>
     
-    <div id="wheel-modal" class="overlay">
-        <div class="popup" style="border-color:var(--accent); display:flex; flex-direction:column; align-items:center;">
-            <h2 style="color:var(--accent);">RULETA</h2>
-            <div style="width:300px; height:300px; position:relative; display:flex; justify-content:center; align-items:center; overflow:hidden; border-radius:50%; margin:20px 0;">
-                <canvas id="wheel-canvas" width="300" height="300"></canvas>
-            </div>
-            <button id="btn-spin" class="modal-btn btn-red" onclick="spinWheel()">GIRAR (10 💎)</button>
-            <button class="modal-btn" style="background:transparent; color:#888;" onclick="closeModals()">CERRAR</button>
-        </div>
-    </div>
+    <div id="wheel-modal" class="overlay"><div class="popup" style="border-color:var(--accent); display:flex; flex-direction:column; align-items:center;"><h2 style="color:var(--accent);">RULETA</h2><div style="margin:20px 0; border-radius:50%; overflow:hidden; width:300px; height:300px;"><canvas id="wheel-canvas" width="300" height="300"></canvas></div><button id="btn-spin" class="modal-btn btn-red" onclick="spinWheel()">GIRAR (10 💎)</button><button class="modal-btn" style="background:transparent; color:#888;" onclick="closeModals()">CERRAR</button></div></div>
     
     <div id="offline-modal" class="overlay"><div class="popup" style="border-color:var(--gold);"><h2 id="txt-off-t" style="color:var(--gold);"></h2><p id="txt-off-m" style="color:#aaa;"></p><h1 id="off-amt" style="color:#fff; font-size:2.5rem; margin:15px 0;">$0</h1><button id="btn-off-x2" class="modal-btn btn-green" onclick="claimOffline(true)">VIDEO x2</button><button id="btn-off-x1" class="modal-btn" style="background:transparent; border:none; color:#666; margin-top:15px; text-decoration:underline;" onclick="claimOffline(false)">Recoger normal</button></div></div>
     <div id="box-modal" class="overlay"><div class="popup" style="border-color:var(--purple);"><h2 id="txt-box-title" style="color:var(--purple);"></h2><p id="txt-box-msg" style="color:#aaa;"></p><button id="btn-box-vid" class="modal-btn btn-green" onclick="openBox(true)"></button><button id="btn-box-norm" class="modal-btn" style="background:#333; color:#aaa;" onclick="openBox(false)"></button></div></div>
     <div id="hacker-modal" class="overlay"><div class="popup" style="border-color:var(--accent);"><h2 id="txt-hacker-title" style="color:var(--accent);"></h2><p id="txt-hacker-msg" style="color:#aaa;"></p><h2 id="hacker-loss" style="color:#fff; font-size:2rem; margin:10px 0;">-$0</h2><button id="btn-hacker-vid" class="modal-btn btn-green" onclick="resolveHacker(true)"></button><button id="btn-hacker-acc" class="modal-btn" style="background:transparent; border:none; color:#666; text-decoration:underline;" onclick="resolveHacker(false)"></button></div></div>
     <div id="museum-modal" class="overlay"><div class="popup" style="border-color:var(--gold);"><h2 style="color:var(--gold);">MUSEO</h2><div class="artifact-grid" id="artifact-list"></div><button class="modal-btn" style="background:#333; color:#fff;" onclick="closeModals()">CERRAR</button></div></div>
-    <div id="world-lock-modal" class="overlay"><div class="popup" style="border-color:var(--blue);"><div style="font-size:3rem;">🔒</div><h2 id="txt-world-title" style="color:var(--blue);">ZONA RESTRINGIDA</h2><div style="margin:20px 0; text-align:left;"><div style="display:flex; justify-content:space-between; font-size:0.8rem; color:#aaa;"><span id="txt-req-gems">Gems (100)</span><span id="lock-gems-val">0/100</span></div><div class="bar-bg"><div class="bar-fill xp-fill" id="lock-bar-gems"></div></div><div style="display:flex; justify-content:space-between; font-size:0.8rem; color:#aaa; margin-top:10px;"><span id="txt-req-serv">Server</span><span id="lock-tech-val">NO</span></div><div class="bar-bg"><div class="bar-fill" style="background:var(--green)" id="lock-bar-tech"></div></div></div><button class="modal-btn" style="background:#333;" onclick="closeModals()">CERRAR</button></div></div>
+    
+    <div id="world-lock-modal" class="overlay"><div class="popup" style="border-color:var(--blue);"><div style="font-size:3rem;">🔒</div><h2 id="txt-world-title" style="color:var(--blue);">ZONA RESTRINGIDA</h2><div style="margin:20px 0; text-align:left;"><div style="display:flex; justify-content:space-between; font-size:0.8rem; color:#aaa;"><span id="txt-req-gems">Gemas (100)</span><span id="lock-gems-val">0/100</span></div><div class="bar-bg"><div class="bar-fill xp-fill" id="lock-bar-gems"></div></div><div style="display:flex; justify-content:space-between; font-size:0.8rem; color:#aaa; margin-top:10px;"><span id="txt-req-serv">Servidor (Nvl 1)</span><span id="lock-tech-val">NO</span></div><div class="bar-bg"><div class="bar-fill" style="background:var(--green)" id="lock-bar-tech"></div></div></div><button class="modal-btn" style="background:#333;" onclick="closeModals()">CERRAR</button></div></div>
 </div>
 
 <script>
@@ -338,7 +337,7 @@
         {name: "Crypto Farm", name_en: "Crypto Farm", cost: 150000, prod: 400, icon: "🏭"}, 
         {name: "IA God", name_en: "AI God", cost: 15000000, prod: 5000, icon: "🧠"} 
     ];
-    // DEFENSAS (Textos acortados para que quepan)
+    // Defensas (Textos cortos)
     const defDB = [ 
         {name: "Antivirus", name_en: "Antivirus", cost: 500, desc: "-10% Amenaza", desc_en: "-10% Threat", icon: "💊"}, 
         {name: "Firewall", name_en: "Firewall", cost: 5000, desc: "-25% Amenaza", desc_en: "-25% Threat", icon: "🔥"}, 
@@ -360,10 +359,10 @@
     let game = { money: 0, gems: 20, btc: 0, machines: [0,0,0,0,0], security: [0,0,0,0], ownedSkins: ["baby"], currentSkin: "baby", missions: [0,0,0,0,0], artifacts: [], hasSpy:false, hasShield:false, overclock:0, lastLogin: Date.now(), worldUnlocked: false, level: 1, xp: 0, prestigeChips: 0 };
     let threat=0, btcPrice=20, nextPrice=25, pendingOffline=0, boostMult=1, brokerActive=false, fever=0, feverMode=false, nextUfoTime=Date.now()+120000;
 
-    // --- REPAIR DATA ON LOAD (EmojiV77_Final) ---
-    if(localStorage.getItem('EmojiV77_Final')) { 
+    // --- REPAIR DATA ON LOAD ---
+    if(localStorage.getItem('EmojiV79_Restored')) { 
         try { 
-            let saved = JSON.parse(localStorage.getItem('EmojiV77_Final'));
+            let saved = JSON.parse(localStorage.getItem('EmojiV79_Restored'));
             game = {...game, ...saved};
             // AUTO-REPAIR ARRAYS
             if(!game.machines || game.machines.length < 5) game.machines = [0,0,0,0,0];
@@ -380,10 +379,22 @@
         // ACTIVAR ANUNCIOS AL JUGAR
         document.getElementById('ad-wrapper').style.display='flex'; 
         updateUI(); updateNews(); checkOffline(); 
+        
+        // Start news cycle immediately
+        setInterval(updateNews, 5000); 
     }
     function showLangSelector() { document.getElementById('btn-start-main').style.display = 'none'; document.getElementById('lang-select').style.display = 'flex'; }
     function notify(m, type='success') { const t = document.createElement('div'); t.className = `toast ${type}`; let icon='🔔'; if(type=='success')icon='✅'; if(type=='error')icon='❌'; if(type=='premium')icon='💎'; t.innerHTML = `<span>${icon}</span> ${m}`; document.getElementById('toast-area').appendChild(t); setTimeout(() => { t.classList.add('fade-out'); setTimeout(() => t.remove(), 400); }, 2000); }
-    function toggleSfx() { sfxEnabled = !sfxEnabled; const btn = document.getElementById('btn-toggle-sfx'); if(sfxEnabled) { btn.innerText = "OFF (APAGAR)"; btn.className = "modal-btn btn-red"; } else { btn.innerText = "ON (ENCENDER)"; btn.className = "modal-btn btn-green"; } }
+    
+    function toggleSfx() { 
+        sfxEnabled = !sfxEnabled; 
+        const btn = document.getElementById('btn-toggle-sfx');
+        if(sfxEnabled) { 
+            btn.innerText = "ON (ENCENDER)"; btn.className = "modal-btn btn-green"; 
+        } else { 
+            btn.innerText = "OFF (APAGAR)"; btn.className = "modal-btn btn-red"; 
+        } 
+    }
     
     function playSfx(type, pitch=1) {
         if(!sfxEnabled || audioCtx.state==='suspended') return;
@@ -400,6 +411,9 @@
         let msg = lang == 'es' ? "Ganarás: " : "Gain: ";
         document.getElementById('prestige-info').innerText = msg + chips + " Chips";
         document.getElementById('settings-modal').style.display = 'flex'; 
+        // ANIMAR ENGRANAJE
+        document.getElementById('btn-settings-icon').classList.add('spinning');
+        setTimeout(()=>document.getElementById('btn-settings-icon').classList.remove('spinning'), 500);
     }
     
     function closeModals() { 
@@ -483,7 +497,7 @@
         }, 4000);
     }
     
-    // NEW WHEEL DRAWING FUNCTION (CIRCULAR FIX)
+    // DRAW WHEEL CORRECTLY
     function drawWheel() {
         const canvas = document.getElementById('wheel-canvas');
         const ctx = canvas.getContext('2d');
@@ -542,7 +556,7 @@
         document.getElementById('txt-wheel-btn').innerText = t.txt_wheel;
         document.getElementById('txt-pack').innerText = t.txt_pack;
 
-        // RENDER LISTS SAFE
+        // RENDER LISTS SAFE & CORRECT LAYOUT
         let h=""; 
         for(let i=0; i<machinesDB.length; i++){
             let m=machinesDB[i]; let c=Math.floor(m.cost*Math.pow(1.15, game.machines[i]||0)); 
@@ -574,19 +588,7 @@
     function tab(id, el) { document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active')); document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active')); document.getElementById(id).classList.add('active'); el.classList.add('active'); }
     function showShopSection(id) { document.getElementById('items-view').style.display=id=='items'?'block':'none'; document.getElementById('skins-view').style.display=id=='skins'?'grid':'none'; }
     
-    function buyMachine(i,c) { 
-        if(game.money>=c){ 
-            game.money-=c; game.machines[i]++; 
-            updateUI(); playSfx('coin'); notify("COMPRADO", 'success'); 
-            
-            // PARTICULAS MINADO (RESTORED)
-            let rect = event.target.getBoundingClientRect(); 
-            let p = document.createElement('div'); p.className='particle'; p.innerText = "+1"; p.style.color='#0f0'; 
-            p.style.left = (rect.left+rect.width/2)+'px'; p.style.top = (rect.top)+'px'; 
-            document.body.appendChild(p); setTimeout(()=>p.remove(), 800);
-        } 
-    }
-    
+    function buyMachine(i,c) { if(game.money>=c){ game.money-=c; game.machines[i]++; updateUI(); playSfx('coin'); notify("COMPRADO", 'success'); } }
     function buyDef(i) { if(game.money>=defDB[i].cost && !game.security[i]) { game.money-=defDB[i].cost; game.security[i]=1; updateUI(); notify(getText('bought'), 'success'); } }
     function buyGemItem(id,c) { if(game.gems>=c) { game.gems-=c; if(id=='coffee'){boostMult=2;setTimeout(()=>boostMult=1,60000);} if(id=='shield'){game.hasShield=true;} if(id=='warp'){game.money+=getPPS()*3600;} updateUI(); notify(getText('bought'), 'success'); } else notify(getText('noGem'), 'error'); }
     function buyDarkItem(id,c) { if(game.btc>=c){ game.btc-=c; if(id=='spy')game.hasSpy=true; if(id=='bot')game.hasBot=true; if(id=='over')game.overclock++; notify(getText('bought'), 'success'); updateUI(); } }
@@ -621,7 +623,6 @@
     function resolveHacker(watch) { if(watch){ watchAd(()=>{ threat=0; document.getElementById('threat-bar').style.width="0%"; closeModals(); notify("SALVADO!", 'success'); }); } else { game.money*=0.8; threat=0; document.getElementById('threat-bar').style.width="0%"; closeModals(); notify("FONDOS PERDIDOS", 'error'); } }
     function openBox(watch) { closeModals(); if(watch) watchAd(()=>{ let m = getPPS()*500 + 1000; game.money += m; notify("+$"+fmt(m), 'success'); }); else { let m = getPPS()*50; game.money += m; notify("+$"+fmt(m), 'success'); } updateUI(); }
     function openMuseum() { updateUI(); document.getElementById('museum-modal').style.display='flex'; }
-    function openSettings() { let chips = Math.floor(Math.sqrt(game.money / 100000)); document.getElementById('prestige-info').innerText = chips + " Chips"; document.getElementById('settings-modal').style.display = 'flex'; }
     function closeModals() { document.querySelectorAll('.overlay').forEach(o => o.style.display = 'none'); if(rouletteInterval) { clearInterval(rouletteInterval); rouletteInterval = null; } }
 
     function startMatrixRain() {
@@ -644,6 +645,19 @@
         }, 300);
         setTimeout(() => { clearInterval(interval); document.getElementById('matrix-overlay').style.display = 'none'; document.getElementById('matrix-ui').style.display = 'none'; }, 12000);
     }
+    
+    // UFO LOGIC (FIXED)
+    function spawnUFO_Logic() { 
+        if(Date.now()>nextUfoTime){ 
+            let d=document.createElement('div'); d.className='particle'; d.innerText='🛸'; 
+            d.style.fontSize='3rem'; d.style.position='absolute'; 
+            d.style.top='15%'; d.style.zIndex='150'; // Z-INDEX ALTO
+            d.style.animation='floatIcon 10s linear'; 
+            document.querySelector('.game-zone').appendChild(d); 
+            d.onclick=(e)=>{e.stopPropagation(); d.remove(); document.getElementById('box-modal').style.display='flex';}; 
+            setTimeout(()=>d.remove(), 10000); nextUfoTime=Date.now()+(Math.random()*120000+120000); 
+        } 
+    }
 
     setInterval(() => {
         if(document.getElementById('hacker-modal').style.display==='flex') return;
@@ -661,8 +675,8 @@
         updateNews(); 
     }, 4000);
     
-    setInterval(() => { game.lastLogin=Date.now(); localStorage.setItem('EmojiV77_Final', JSON.stringify(game)); }, 5000);
-    setInterval(spawnUFO_Logic, 1000); function spawnUFO_Logic() { if(Date.now()>nextUfoTime){ let d=document.createElement('div'); d.className='particle'; d.innerText='🛸'; d.style.fontSize='3rem'; d.style.animation='floatIcon 10s linear'; d.style.top='15%'; document.querySelector('.game-zone').appendChild(d); d.onclick=(e)=>{d.remove(); document.getElementById('box-modal').style.display='flex';}; setTimeout(()=>d.remove(), 10000); nextUfoTime=Date.now()+(Math.random()*120000+120000); } }
+    setInterval(() => { game.lastLogin=Date.now(); localStorage.setItem('EmojiV79_Restored', JSON.stringify(game)); }, 5000);
+    setInterval(spawnUFO_Logic, 1000); 
     
     setInterval(() => { if(Math.random() < 0.05) startMatrixRain(); }, 60000);
 
