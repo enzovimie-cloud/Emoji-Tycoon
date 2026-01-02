@@ -62,14 +62,14 @@
         .money { color: var(--green); font-weight: 900; font-size: 1.6rem; letter-spacing: 1px; text-shadow: 0 0 15px rgba(0, 230, 118, 0.25); }
         .gems-pill { background: rgba(255, 215, 0, 0.1); border: 1px solid rgba(255, 215, 0, 0.4); color: var(--gold); padding: 4px 12px; border-radius: 20px; font-weight: 800; display: flex; align-items: center; gap: 5px; }
         
-        /* --- NOTICIAS CORREGIDAS (Técnica Padding-Left 100%) --- */
+        /* --- NOTICIAS CORREGIDAS --- */
         .news-bar { 
             background: #050505; 
             border-bottom: 1px solid #222; 
             height: 26px; 
             width: 100%; 
             overflow: hidden; 
-            white-space: nowrap; /* Mantiene todo en una línea */
+            white-space: nowrap; 
             position: relative;
             z-index: 15; 
             flex-shrink: 0; 
@@ -77,8 +77,8 @@
         }
         .news-text { 
             display: inline-block;
-            padding-left: 100%; /* Esto empuja el texto fuera de la pantalla a la derecha */
-            animation: scrollText 18s linear infinite; 
+            padding-left: 100%; /* Empieza fuera a la derecha */
+            animation: scrollText 18s linear infinite; /* 18 Segundos de duración */
             
             font-size: 0.7rem; 
             color: #aaa; 
@@ -89,7 +89,7 @@
         
         @keyframes scrollText { 
             0% { transform: translate3d(0, 0, 0); } 
-            100% { transform: translate3d(-100%, 0, 0); } /* Mueve el 100% del ancho total (padding + texto) */
+            100% { transform: translate3d(-100%, 0, 0); } 
         }
 
         /* --- GAME ZONE --- */
@@ -459,7 +459,9 @@
         document.getElementById('start-screen').style.display='none'; 
         document.getElementById('ad-wrapper').style.display='flex'; 
         updateUI(); updateNews(); checkOffline(); 
-        setInterval(updateNews, 5000); 
+        
+        // CORRECCIÓN DEL TIEMPO DE NOTICIAS: 18000ms para coincidir con CSS
+        setInterval(updateNews, 18000); 
     }
     function showLangSelector() { document.getElementById('btn-start-main').style.display = 'none'; document.getElementById('lang-select').style.display = 'flex'; }
     
