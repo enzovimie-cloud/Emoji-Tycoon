@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Emoji Tycoon: v81 FINAL FIX</title>
+    <title>Emoji Tycoon: v82 FINAL</title>
     <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700;800;900&display=swap" rel="stylesheet">
     
     <style>
@@ -39,7 +39,7 @@
         /* --- TOASTS --- */
         #toast-area { position: absolute; top: 110px; left: 50%; transform: translateX(-50%); width: 90%; z-index: 20000; pointer-events: none; display: flex; flex-direction: column; align-items: center; gap: 8px; }
         .toast { 
-            background: #fff; color: #000; padding: 8px 20px; border-radius: 50px; 
+            background: #fff; color: #000; padding: 10px 20px; border-radius: 50px; 
             font-weight: 800; font-size: 0.85rem; box-shadow: 0 10px 30px rgba(0,0,0,0.5); 
             display: flex; align-items: center; gap: 8px; border-left: 5px solid #333;
             animation: toastIn 0.3s forwards;
@@ -85,9 +85,14 @@
         /* AD WRAPPER */
         #ad-wrapper { width: 100%; height: 50px; background: #000; border-top: 1px solid #222; display: none; justify-content: center; align-items: center; flex-shrink: 0; z-index: 25; }
 
-        /* --- TABS --- */
+        /* --- TABS (MENU) --- */
         .tabs { display: flex; background: #080808; border-top: 1px solid #222; height: 75px; z-index: 30; padding-bottom: env(safe-area-inset-bottom); flex-shrink: 0; }
-        .tab { flex: 1; background: none; border: none; color: #555; font-weight: 700; font-size: 0.65rem; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; transition: all 0.2s ease; overflow: hidden; }
+        .tab { 
+            flex: 1; background: none; border: none; color: #555; 
+            font-weight: 700; font-size: 0.65rem; display: flex; flex-direction: column; 
+            align-items: center; justify-content: center; position: relative; 
+            transition: all 0.2s ease; overflow: hidden; 
+        }
         .tab span { font-size: 1.6rem; filter: grayscale(1) opacity(0.5); margin-bottom: 3px; transition: 0.2s; position: relative; z-index: 2; }
         
         .tab.active { background: radial-gradient(circle at bottom, rgba(255,255,255,0.05), transparent 70%); }
@@ -95,7 +100,12 @@
         .tab.active::before { content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 45px; height: 45px; border-radius: 50%; filter: blur(15px); opacity: 0.5; z-index: 1; background: currentColor; }
         .tab.active span { filter: grayscale(0) opacity(1); transform: scale(1.15) translateY(-3px); text-shadow: 0 0 10px currentColor; }
         
-        .tab:nth-child(1).active { color: var(--green); } .tab:nth-child(2).active { color: var(--blue); } .tab:nth-child(3).active { color: var(--orange); } .tab:nth-child(4).active { color: var(--purple); } .tab:nth-child(5).active { color: #fff; } 
+        .tab:nth-child(1).active { color: var(--green); } 
+        .tab:nth-child(2).active { color: var(--blue); } 
+        .tab:nth-child(3).active { color: var(--orange); } 
+        .tab:nth-child(4).active { color: var(--purple); } 
+        .tab:nth-child(5).active { color: #fff; } 
+
         .tab-locked { opacity: 0.4; }
         .lock-icon { position: absolute; top: 10px; right: 18px; font-size: 0.6rem; background: #000; border-radius: 50%; padding: 2px; border: 1px solid #444; color: #fff; z-index: 5; }
 
@@ -105,24 +115,37 @@
         .panel.active { display: block; }
         @keyframes fadeIn { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
 
-        /* --- CARDS (BOTONES CORREGIDOS) --- */
+        /* --- CARDS (FLEXBOX ALIGNMENT FIX) --- */
+        /* Usamos FLEX con JUSTIFY-BETWEEN para pegar el boton a la derecha */
         .card { 
             background: var(--card); padding: 10px; margin-bottom: 8px; border-radius: 10px; 
             border: 1px solid #2a2a35; box-shadow: 0 4px 6px rgba(0,0,0,0.2); 
-            display: grid; grid-template-columns: 50px 1fr auto; align-items: center; gap: 10px;
+            display: flex; align-items: center; justify-content: space-between; 
+            gap: 10px;
         }
         .card:active { transform: scale(0.99); }
-        .card-icon { font-size: 1.6rem; width: 45px; height: 45px; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.03); border-radius: 10px; border: 1px solid rgba(255,255,255,0.08); }
+        
+        /* Contenedor izquierdo (Icono + Texto) */
+        .card-left { 
+            display: flex; align-items: center; gap: 12px; 
+            flex: 1; /* Ocupa todo el espacio disponible */
+            min-width: 0; /* IMPIDE que el texto empuje si es muy largo */
+        }
+        
+        .card-icon { font-size: 1.6rem; width: 45px; height: 45px; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.03); border-radius: 10px; border: 1px solid rgba(255,255,255,0.08); flex-shrink: 0; }
+        
         .card-info { display: flex; flex-direction: column; overflow: hidden; }
+        /* El texto se corta con puntos suspensivos si es muy largo */
         .card-info b { display: block; color: #eee; font-size: 0.95rem; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; }
         .card-info small { color: #888; font-size: 0.7rem; font-weight: 600; white-space: nowrap; }
         
-        /* BOTON AJUSTADO PARA NO APLASTAR TEXTO */
+        /* BOTON A LA DERECHA (FIJO) */
         .btn-buy { 
             background: linear-gradient(180deg, #3a3a40, #2a2a30); color: #777; border: 1px solid #444; 
             padding: 8px 5px; border-radius: 8px; font-weight: 800; cursor: pointer; 
-            min-width: 80px; max-width: 90px; /* Ancho controlado */
+            min-width: 80px; max-width: 90px; flex-shrink: 0; /* No se encoge */
             font-family: 'Rajdhani', sans-serif; font-size: 0.8rem; box-shadow: 0 3px 0 #1a1a20; transition: 0.1s; 
+            text-align: center;
         }
         .btn-buy.affordable { background: linear-gradient(180deg, #2ecc71, #27ae60); color: #fff; border-color: #2ecc71; box-shadow: 0 3px 0 #1e8449; text-shadow: 0 1px 2px rgba(0,0,0,0.3); }
         .btn-buy.hacker-btn { background: linear-gradient(180deg, #9b59b6, #8e44ad); color: #fff; border-color: #8e44ad; box-shadow: 0 3px 0 #6c3483; }
@@ -160,7 +183,7 @@
         .particle { position: absolute; font-weight: 900; pointer-events: none; animation: floatUp 0.8s forwards; font-size: 1.3rem; z-index: 10; text-shadow: 0 0 5px currentColor; }
         @keyframes floatUp { to { transform: translateY(-100px) rotate(20deg); opacity: 0; } }
 
-        /* UFO ANIMATION (CORREGIDO) */
+        /* UFO ANIMATION (CORREGIDO PARA CRUZAR PANTALLA) */
         .ufo-fly { position: fixed; top: 15%; z-index: 9000; font-size: 3.5rem; animation: flyAcross 12s linear forwards; cursor: pointer; }
         @keyframes flyAcross { 0% { left: -100px; } 100% { left: 110vw; } }
         
@@ -199,7 +222,7 @@
     <div id="start-screen" style="position:fixed; top:0; left:0; width:100%; height:100%; background:#000; z-index:20000; display:flex; flex-direction:column; align-items:center; justify-content:center;">
         <div style="font-size: 6rem; animation: floatIcon 3s infinite;">💎</div>
         <h1 style="color:#fff; font-size:3rem; margin-bottom:5px;">EMOJI TYCOON</h1>
-        <p style="color:#666; letter-spacing:3px; margin-bottom:40px;">v81 FINAL FIX</p>
+        <p style="color:#666; letter-spacing:3px; margin-bottom:40px;">v82 FINAL</p>
         
         <button id="btn-start-main" onclick="showLangSelector()" style="background:var(--green); padding:15px 60px; border:none; border-radius:50px; font-weight:900; font-size:1.5rem; cursor:pointer; box-shadow: 0 0 25px rgba(0,255,136,0.4); animation: pulse 2s infinite;">PLAY</button>
         
@@ -342,6 +365,7 @@
         {name: "Crypto Farm", name_en: "Crypto Farm", cost: 150000, prod: 400, icon: "🏭"}, 
         {name: "IA God", name_en: "AI God", cost: 15000000, prod: 5000, icon: "🧠"} 
     ];
+    // Defensas (Textos cortos)
     const defDB = [ 
         {name: "Antivirus", name_en: "Antivirus", cost: 500, desc: "-10% Amenaza", desc_en: "-10% Threat", icon: "💊"}, 
         {name: "Firewall", name_en: "Firewall", cost: 5000, desc: "-25% Amenaza", desc_en: "-25% Threat", icon: "🔥"}, 
@@ -363,11 +387,12 @@
     let game = { money: 0, gems: 20, btc: 0, machines: [0,0,0,0,0], security: [0,0,0,0], ownedSkins: ["baby"], currentSkin: "baby", missions: [0,0,0,0,0], artifacts: [], hasSpy:false, hasShield:false, overclock:0, lastLogin: Date.now(), worldUnlocked: false, level: 1, xp: 0, prestigeChips: 0 };
     let threat=0, btcPrice=20, nextPrice=25, pendingOffline=0, boostMult=1, brokerActive=false, fever=0, feverMode=false, nextUfoTime=Date.now()+120000;
 
-    // --- REPAIR DATA ON LOAD ---
-    if(localStorage.getItem('EmojiV81_Fix')) { 
+    // --- REPAIR DATA ON LOAD (EmojiV82_Final) ---
+    if(localStorage.getItem('EmojiV82_Final')) { 
         try { 
-            let saved = JSON.parse(localStorage.getItem('EmojiV81_Fix'));
+            let saved = JSON.parse(localStorage.getItem('EmojiV82_Final'));
             game = {...game, ...saved};
+            // AUTO-REPAIR ARRAYS
             if(!game.machines || game.machines.length < 5) game.machines = [0,0,0,0,0];
             if(!game.security || game.security.length < 4) game.security = [0,0,0,0];
             if(!game.missions || game.missions.length < 5) game.missions = [0,0,0,0,0];
@@ -379,6 +404,7 @@
     function setLang(l) { 
         lang = l; 
         document.getElementById('start-screen').style.display='none'; 
+        // ACTIVAR ANUNCIOS AL JUGAR
         document.getElementById('ad-wrapper').style.display='flex'; 
         updateUI(); updateNews(); checkOffline(); 
         setInterval(updateNews, 5000); 
@@ -389,8 +415,11 @@
     function toggleSfx() { 
         sfxEnabled = !sfxEnabled; 
         const btn = document.getElementById('btn-toggle-sfx');
-        if(sfxEnabled) { btn.innerText = "ON (ENCENDER)"; btn.className = "modal-btn btn-green"; } 
-        else { btn.innerText = "OFF (APAGAR)"; btn.className = "modal-btn btn-red"; } 
+        if(sfxEnabled) { 
+            btn.innerText = "ON (ENCENDER)"; btn.className = "modal-btn btn-green"; 
+        } else { 
+            btn.innerText = "OFF (APAGAR)"; btn.className = "modal-btn btn-red"; 
+        } 
     }
     
     function playSfx(type, pitch=1) {
@@ -408,6 +437,7 @@
         let msg = lang == 'es' ? "Ganarás: " : "Gain: ";
         document.getElementById('prestige-info').innerText = msg + chips + " Chips";
         document.getElementById('settings-modal').style.display = 'flex'; 
+        // ANIMAR ENGRANAJE
         document.getElementById('btn-settings-icon').classList.add('spinning');
         setTimeout(()=>document.getElementById('btn-settings-icon').classList.remove('spinning'), 500);
     }
@@ -499,6 +529,7 @@
         }, 4000);
     }
     
+    // DRAW WHEEL CORRECTLY
     function drawWheel() {
         const canvas = document.getElementById('wheel-canvas');
         const ctx = canvas.getContext('2d');
@@ -506,14 +537,26 @@
         const height = canvas.height;
         const radius = width / 2;
         const arc = Math.PI * 2 / wheelPrizes.length;
+
         ctx.clearRect(0, 0, width, height);
+
         wheelPrizes.forEach((p, i) => {
             const angle = i * arc;
-            ctx.beginPath(); ctx.fillStyle = p.color; ctx.moveTo(radius, radius);
-            ctx.arc(radius, radius, radius, angle, angle + arc); ctx.lineTo(radius, radius); ctx.fill();
-            ctx.save(); ctx.translate(radius, radius); ctx.rotate(angle + arc / 2);
-            ctx.textAlign = "right"; ctx.fillStyle = "#fff"; ctx.font = "bold 20px Arial";
-            ctx.fillText(p.label, radius - 20, 10); ctx.restore();
+            ctx.beginPath();
+            ctx.fillStyle = p.color;
+            ctx.moveTo(radius, radius);
+            ctx.arc(radius, radius, radius, angle, angle + arc);
+            ctx.lineTo(radius, radius);
+            ctx.fill();
+
+            ctx.save();
+            ctx.translate(radius, radius);
+            ctx.rotate(angle + arc / 2);
+            ctx.textAlign = "right";
+            ctx.fillStyle = "#fff";
+            ctx.font = "bold 20px Arial";
+            ctx.fillText(p.label, radius - 20, 10);
+            ctx.restore();
         });
     }
 
@@ -545,6 +588,7 @@
         document.getElementById('txt-wheel-btn').innerText = t.txt_wheel;
         document.getElementById('txt-pack').innerText = t.txt_pack;
 
+        // RENDER LISTS SAFE
         let h=""; 
         for(let i=0; i<machinesDB.length; i++){
             let m=machinesDB[i]; let c=Math.floor(m.cost*Math.pow(1.15, game.machines[i]||0)); 
@@ -576,36 +620,73 @@
     function tab(id, el) { document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active')); document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active')); document.getElementById(id).classList.add('active'); el.classList.add('active'); }
     function showShopSection(id) { document.getElementById('items-view').style.display=id=='items'?'block':'none'; document.getElementById('skins-view').style.display=id=='skins'?'grid':'none'; }
     
-    function buyMachine(i,c) { if(game.money>=c){ game.money-=c; game.machines[i]++; updateUI(); playSfx('coin'); notify("COMPRADO", 'success'); let rect = event.target.getBoundingClientRect(); let p = document.createElement('div'); p.className='particle'; p.innerText = "+1"; p.style.color='#0f0'; p.style.left = (rect.left+rect.width/2)+'px'; p.style.top = (rect.top)+'px'; document.body.appendChild(p); setTimeout(()=>p.remove(), 800); } }
+    function buyMachine(i,c) { 
+        if(game.money>=c){ 
+            game.money-=c; game.machines[i]++; 
+            updateUI(); playSfx('coin'); notify("COMPRADO", 'success'); 
+            
+            // PARTICULAS MINADO (RESTORED)
+            let rect = event.target.getBoundingClientRect(); 
+            let p = document.createElement('div'); p.className='particle'; p.innerText = "+1"; p.style.color='#0f0'; 
+            p.style.left = (rect.left+rect.width/2)+'px'; p.style.top = (rect.top)+'px'; 
+            document.body.appendChild(p); setTimeout(()=>p.remove(), 800);
+        } 
+    }
+    
     function buyDef(i) { if(game.money>=defDB[i].cost && !game.security[i]) { game.money-=defDB[i].cost; game.security[i]=1; updateUI(); notify(getText('bought'), 'success'); } }
     function buyGemItem(id,c) { if(game.gems>=c) { game.gems-=c; if(id=='coffee'){boostMult=2;setTimeout(()=>boostMult=1,60000);} if(id=='shield'){game.hasShield=true;} if(id=='warp'){game.money+=getPPS()*3600;} updateUI(); notify(getText('bought'), 'success'); } else notify(getText('noGem'), 'error'); }
     function buyDarkItem(id,c) { if(game.btc>=c){ game.btc-=c; if(id=='spy')game.hasSpy=true; if(id=='bot')game.hasBot=true; if(id=='over')game.overclock++; notify(getText('bought'), 'success'); updateUI(); } }
     function doMission(i) { let m=missionsDB[i]; if(game.money>=m.cost){ game.money-=m.cost; game.missions[i]=1; notify(getText('miss_ok'), 'success'); updateUI(); } }
     function buySkin(id,c) { if(game.ownedSkins.includes(id)) { game.currentSkin=id; updateUI(); } else if(game.gems>=c) { if(confirm('Buy?')) { game.gems-=c; game.ownedSkins.push(id); game.currentSkin=id; updateUI(); } } }
     
-    function updateNews() { const k = "n" + (Math.floor(Math.random() * 5) + 1); document.querySelector('.news-text').innerText = getText(k); }
     function checkOffline() { if(Date.now()-game.lastLogin > 60000) { let v = getPPS() * ((Date.now()-game.lastLogin)/1000); if(v>0) { pendingOffline=v; document.getElementById('off-amt').innerText="$"+fmt(v); document.getElementById('offline-modal').style.display='flex'; } } }
     function claimOffline(x2) { if(x2) watchAd(()=>{game.money+=pendingOffline*2; closeModals(); updateUI();}); else {game.money+=pendingOffline; closeModals(); updateUI();} }
     function watchAdForGems() { watchAd(()=>{ game.gems+=10; notify("+10 GEMAS", 'success'); updateUI(); }); }
     
-    // --- REAL AD LINK ---
-    function watchAd(cb) { notify(getText('loadingAd'), 'warn'); const url="https://www.effectivegatecpm.com/ttwcdab5?key=8d51779f7c6cbf2f752d275eb491f8dc"; window.open(url, '_blank'); setTimeout(()=>{ if(cb) cb(); }, 4000); }
+    // --- REAL AD LINK INTEGRATION ---
+    function watchAd(cb) { 
+        notify(getText('loadingAd'), 'warn'); 
+        const url="https://www.effectivegatecpm.com/ttwcdab5?key=8d51779f7c6cbf2f752d275eb491f8dc"; 
+        window.open(url, '_blank'); 
+        setTimeout(()=>{ if(cb) cb(); }, 4000); 
+    }
     
-    function mineBTC(e) { game.btc++; updateUI(); let rect = e.target.getBoundingClientRect(); let p = document.createElement('div'); p.className='particle'; p.innerText = "+1₿"; p.style.color='#f39c12'; p.style.left = (rect.left+rect.width/2)+'px'; p.style.top = (rect.top)+'px'; document.body.appendChild(p); setTimeout(()=>p.remove(), 800); }
+    function mineBTC(e) { 
+        game.btc++; updateUI(); 
+        let rect = e.target.getBoundingClientRect(); 
+        let p = document.createElement('div'); p.className='particle'; p.innerText = "+1₿"; p.style.color='#f39c12'; 
+        p.style.left = (rect.left+rect.width/2)+'px'; p.style.top = (rect.top)+'px'; 
+        document.body.appendChild(p); setTimeout(()=>p.remove(), 800); 
+    }
+
     function sellBTC() { if(game.btc>0){ game.money+=game.btc*btcPrice; game.btc=0; updateUI(); } }
     function activateBroker() { watchAd(()=>{ brokerActive=true; notify("BROKER ON", 'success'); setTimeout(()=>brokerActive=false, 180000); }); }
     function openWheel() { document.getElementById('wheel-modal').style.display='flex'; drawWheel(); }
     function doPrestige() { let c=Math.floor(Math.sqrt(game.money/100000)); if(c<1) { notify("NEED $100k+", 'error'); return; } if(confirm("RESET?")) { game.money=0; game.machines=[0,0,0,0,0]; game.xp=0; game.level=1; game.prestigeChips+=c; updateUI(); closeModals(); } }
     
-    function resolveHacker(watch) { if(watch){ watchAd(()=>{ threat=0; document.getElementById('threat-bar').style.width="0%"; closeModals(); notify("SALVADO!", 'success'); }); } else { game.money*=0.8; threat=0; document.getElementById('threat-bar').style.width="0%"; closeModals(); notify("FONDOS PERDIDOS", 'error'); } }
+    // SEMÁFORO DE EVENTOS ACTIVO
+    function isEventActive() {
+        return (document.getElementById('hacker-modal').style.display === 'flex') || 
+               (document.getElementById('offline-modal').style.display === 'flex');
+    }
+
+    function resolveHacker(watch) { 
+        if(watch){ watchAd(()=>{ threat=0; document.getElementById('threat-bar').style.width="0%"; closeModals(); notify("SALVADO!", 'success'); }); } 
+        else { game.money*=0.8; threat=0; document.getElementById('threat-bar').style.width="0%"; closeModals(); notify("FONDOS PERDIDOS", 'error'); } 
+    }
+    
     function openBox(watch) { closeModals(); if(watch) watchAd(()=>{ let m = getPPS()*500 + 1000; game.money += m; notify("+$"+fmt(m), 'success'); }); else { let m = getPPS()*50; game.money += m; notify("+$"+fmt(m), 'success'); } updateUI(); }
     function openMuseum() { updateUI(); document.getElementById('museum-modal').style.display='flex'; }
     function closeModals() { document.querySelectorAll('.overlay').forEach(o => o.style.display = 'none'); if(rouletteInterval) { clearInterval(rouletteInterval); rouletteInterval = null; } }
 
     function startMatrixRain() {
+        if(isEventActive()) return; // EVITAR SUPERPOSICIÓN
+        
         document.getElementById('matrix-overlay').style.display = 'block'; document.getElementById('matrix-ui').style.display = 'block';
         let items = [{t:'💾', type:'artifact', id:'disk', prob:0.02}, {t:'🔋', type:'artifact', id:'batt', prob:0.02}, {t:'🎲', type:'artifact', id:'dice', prob:0.02}, {t:'₿', type:'btc', val:3, prob:0.1}, {t:'💰', type:'cash', val:50, prob:0.3}, {t:'0', type:'junk', val:1, prob:0.5}, {t:'1', type:'junk', val:1, prob:0.5}]; 
         let interval = setInterval(() => {
+            if(isEventActive()) { clearInterval(interval); document.getElementById('matrix-overlay').style.display = 'none'; document.getElementById('matrix-ui').style.display = 'none'; return; } // CERRAR SI HACKER APARECE
+
             let x = Math.random() * window.innerWidth;
             let r = Math.random(), accumulated = 0, chosen = items[5];
             for(let i of items) { accumulated += i.prob; if(r <= accumulated) { chosen = i; break; } }
@@ -623,8 +704,10 @@
         setTimeout(() => { clearInterval(interval); document.getElementById('matrix-overlay').style.display = 'none'; document.getElementById('matrix-ui').style.display = 'none'; }, 12000);
     }
     
-    // UFO FIX (CROSS SCREEN)
+    // UFO FIX (CROSS SCREEN & NO OVERLAP)
     function spawnUFO_Logic() { 
+        if(isEventActive()) return; // NO UFO SI HAY HACKER
+
         if(Date.now()>nextUfoTime){ 
             let d=document.createElement('div'); d.className='ufo-fly'; d.innerText='🛸'; 
             document.body.appendChild(d); 
@@ -638,7 +721,17 @@
         game.money+=getPPS()/10;
         let red=1; if(game.security[0])red-=0.1; if(game.security[1])red-=0.25; 
         threat+=0.08*red; document.getElementById('threat-bar').style.width=threat+"%";
-        if(threat>=100){ threat=0; if(game.security[2]){ game.btc+=5; notify("SEÑUELO! +5 BTC", 'success'); } else if(game.hasShield){ game.hasShield=false; notify("ESCUDO USADO", 'error'); } else { let l=Math.floor(game.money*0.2); document.getElementById('hacker-loss').innerText="-$"+fmt(l); document.getElementById('hacker-modal').style.display='flex'; } }
+        if(threat>=100){ 
+            threat=0; 
+            // LIMPIEZA DE PANTALLA ANTES DEL HACK
+            document.querySelectorAll('.ufo-fly, .falling-item').forEach(e => e.remove());
+            document.getElementById('matrix-overlay').style.display = 'none';
+            document.getElementById('matrix-ui').style.display = 'none';
+
+            if(game.security[2]){ game.btc+=5; notify("SEÑUELO! +5 BTC", 'success'); } 
+            else if(game.hasShield){ game.hasShield=false; notify("ESCUDO USADO", 'error'); } 
+            else { let l=Math.floor(game.money*0.2); document.getElementById('hacker-loss').innerText="-$"+fmt(l); document.getElementById('hacker-modal').style.display='flex'; } 
+        }
         if(game.hasBot && Math.random()<0.1) doClick({clientX:window.innerWidth/2, clientY:window.innerHeight/3});
         updateUI();
     }, 100);
@@ -646,9 +739,10 @@
     setInterval(() => { 
         oldPrice=btcPrice; btcPrice=nextPrice; nextPrice=Math.floor(Math.random()*55)+5; 
         if(brokerActive){ if(btcPrice<15&&game.money>=1000){game.money-=btcPrice; game.btc++; notify("🤖 COMPRA", 'success');} if(btcPrice>45&&game.btc>0){game.money+=btcPrice; game.btc--; notify("🤖 VENTA", 'success');} } 
+        updateNews(); 
     }, 4000);
     
-    setInterval(() => { game.lastLogin=Date.now(); localStorage.setItem('EmojiV81_Fix', JSON.stringify(game)); }, 5000);
+    setInterval(() => { game.lastLogin=Date.now(); localStorage.setItem('EmojiV82_Final', JSON.stringify(game)); }, 5000);
     setInterval(spawnUFO_Logic, 1000); 
     
     setInterval(() => { if(Math.random() < 0.05) startMatrixRain(); }, 60000);
